@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="zh-CN" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>斗地主</title>
+  </head>
+  <body>
+    <div class="gameRegion msParent">
+      <!-- 左边玩家 -->
+      <div class="leftGamer gamer">
+        <img class="readflg" src="./img/onread.png" />
+        <!-- 名称积分 -->
+        <div class="name name-left">
+          <img src="./img/famer.png" alt="" />
+          <div class="info">
+            <p><span id="lef-name"></span></p>
+            <p>ID:<span id="lef-id"></span></p>
+          </div>
+        </div>
+        <!-- 闹钟 -->
+        <div class="clock clock_lef">30</div>
+        <!-- 人物角色 -->
+        <div class="role role-left roleask"></div>
+        <!-- 牌数 -->
+        <div class="pokerNum pokerNum-left">
+          <i>17</i>
+        </div>
+        <div class="staebar staebar-lef"></div>
+        <!-- 报警灯 -->
+        <div class="wringlamp wringlamp-lef">
+          <img src="./img/wick.png" />
+        </div>
+        <!-- 出牌完毕提示 -->
+        <div class="outfinish outfinish-lef">
+          <img src="./img/outfsh_lef.png" alt="" />
+        </div>
+        <!-- 玩家钱币 -->
+        <div class="money money-lef">
+          <span id="money-lef"></span>
+        </div>
+      </div>
+
+      <!-- 中间区域 -->
+      <div class="centerRegion">
+        <!-- 地主牌区 -->
+        <div class="last-poker">
+          <div class="lastThree nowrot">
+            <div class="front"></div>
+            <div class="back_info"></div>
+          </div>
+          <div class="lastThree nowrot">
+            <div class="front"></div>
+            <div class="back_info"></div>
+          </div>
+          <div class="lastThree nowrot">
+            <div class="front"></div>
+            <div class="back_info"></div>
+          </div>
+        </div>
+        <!-- 其他玩家出牌区 -->
+        <div class="theyOutbox clearfix">
+          <ul class="outbox lef"></ul>
+          <ul class="outbox rig"></ul>
+        </div>
+        <!-- 我方玩家出牌区 -->
+        <ul class="myOutbox outbox"></ul>
+      </div>
+
+      <!-- 右边玩家 -->
+      <div class="rightGamer gamer">
+        <img class="readflg" src="./img/onread.png" />
+        <!-- 名称积分 -->
+        <div class="name name-right">
+          <img src="./img/famer.png" alt="" />
+          <div class="info">
+            <p><span id="rig-name"></span></p>
+            <p>ID:<span id="rig-id"></span></p>
+          </div>
+        </div>
+        <!-- 名称积分end -->
+
+        <div class="clock clock_rig">30</div>
+        <!-- 按钮 -->
+        <!-- 人物角色 -->
+        <div class="role role-right roleaskrig"></div>
+        <!-- 人物角色end -->
+
+        <!-- 牌数 -->
+        <div class="pokerNum pokerNum-right">
+          <i>17</i>
+        </div>
+        <div class="staebar staebar-rig"></div>
+        <!-- 报警灯 -->
+        <div class="wringlamp wringlamp-rig">
+          <img src="./img/wick.png" />
+        </div>
+
+        <div class="outfinish outfinish-rig">
+          <img src="./img/outfsh_rig.png" />
+        </div>
+
+        <!-- 玩家钱币 -->
+        <div class="money money-rig">
+          <span id="money-rig"></span>
+        </div>
+      </div>
+
+      <!-- 自己 -->
+      <div class="ownGamer gamer">
+        <div class="owninfo">
+          <!-- 名称积分 -->
+          <div class="name name-own">
+            <img src="./img/famer.png" alt="" />
+            <div class="info">
+              <p><span id="btm-name"></span></p>
+              <p>ID:<span id="btm-id"></span></p>
+            </div>
+          </div>
+          <!-- 人物角色 -->
+          <div class="role role-own roleask"></div>
+          <!-- 警报灯 -->
+          <div class="wringlamp wringlamp-btm">
+            <img src="./img/wick.png" />
+          </div>
+          <!-- 玩家钱币 -->
+          <div class="money money-btm">
+            <span id="money-btm"></span>
+          </div>
+          <!-- 出牌完毕提示 -->
+          <div class="outfinish outfinish-btm">
+            <img src="./img/outfsh_lef.png" />
+          </div>
+        </div>
+
+        <!-- 计时器 -->
+        <div class="clock clock_bottom">30</div>
+
+        <!-- 按钮 -->
+        <ul class="plybtns">
+          <li><button class="gmbtn" id="btn_dontCall">不叫</button></li>
+          <li><button class="gmbtn" id="btn_one">1分</button></li>
+          <li><button class="gmbtn" id="btn_two">2分</button></li>
+          <li><button class="gmbtn" id="btn_three">3分</button></li>
+          <li><button class="gmbtn" id="btn_notDoubly">不加倍</button></li>
+          <li><button class="gmbtn" id="btn_doubly">加倍</button></li>
+          <li><button class="gmbtn" id="btn_spDoubly">超级加倍</button></li>
+          <li><button class="gmbtn" id="btn_prompt">提示</button></li>
+          <li><button class="gmbtn" id="btn_send">出牌</button></li>
+          <li><button class="gmbtn" id="btn_dont">不要</button></li>
+          <li><button class="gmbtn" id="btn_unable">要不起</button></li>
+          <li><button class="gmbtn" id="btn_ready">准备</button></li>
+        </ul>
+
+        <!-- 牌区 -->
+        <ul class="myPkList"></ul>
+
+        <!-- 底部分数状态栏 -->
+        <div class="btmData">
+          <div class="minScore">
+            <span>底</span>
+            <span>&nbsp10</span>
+          </div>
+          <div class="multiple">
+            <span>倍</span>
+            <span>&nbspx1</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 房间ID水印 -->
+      <div class="roomidbox">
+        <span id="roomid">房间ID:1487564</span>
+        <span id="roommaster">房主:一语清风</span>
+      </div>
+
+      <!-- 结算面板弹出层 -->
+      <div class="wlmask mask">
+        <div class="wlbox">
+          <table class="stat">
+            <tr>
+              <td>本局底分:</td>
+              <td id="btsc">0</td>
+            </tr>
+            <tr>
+              <td>本局倍数:</td>
+              <td id="mple">0</td>
+            </tr>
+            <tr>
+              <td>本局得分:</td>
+              <td id="score">0</td>
+            </tr>
+            <tr>
+              <td>剩余分数:</td>
+              <td id="remsc">0</td>
+            </tr>
+          </table>
+          <div class="btns">
+            <button class="gmbtn" id="btn_newGame">再来一局</button>
+            <button class="gmbtn" id="btn_return">返回大厅</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 功能面板滑出层 -->
+      <div class="slippanel">
+        <div class="slipbtn"><span class="iconfont icon-zuo"></span></div>
+        <div class="pagetags">
+          <div id="pt-setting"><span class="iconfont icon-shezhi">设置</span></div>
+          <div id="pt-mmt"><span class="iconfont icon-chengyuan">成员管理</span></div>
+          <div id="pt-talk"><span class="iconfont icon-talk">聊天</span></div>
+        </div>
+        <div class="pages">
+          <div class="long">
+            <div id="pg-setting"></div>
+            <div id="pg-mmt">
+              <div class="top">
+                <div class="lef">
+                  <div class="head">
+                    <img id="slip-lef-head" src="./img/HeadImgs/an1.png" alt="" />
+                  </div>
+                  <div id="slip-lef-name" class="name">测试姓名</div>
+                  <div id="slip-lef-ip" class="ip">192.168.1.21</div>
+                  <div class="btn">
+                    <button class="homebtn homebtn-color-cyan iconfont icon-tichu">踢出</button>
+                  </div>
+                </div>
+                <div class="rig">
+                  <div class="head">
+                    <img id="slip-rig-head" src="./img/HeadImgs/an1.png" alt="" />
+                  </div>
+                  <div id="slip-rig-name" class="name">测试姓名</div>
+                  <div id="slip-rig-ip" class="ip">192.168.1.21</div>
+                  <div class="btn">
+                    <button class="homebtn homebtn-color-cyan iconfont icon-tichu">踢出</button>
+                  </div>
+                </div>
+              </div>
+              <!-- 我方信息 -->
+              <div class="btm">
+                <div class="head">
+                  <img id="slip-btm-head" src="./img/HeadImgs/an1.png" alt="" />
+                </div>
+                <div id="slip-btm-name" class="name">测试姓名</div>
+                <div id="slip-btm-ip" class="ip">192.168.1.21</div>
+                <div class="btn">
+                  <button class="homebtn homebtn-color-cyan iconfont icon-tichu">离开</button>
+                </div>
+              </div>
+              <div id="pg-talk"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

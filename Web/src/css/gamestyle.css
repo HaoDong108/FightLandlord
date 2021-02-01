@@ -1,0 +1,949 @@
+@import "./reset.css";
+@import "./poker.css";
+@import "./anim.css";
+@import "./public.css";
+@import "./iconfont.css";
+
+* {
+  box-sizing: border-box;
+  cursor: default;
+}
+
+/* ul[class],div[class]{
+  border: 1px solid white;
+  box-sizing: border-box;
+} */
+
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background: url(../img/bj.jpg);
+  background-size: 100%;
+  position: relative;
+}
+
+img {
+  -webkit-user-drag: none;
+}
+
+.gameRegion {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.leftGamer,
+.rightGamer {
+  position: relative;
+  width: 20vw;
+  height: 67vh;
+}
+
+.centerRegion {
+  position: relative;
+  width: 60vw;
+  height: 67vh;
+}
+
+.ownGamer {
+  position: relative;
+  width: 100vw;
+  height: 33vh;
+}
+
+.owninfo {
+  height: 240px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40%;
+}
+
+/* 名称 */
+
+.gamer .name {
+  margin: 0 10px;
+  position: absolute;
+  top: 4%;
+  width: 300px;
+  height: 90px;
+  clear: both;
+}
+
+.gamer .name > .info {
+  display: inline-block;
+  width: 150px;
+  height: 100%;
+  font-family: "微软雅黑", sans-serif;
+  text-align: left;
+  padding-top: 30px;
+  padding-left: 10px;
+}
+
+.gamer .name > .info > p,
+.gamer .name > .info > p > span {
+  font-weight: bold;
+  font-size: 15px;
+  color: white;
+}
+
+.gamer .name-left,
+.gamer .name-own {
+  background: url("../img/uinfo_lef.png") no-repeat;
+  background-size: 75%, 75%;
+  background-position: left center;
+}
+
+.gamer .name-left {
+  position: absolute;
+  left: 0;
+  top: 10px;
+}
+
+.gamer .name-right {
+  background: url("../img/uinfo_rig.png") no-repeat;
+  background-size: 75%, 75%;
+  background-position: right center;
+  text-align: right;
+  position: absolute;
+  right: 0;
+  top: 10px;
+}
+
+.gamer .name-right > .info > p {
+  text-align: right;
+}
+
+.gamer .name-right > .info {
+  margin-right: 10px;
+}
+
+.gamer .name > img {
+  width: 75px;
+  height: 75px;
+  display: inline;
+  float: left;
+}
+
+.gamer .name-right > img {
+  float: right;
+  margin-top: 8px;
+}
+
+.gamer .name-left > img,
+.gamer .name-own > img {
+  margin-top: 7px;
+  transform: rotateY(180deg);
+}
+
+.gamer .name-own {
+  position: absolute;
+  top: calc(100% - 85px);
+}
+
+/* 角色 */
+
+.rolediv {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.rolediv > div {
+  height: 100%;
+}
+
+.role {
+  position: absolute;
+  top: 40%;
+  margin: 0 5px;
+  width: 100px;
+  height: 175px;
+  margin-top: -50px;
+  text-align: center;
+  line-height: 175px;
+}
+
+.role-left {
+  background: url(../img/Roles/role0.png) no-repeat;
+  background-size: contain;
+}
+
+.role-right {
+  right: 0%;
+  background: url(../img/Roles/role0.png) no-repeat;
+  background-size: contain;
+  transform: rotateY(180deg);
+}
+
+.role-own {
+  left: 3%;
+  top: -8%;
+  width: 140px;
+  height: 240px;
+  background: url(../img/Roles/role0.png) no-repeat;
+  background-size: contain;
+  z-index: -1;
+  line-height: 240px;
+}
+
+.roleask::after {
+  content: "?";
+  color: white;
+  font-size: 25px;
+}
+
+.roleaskrig::after {
+  content: "?";
+  color: white;
+  font-size: 25px;
+  display: inline-block;
+  transform: rotateY(180deg);
+}
+
+/* 牌数 */
+
+.pokerNum {
+  margin: 0 10px;
+  width: 52px;
+  height: 69px;
+  background: url(../img/cardback.png) no-repeat;
+  background-size: 100%;
+  text-align: center;
+}
+
+.pokerNum i {
+  line-height: 69px;
+}
+
+.pokerNum-left,
+.pokerNum-right {
+  position: absolute;
+  top: 45%;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.pokerNum-left {
+  left: 40%;
+}
+
+.pokerNum-right {
+  right: 40%;
+}
+
+.money {
+  width: 120px;
+  height: 35px;
+  background: url("../img/Home/moneybg.png") no-repeat;
+  background-size: 100% 100%;
+  line-height: 30px;
+  position: absolute;
+  text-align: center;
+}
+
+.money > span {
+  color: white;
+  font-family: "微软雅黑", sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  display: inline-block;
+  margin-left: 10px;
+}
+.money-lef {
+  left: 10px;
+  top: 68%;
+}
+.money-rig {
+  right: 10px;
+  top: 68%;
+}
+.money-btm {
+  bottom: 0;
+  left: 40%;
+}
+
+/* 中间区域 */
+
+.last-poker {
+  width: 100%;
+  height: 140px;
+  margin: auto 0px;
+  perspective: 400;
+  -webkit-perspective: 400;
+  transform: scale(0.95);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.lastThree {
+  position: relative;
+  margin-right: 13px;
+  width: 75px;
+  height: 105px;
+  transform-style: preserve-3d;
+}
+
+.lastThree > div {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.lastThree .front {
+  transform: translateZ(-1px);
+}
+.lastThree .back_info {
+  background: url(../img/cardback.png) no-repeat;
+  background-size: 100%;
+}
+.myPkList {
+  width: 60%;
+  height: 105px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 7%;
+  text-align: center;
+}
+
+.myPkList > li {
+  display: inline-block;
+  margin-left: -60px;
+  margin-top: 0px;
+  overflow: hidden;
+  position: relative;
+  top: 0px;
+  animation: pokerScale 0.6s 1;
+}
+
+@keyframes pokerScale {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.myPkList > .dizuPk::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background: url("../img/lordcardlogo.png") no-repeat;
+  width: 100%;
+  height: 100%;
+  background-size: 100% 100%;
+  pointer-events: none;
+}
+
+.plybtns {
+  width: 100%;
+  height: 45px;
+  margin-left: auto;
+  margin-right: auto;
+  vertical-align: center;
+  text-align: center;
+  position: absolute;
+  top: 10%;
+  z-index: 5;
+}
+
+.plybtns > li {
+  display: none;
+}
+
+.gmbtn {
+  -webkit-text-stroke: 1px deepskyblue;
+  padding-bottom: 5px;
+  outline: none;
+  border-style: none;
+  cursor: pointer;
+  width: 112px;
+  height: 43px;
+  background-color: transparent;
+  background: url("../img/btn_blue.png") no-repeat;
+  background-size: 100%, 100%;
+  font-family: "华文琥珀", "黑体", sans-serif;
+  font-size: 22px;
+  /* font-weight: bold; */
+  color: white;
+  border-radius: 28px;
+}
+
+.gmbtn:hover {
+  background: url("../img/btn_yellow.png") no-repeat;
+  background-size: 100%, 100%;
+  -webkit-text-stroke: 1px orange;
+  /* box-shadow: inset 2px 3px #222; */
+}
+
+.gmbtn:active {
+  background: url("../img/btn_ydown.png") no-repeat;
+  background-size: 100%, 100%;
+  -webkit-text-stroke: 1px orange;
+  font-size: 20px;
+}
+
+.clock {
+  width: 60px;
+  height: 60px;
+  background: url("../img/roomclock.png") no-repeat;
+  background-size: 100%, 100%;
+  text-align: center;
+  color: red;
+  font-size: 19px;
+  font-family: "微软雅黑", sans-serif;
+  font-weight: bold;
+  padding-top: 19px;
+  position: absolute;
+  top: calc(50% - 30px);
+  display: none;
+}
+
+.clock_bottom {
+  position: absolute;
+  top: -60px;
+  left: calc(50% - 30px);
+}
+
+.clock_lef {
+  left: 100%;
+}
+
+.clock_rig {
+  right: 100%;
+}
+
+.theyOutbox,
+.myOutbox {
+  font-size: 60px;
+  font-family: "华文琥珀", sans-serif;
+  -webkit-text-stroke: 2px rgb(11, 201, 226);
+  color: white;
+  line-height: 112px;
+  width: 100%;
+  height: 112px;
+}
+
+.theyOutbox {
+  margin-top: 7%;
+}
+
+.theyOutbox > .lef,
+.theyOutbox > .rig {
+  width: 40%;
+  height: 100%;
+}
+
+.theyOutbox > .lef > li,
+.theyOutbox > .rig > li,
+.myOutbox > li {
+  margin-left: -52px;
+  display: inline-block;
+  position: relative;
+  text-align: center;
+}
+
+.theyOutbox > .lef {
+  text-align: left;
+  float: left;
+}
+
+.theyOutbox > .rig {
+  text-align: right;
+  float: right;
+}
+
+.myOutbox {
+  margin-top: 7%;
+  text-align: center;
+}
+
+.outbox > li > div {
+  box-shadow: 2px 2px 10px black;
+}
+
+.outbox > span {
+  text-shadow: 2px 2px 2px black;
+}
+
+.msgbox {
+  position: fixed;
+  top: 50%;
+  width: 100%;
+  height: 45px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.msgbox > span {
+  font-family: "华文琥珀", sans-serif;
+  font-size: 45px;
+  color: floralwhite;
+  -webkit-text-stroke: 2px darkturquoise;
+  text-shadow: 6px 3px 9px black;
+  letter-spacing: 15px;
+}
+
+.staebar {
+  height: 49px;
+  position: absolute;
+}
+.staebar > .homebtn {
+  height: 27px;
+}
+
+.staebar-lef {
+  padding-left: 32px;
+  width: 100%;
+  text-align: left;
+  top: 22%;
+}
+
+.staebar-rig {
+  padding-right: 30px;
+  width: 100%;
+  text-align: right;
+  top: 22%;
+}
+
+.staebar-btm {
+  height: 65px;
+  width: 500px;
+  text-align: left;
+  top: 0%;
+  left: 10%;
+}
+
+/* .landlog-lef,.landlog-rig,.landlog-btm{
+    width: 60px;
+    height: 60px;
+    display: none;
+  } */
+
+.btmData {
+  width: 375px;
+  /* border:1px solid white; */
+  position: absolute;
+  right: 1%;
+  bottom: 1%;
+  text-align: center;
+}
+
+.multiple {
+  width: 150px;
+  height: 37px;
+  display: inline-block;
+}
+
+.multiple > span:first-child {
+  display: inline-block;
+  width: 37px;
+  height: 37px;
+  font-family: "华文琥珀", "微软雅黑", sans-serif;
+  font-size: 22px;
+  color: whitesmoke;
+  font-weight: bold;
+  -webkit-text-stroke: 1px peru;
+  background-image: linear-gradient(128deg, rgb(235 83 114), rgb(255, 208, 1) 62%, rgb(236, 75, 1));
+  border-radius: 50%;
+  box-shadow: 2px 2px 2px rgb(178 72 39);
+  text-align: center;
+  padding-top: 8px;
+}
+
+.multiple > span:last-child {
+  color: whitesmoke;
+  font-family: fantasy, "微软雅黑", sans-serif;
+  font-weight: bold;
+  font-size: 26px;
+  display: inline-block;
+  -webkit-text-stroke: 1px orange;
+  transform: translateY(5px);
+  font-weight: bold;
+}
+
+.minScore {
+  width: 90px;
+  height: 37px;
+  display: inline-block;
+}
+
+.minScore > span:first-child {
+  display: inline-block;
+  width: 37px;
+  height: 37px;
+  font-family: "华文琥珀", "微软雅黑", sans-serif;
+  font-size: 22px;
+  font-weight: bold;
+  color: whitesmoke;
+  -webkit-text-stroke: 1px rgb(8, 155, 204);
+  background-image: linear-gradient(128deg, rgb(1, 142, 189), rgb(172, 222, 245) 62%, rgb(1, 122, 236));
+  border-radius: 50%;
+  box-shadow: 2px 2px 2px rgb(0, 119, 158);
+  text-align: center;
+  padding-top: 8px;
+}
+
+.minScore > span:last-child {
+  color: whitesmoke;
+  font-family: fantasy, "微软雅黑", sans-serif;
+  font-weight: bold;
+  font-size: 26px;
+  display: inline-block;
+  -webkit-text-stroke: 1px rgb(11, 131, 243);
+  transform: translateY(5px);
+  font-weight: bold;
+}
+
+.waitbox {
+  width: 400px;
+  height: 100px;
+  color: whitesmoke;
+  font-family: "华文琥珀", sans-serif;
+  font-size: 27px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -50px;
+  margin-left: -200px;
+  text-align: center;
+}
+
+.waitbox > span {
+  line-height: 100px;
+  display: inline-block;
+}
+
+.wringlamp {
+  background: url("../img/waringlamp.png") no-repeat;
+  width: 33px;
+  height: 38px;
+  visibility: hidden;
+  position: absolute;
+}
+
+.wringlamp-btm {
+  left: 40%;
+  top: 40%;
+}
+
+.wringlamp-lef {
+  left: 47%;
+  top: 37%;
+}
+
+.wringlamp-rig {
+  right: 47%;
+  top: 37%;
+}
+
+.wringlamp > img {
+  width: 100%;
+  height: 100%;
+}
+
+.outfinish {
+  position: absolute;
+  text-align: center;
+  display: none;
+}
+
+.outfinish > img {
+  width: 100%;
+  height: 100%;
+}
+
+.outfinish-lef {
+  left: 30%;
+  top: 22%;
+}
+
+.outfinish-rig {
+  right: 30%;
+  top: 22%;
+}
+
+.outfinish-btm {
+  left: 12%;
+  top: -35%;
+}
+.wlmask {
+  display: none;
+}
+.lfwl {
+  display: block;
+  width: 450px;
+  height: 86px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -210px;
+  margin-top: -43px;
+}
+
+/* 胜利弹出框 */
+.wlbox {
+  width: 460px;
+  height: 620px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -240px;
+  margin-top: -360px;
+  z-index: 4;
+  display: block;
+}
+
+.winbox {
+  background: url("../img/Win/bg.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.losebox {
+  background: url("../img/Lose/bg.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.wlbox > img {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.wlbox > .leaf {
+  display: block;
+  position: absolute;
+  top: -50px;
+  width: 30px;
+  height: 30px;
+}
+
+.wlbox > .stat {
+  color: white;
+  display: block;
+  width: 100%;
+  font-size: 30px;
+  margin-top: 180px;
+  box-sizing: border-box;
+  font-family: "华文琥珀", sans-serif;
+  padding: 0px 60px;
+  border-collapse: separate;
+  border-spacing: 10px 20px;
+  text-shadow: 1px 1px 1px black;
+  text-align: center;
+}
+
+.wlbox > .stat tr {
+  display: inline;
+}
+
+.wlbox > .stat tr > td:last-child {
+  /* -webkit-text-stroke: skyblue 1px; */
+  color: cornsilk;
+  font-family: "微软雅黑", sans-serif;
+  font-weight: bold;
+}
+
+.wlbox > .btns {
+  display: block;
+  width: 100%;
+  height: 60px;
+  text-align: center;
+}
+
+.roomidbox {
+  position: absolute;
+  top: 0;
+  left: 65%;
+  width: 15%;
+  height: 50px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 0 0 40px 40px;
+  opacity: 0.7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.roomidbox > span {
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+}
+#quitgame {
+  width: 50px;
+  height: 30px;
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+}
+#quitgame > i {
+  font-size: 1.2rem;
+  display: inline-block;
+  transform: rotate(180deg);
+}
+.readflg {
+  position: absolute;
+  top: 40%;
+  width: 120px;
+  display: none;
+}
+.leftGamer .readflg {
+  right: -100px;
+}
+.rightGamer .readflg {
+  left: -100px;
+}
+
+/* 管理面板 */
+.slippanel {
+  position: absolute;
+  right: -400px;
+  bottom: 8vh;
+  width: 400px;
+  height: 300px;
+  background-color: #111;
+  border-radius: 10px 0 0 10px;
+  opacity: 0.8;
+  z-index: 5;
+  transition: right 1s;
+}
+.slippanel .pagetags {
+  width: 100%;
+  height: 15%;
+  box-sizing: border-box;
+  border-bottom: 2px solid white;
+  display: table;
+}
+.slippanel .pagetags > div {
+  width: 50px;
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 5px 5px 0 0;
+  box-sizing: border-box;
+}
+.slippanel .pagetags > div > span {
+  pointer-events: none;
+}
+.slippanel .pagetags .iconfont::before {
+  display: inline-block;
+  margin-right: 3px;
+}
+.slippanel .pagetags > div:hover {
+  background-color: #222;
+}
+.slippanel .slipbtn {
+  position: absolute;
+  width: 20px;
+  height: 80px;
+  border-radius: 5px 0 0 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: -20px;
+  top: 50%;
+  line-height: 80px;
+  margin-top: -40px;
+  cursor: pointer;
+  background-color: #111;
+}
+
+.slippanel .slipbtn span {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 1.3rem;
+  line-height: 80px;
+  cursor: pointer;
+}
+.slippanel .slipbtn > span:hover {
+  color: darkturquoise;
+  font-size: 1.3rem;
+}
+.slippanel .pages {
+  width: 1200px;
+  height: 85%;
+  overflow: hidden;
+}
+.slippanel .pages > .long {
+  width: 100%;
+  height: 100%;
+  transition: margin-lef, 1s;
+}
+.slippanel .pages > .long > div {
+  width: 400px;
+  height: 100%;
+  transition: margin 1s;
+  float: left;
+}
+#pg-setting {
+  background-color: yellow;
+}
+#pg-mmt {
+  display: block;
+}
+#pg-mmt > .top {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+#pg-mmt > .top > div {
+  width: 50%;
+  height: 100%;
+  flex-grow: 1;
+}
+#pg-mmt > .btm {
+  width: 100%;
+  height: 50%;
+}
+#pg-mmt > .top > div,
+#pg-mmt > .btm {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+#pg-mmt > .top > div > div,
+#pg-mmt > .btm > div {
+  width: 100%;
+  flex-grow: 1;
+  text-align: center;
+  color: white;
+  padding: 0px 3px;
+}
+#pg-mmt .head {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#pg-mmt .head > img {
+  width: 60px;
+}
+#pg-talk {
+  background-color: hotpink;
+}

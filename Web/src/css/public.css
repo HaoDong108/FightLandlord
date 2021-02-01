@@ -1,0 +1,208 @@
+/* 遮罩样式 */
+.mask {
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.homebtn {
+  color: white;
+  font-family: "微软雅黑", sans-serif;
+  font-weight: bold;
+  text-shadow: rgb(51, 51, 51) 1px 1px 3px;
+  cursor: pointer;
+  border-radius: 5px;
+  border-style: none;
+  outline: none;
+}
+/* 房间按钮样式 */
+.homebtn:active {
+  background-color: #ee12ee !important;
+  box-shadow: 1px 1px 0px #ba1fad !important;
+  transform: translateX(2px) translateY(2px);
+}
+.homebtn-color-green {
+  background-color: #09f56f;
+  box-shadow: 3px 3px 0px #50ba1f;
+}
+.homebtn-color-green:hover {
+  background-color: #00ffaa;
+  box-shadow: 3px 3px 0px #20d365;
+}
+.homebtn-color-cyan {
+  background-color: rgb(24, 224, 224);
+  box-shadow: 2px 2px 0px #1fa9ba;
+}
+.homebtn-color-cyan:hover {
+  background-color: rgb(7, 248, 248);
+  box-shadow: 2px 2px 0px #1cbed3;
+}
+.homebtn-color-orange {
+  background-color: #eca809;
+  box-shadow: 3px 3px 0px #b47816;
+}
+.homebtn-color-orange:hover {
+  background-color: #ffc400;
+  box-shadow: 3px 3px 0px #b8a016;
+}
+.homebtn-color-red {
+  background-color: #eb2d07;
+  box-shadow: 2px 2px 0px #af2715;
+}
+.homebtn-color-red:hover {
+  background-color: #ff2d03;
+  box-shadow: 2px 2px 0px #d12a14;
+}
+.slider-label {
+  width: 70px;
+  height: 30px;
+  background-color: whitesmoke;
+  border-radius: 30px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+  transition: all 1s;
+  box-shadow: inset 2px 2px 2px #aaa;
+}
+.slider-label::before {
+  content: "";
+  display: block;
+  width: 25px;
+  height: 25px;
+  background-color: whitesmoke;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  left: 3px;
+  box-shadow: 1px 0px 4px rgb(44, 43, 43);
+  transition: left 0.5s;
+  box-sizing: border-box;
+}
+.slider-label:hover::before {
+  border: 2px solid greenyellow;
+}
+.slider-input {
+  display: none;
+}
+.slider-input:checked + label {
+  background-color: deepskyblue;
+  box-shadow: inset 2px 2px 2px rgb(72, 137, 180);
+}
+.slider-input:checked + label::before {
+  left: calc(100% - 30px);
+}
+
+/* 消息框 */
+.megbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: none;
+}
+.megbox .center {
+  width: 30%;
+  height: 30%;
+  background-color: rgba(8, 41, 62, 0.9);
+  border-radius: 10px;
+  box-shadow: 2px 2px 3px rgb(48, 79, 105);
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+}
+.megbox .head {
+  width: 100%;
+  height: 15%;
+  border-radius: 10px 10px 0px 0px;
+  background-color: rgba(22, 175, 226, 0.56);
+  position: relative;
+}
+.megbox .head .cblock {
+  width: 30%;
+  height: 80%;
+  background-color: #1f9eda;
+  border-radius: 0 0 10px 10px;
+  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin-left: -15%;
+}
+.megbox .head .title {
+  color: white;
+  font-size: 1em;
+  display: inline-block;
+  margin-left: 10px;
+  margin-top: 5px;
+  font-family: "微软雅黑", sans-serif;
+  font-weight: bold;
+}
+.megbox .text {
+  width: 100%;
+  height: 60%;
+}
+.megbox .text > span {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+.megbox .msbtns button {
+  margin: 0px 10px 10px 10px;
+  width: 60px;
+  height: 30px;
+}
+
+/* 提示弹出层 */
+.prompt {
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+.prompt .ico {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  line-height: 20px;
+  margin-right: 5px;
+}
+.prompt .erro {
+  background-color: red;
+}
+.prompt .succ {
+  background-color: limegreen;
+  display: block;
+}
+.prompt .inf {
+  background-color: deepskyblue;
+}
+
+.prompt .innertext {
+  color: white;
+  font-family: "微软雅黑", sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+}

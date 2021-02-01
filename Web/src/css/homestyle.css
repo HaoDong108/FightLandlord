@@ -1,0 +1,1217 @@
+@import "./reset.css";
+@import "./public.css";
+@import "./iconfont.css";
+@import "./anim.css";
+
+html {
+  height: 100%;
+  width: 100%;
+  transform-style: preserve-3d;
+}
+* {
+  box-sizing: border-box;
+}
+/* div[class]{
+    border: 1px solid greenyellow;
+} */
+body {
+  width: 100%;
+  height: 100%;
+  /* overflow:hidden; */
+  background-color: rgb(22, 24, 28);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.view {
+  width: 1200px;
+  height: 700px;
+  box-sizing: border-box;
+  border: 10px solid rgb(50, 50, 51);
+  box-shadow: inset 1px 1px 6px black;
+  background-color: #777;
+  position: relative;
+}
+
+.region {
+  width: 100%;
+  height: 100%;
+  background: url("../img/Home/back.png") no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  position: relative;
+}
+.region > header {
+  width: 100%;
+  height: 14%;
+  display: flex;
+  justify-content: space-between;
+}
+.region > header > div {
+  height: 100%;
+}
+/* 信息栏块 */
+.userinfo {
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 30px;
+  width: 30%;
+}
+.userinfo > .head {
+  position: relative;
+}
+.userinfo > .head::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70px;
+  height: 70px;
+  margin-left: -35px;
+  margin-top: -35px;
+  background-color: rgba(254, 254, 254, 0.8);
+  border-radius: 50%;
+}
+.userinfo > .head > img {
+  width: 80px;
+  height: 80px;
+  z-index: 1;
+}
+.userinfo > .ifo {
+  width: 200px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px;
+}
+.userinfo > .ifo #pname,
+.userinfo > .ifo #pip {
+  width: 100%;
+  font-family: "微软雅黑", sans-serif;
+  color: white;
+  font-weight: bold;
+  line-height: 25px;
+}
+.userinfo > .ifo #psex {
+  font-size: 14px;
+}
+.userinfo > .ifo > hr {
+  width: 150px;
+  background-color: white;
+  border-color: white;
+}
+/* 广播栏块 */
+.radio {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 40%;
+}
+.radio > .content {
+  width: 450px;
+}
+.radio > .content > .innerback {
+  width: 100%;
+  background-color: rgba(43, 42, 42, 0.45);
+  /* border-radius: 20px 20px 20px 0px; */
+  height: 40px;
+}
+.radio > .content > .sendbox {
+  width: 100%;
+  background-color: rgba(43, 42, 42, 0.45);
+  color: transparent;
+  height: 40px;
+  border-top: 1px solid whitesmoke;
+  border-image-slice: 10;
+  /* border-image-source: ; */
+  display: flex;
+  justify-content: space-between;
+  border-image-source: linear-gradient(90deg, transparent, white 50%, transparent);
+  display: none;
+}
+.radio > .content > .sendbox > div {
+  height: 100%;
+}
+.radio > .content > .sendbox > div:first-child {
+  width: 85%;
+  color: white;
+  font-size: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+#putradio {
+  width: 85%;
+  height: 80%;
+  outline: none;
+  background-color: transparent;
+  border-style: none;
+  color: white;
+  font-family: "微软雅黑", sans-serif;
+}
+.radio > .content > .sendbox > div:last-child {
+  width: 15%;
+}
+#sendradio {
+  background-color: transparent;
+  color: white;
+  border-style: none;
+  cursor: pointer;
+  outline: none;
+  height: 100%;
+  width: 50px;
+}
+#sendradio:hover > i {
+  color: turquoise;
+  font-size: 20px;
+}
+#sendradio:active > i {
+  color: lightgoldenrodyellow;
+  font-size: 18px;
+}
+.radio > div > i {
+  color: white;
+  font-size: 25px;
+}
+.radio > div {
+  margin-right: 10px;
+}
+.radio > .jianpan {
+  cursor: pointer;
+}
+.radio > .jianpan > i:hover {
+  color: rgb(4, 214, 241);
+}
+/* 钱币区域 */
+.money {
+  width: 30%;
+}
+.money > .moneytext {
+  width: 150px;
+  height: 43px;
+  background: url("../img/Home/moneybg.png") no-repeat;
+  background-size: 100% 100%;
+  position: relative;
+  flex-shrink: 1;
+}
+.money > .moneytext > span {
+  color: white;
+  font-family: "微软雅黑", sans-serif;
+  font-weight: bold;
+  position: relative;
+  bottom: 3px;
+}
+/* 主体区域 */
+.region section {
+  display: flex;
+  justify-content: space-around;
+  height: 70%;
+  width: 100%;
+  padding: 0 30px;
+  align-items: center;
+}
+.region section > div {
+  height: 90%;
+}
+/* 人物展示区 */
+.roleinfo {
+  flex-grow: 1;
+  flex-direction: column;
+}
+.roleinfo > .role {
+  width: 200px;
+  height: 350px;
+  position: relative;
+}
+.roleinfo > .role > .rol {
+  width: 90%;
+  height: 90%;
+  position: relative;
+  top: 10px;
+  left: 10px;
+}
+.roleinfo > .role > .btz {
+  width: 180px;
+  position: absolute;
+  bottom: 15px;
+  left: 10px;
+}
+.roleinfo > .btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.roleinfo > .change {
+  text-align: center;
+  width: 90%;
+}
+.roleinfo > .change > button {
+  background-color: rgba(3, 223, 252, 0.9);
+  width: 90px;
+  height: 30px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  color: white;
+  font-family: "微软雅黑", sans-serif;
+  font-weight: bold;
+  box-shadow: 2px 2px 1px rgba(5, 166, 187, 0.8);
+  text-shadow: 1px 1px 3px rgb(51, 51, 51);
+  cursor: pointer;
+  transform: all 1s;
+}
+.roleinfo > .change > button:hover {
+  background-color: rgba(3, 252, 98, 0.9);
+  box-shadow: 2px 2px 1px rgba(5, 187, 111, 0.8);
+}
+.roleinfo > .change > button:active {
+  background-color: rgba(252, 206, 3, 0.9);
+  box-shadow: 1.5px 1.5px 1px rgba(165, 114, 3, 0.8);
+  text-shadow: none;
+}
+/* 按钮 */
+.region section .btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  flex-grow: 1;
+}
+.region section .btns > div {
+  width: 300px;
+  height: 155px;
+  position: relative;
+  cursor: pointer;
+}
+.region section .btns button {
+  border-style: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  cursor: pointer;
+}
+.region section .btns button > span {
+  font-family: "微软雅黑", "黑体", sans-serif;
+  font-style: oblique;
+  font-weight: bold;
+  color: white;
+  font-size: 40px;
+  text-shadow: 2px 2px 5px black;
+}
+.region section .btns > .quick button > span {
+  position: relative;
+  left: 10px;
+}
+.region section .btns > .create button > span {
+  position: relative;
+  right: 10px;
+}
+.region section .btns > .quick button {
+  background: url("../img/Home/btnpurple.png");
+  background-size: 100% 100%;
+}
+.region section .btns > .create button {
+  background: url("../img/Home/btngreen.png");
+  background-size: 100% 100%;
+}
+.region section .btns .rol {
+  width: 45%;
+  z-index: 1;
+}
+.region section .btns .quick .rol {
+  position: absolute;
+  left: -40px;
+  bottom: -20px;
+  animation: udfloat1 3.8s infinite linear;
+}
+.region section .btns .create .rol {
+  position: absolute;
+  right: -40px;
+  bottom: -20px;
+  animation: udfloat2 4.2s infinite linear;
+}
+@keyframes udfloat1 {
+  0% {
+    bottom: -20px;
+  }
+  50% {
+    bottom: 0px;
+  }
+  100% {
+    bottom: -20px;
+  }
+}
+@keyframes udfloat2 {
+  0% {
+    bottom: -25px;
+  }
+  50% {
+    bottom: 5px;
+  }
+  100% {
+    bottom: -25px;
+  }
+}
+/* 按钮光效 */
+.region section .btns .indiv {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 20px;
+  transition: all 0.2s;
+}
+.region section .btns .indiv:hover,
+.region section .btns .indiv:hover button span {
+  transform: scale(1.05);
+}
+.btns .indiv:active {
+  transform: scale(1);
+}
+.region section .btns .white1,
+.region section .btns .white2 {
+  position: absolute;
+  width: 600px;
+  height: 300px;
+  pointer-events: none;
+}
+.region section .btns .white1 {
+  left: -500px;
+  top: -180px;
+  animation: ltor 4s infinite linear;
+}
+.region section .btns .white2 {
+  right: -500px;
+  bottom: -180px;
+  animation: rtol 4s infinite linear;
+}
+@keyframes ltor {
+  from {
+    left: -500px;
+  }
+  to {
+    left: 1500px;
+  }
+}
+@keyframes rtol {
+  from {
+    right: -500px;
+  }
+  to {
+    right: 1500px;
+  }
+}
+.region section .btns .sg {
+  width: 100px;
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  transform: scale(0);
+}
+.flashlamp {
+  animation: twk 4s infinite linear;
+}
+@keyframes twk {
+  50% {
+    transform: scale(0);
+  }
+  75% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+/* 排行榜 */
+.rank {
+  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+.rank > .backdiv {
+  background-color: rgba(23, 164, 220, 0.45);
+  border: 3px solid rgba(254, 254, 254, 0.4);
+  border-radius: 20px;
+  width: 100%;
+  height: 96%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: center;
+  padding-right: 10px;
+}
+.rank > .backdiv > div {
+  width: 100%;
+  padding: 0px 30px;
+}
+.rank > .backdiv > .they {
+  height: 85%;
+  overflow-y: scroll;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.rank > .backdiv > .my {
+  height: 10%;
+}
+.rkitem {
+  width: 100%;
+  height: 20%;
+  border-radius: 10px;
+  box-shadow: 1px 2px 3px black;
+  background-color: whitesmoke;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 10px;
+  position: relative;
+  padding-left: 10px;
+}
+.rkitem > .head {
+  width: 60px;
+  height: 60px;
+  background-color: deepskyblue;
+  box-shadow: 1px 1px 3px #555;
+  border-radius: 50%;
+  margin-left: -10px;
+}
+.rkitem > .head > img {
+  width: 60px;
+  height: 60px;
+}
+.rkitem > .info {
+  width: 40%;
+  flex-direction: column;
+}
+.rkitem > .info > div {
+  width: 100%;
+  height: 30px;
+}
+.rkitem > .info > .name {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.rkitem > .info > .name > span {
+  color: rgb(80, 80, 80);
+  font-weight: bold;
+  font-family: "微软雅黑", sans-serif;
+}
+.rkitem > .info > .moy {
+  background: url("../img/Home/bi.png") no-repeat;
+  background-size: 25px 25px;
+  background-position-y: 4px;
+  height: 30px;
+}
+.rkitem > .info > .moy > span {
+  color: rgb(226, 208, 45);
+  font-weight: bold;
+  font-family: "微软雅黑", sans-serif;
+}
+.rkitem > .no {
+  color: rgb(80, 80, 80);
+  font-weight: bold;
+  font-family: "微软雅黑", sans-serif;
+  font-size: 20px;
+}
+.rkitem:nth-child(1)::before,
+.rkitem:nth-child(2)::before,
+.rkitem:nth-child(3)::before {
+  content: "";
+  background: url("../img/Home/no123.png") no-repeat;
+  background-size: 120px 60px;
+  width: 40px;
+  height: 50px;
+  position: absolute;
+  top: -25px;
+  left: -25px;
+  transform: rotate(-45deg);
+}
+.rkitem:nth-child(2)::before {
+  background-position-x: -40px;
+}
+.rkitem:nth-child(3)::before {
+  background-position-x: -80px;
+}
+.rank > .backdiv > .my > hr {
+  width: 100px;
+  background-color: white;
+  border: 1px solid white;
+  box-shadow: 1px 1px 2px black;
+}
+.rank > .backdiv > .my > div {
+  color: white;
+  font-family: "微软雅黑", sans-serif;
+  text-align: center;
+}
+div::-webkit-scrollbar {
+  height: 1px;
+}
+div::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.7);
+}
+div::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background: rgba(234, 236, 236, 0.5);
+}
+div::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.region footer {
+  width: 100%;
+  height: 80px;
+  /* border: 1px solid greenyellow; */
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.region footer > .lokfor {
+  width: 300px;
+  height: 50px;
+  /* border: 1px solid orange; */
+  background-image: url("../img/Home/lfback.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  color: white;
+  font-family: "华文琥珀", "微软雅黑", sans-serif;
+  font-weight: bold;
+  font-style: oblique;
+  font-size: 22px;
+}
+.region footer > .lokfor > div {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.region footer > .lokfor > .innertext {
+  margin-left: 7px;
+  margin-right: 20px;
+}
+.region footer > .lokfor > .innertext > span {
+  position: relative;
+  top: 5px;
+  -webkit-text-stroke: 0.5px rgb(0, 247, 255);
+  margin-left: 7px;
+}
+.region footer > .lokfor > .innertext > i {
+  position: relative;
+  top: 5px;
+  animation: rot 2s infinite linear;
+  font-size: 20px;
+}
+@keyframes rot {
+  0% {
+    transform: translateX(0px) translateY(-5px);
+  }
+  25% {
+    transform: translateX(5px) translateY(0px);
+  }
+  50% {
+    transform: translateX(0px) translateY(5px);
+  }
+  75% {
+    transform: translateX(-5px) translateY(0px);
+  }
+  100% {
+    transform: translateX(0px) translateY(-5px);
+  }
+}
+.region footer > .lokfor > .cancel {
+  /* background-color: white; */
+  box-sizing: border-box;
+  transform: translateX(55px);
+}
+.region footer > .lokfor > .cancel > i {
+  font-size: 25px;
+  color: white;
+  border-radius: 50%;
+}
+.region footer > .lokfor .dot {
+  display: inline-block;
+}
+
+/* 房间查找界面 */
+.roombox {
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+.roombox > .rolelogo > .rol {
+  width: 100%;
+  height: 100%;
+}
+.roombox > .rolelogo > .sg {
+  position: absolute;
+  left: 60px;
+  top: 115px;
+}
+.roombox > .rolelogo {
+  position: absolute;
+  bottom: -40px;
+  left: 0px;
+  width: 300px;
+}
+.roombox > .center {
+  width: 800px;
+  height: 500px;
+  background-color: rgba(113, 167, 220, 0.63);
+  border-radius: 20px;
+  border: 3px solid rgba(42, 166, 245, 0.54);
+  box-shadow: 3px 3px 7px #333;
+}
+/* 顶部样式 */
+.roombox .header,
+.roombox .section,
+.roombox .footer {
+  width: 100%;
+}
+.roombox .header {
+  height: 15%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 30px;
+}
+.roombox .header .lef > .wback {
+  width: 100px;
+  height: 50px;
+  background-color: white;
+  border-radius: 0px 30px 30px 0px;
+  box-shadow: 1px 1px 4px black;
+  border: 1px solid whitesmoke;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: -10px;
+}
+.roombox .header .wback > div {
+  border-radius: 50%;
+  background-color: white;
+  border: 2px solid deepskyblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 1px 1px 2px #333;
+  width: 45px;
+  height: 45px;
+  margin-right: 13px;
+}
+.roombox .header .wback > div > i {
+  color: deepskyblue;
+  font-weight: bold;
+  font-size: 25px;
+}
+.roombox .header .mid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.roombox .header .mid > div {
+  width: 280px;
+  height: 70px;
+  background: url("../img/Home/roomtitle.png") no-repeat;
+  background-size: 100% 100%;
+  margin-top: -30px;
+  text-align: center;
+}
+.roombox .header .mid > div > span {
+  font-size: 30px;
+  /* font-weight: bold; */
+  color: white;
+  text-shadow: 2px 1px 2px #333;
+  font-family: "华文琥珀", sans-serif;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+.roombox .header .rig > button {
+  width: 45px;
+  height: 35px;
+}
+.roombox .header .rig > button > i {
+  font-size: 22px;
+}
+.roombox .header .rig > button:nth-child(2) {
+  margin-left: 10px;
+}
+.roombox .header .rig > button:nth-child(1):hover > i {
+  animation: shuaxinrol 3s infinite linear;
+  display: inline-block;
+  text-shadow: none;
+}
+@keyframes shuaxinrol {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* 列表样式 */
+.roombox .section {
+  height: 70%;
+}
+.roombox .section > .rooms {
+  width: 80%;
+  height: 100%;
+  margin: 0 auto;
+  overflow-y: scroll;
+  padding-top: 5px;
+  position: relative;
+}
+.roombox .section > .rooms > .nullroom {
+  display: block;
+  position: absolute;
+  width: 100%;
+  top: 48%;
+  font-family: "华文琥珀", sans-serif;
+  color: white;
+  font-size: 1.8rem;
+  text-align: center;
+  opacity: 0.8;
+  transform: rotate();
+}
+.roombox .section > .rooms table {
+  width: 95%;
+  margin: 0 auto;
+}
+.roombox .section > .rooms table td {
+  text-align: center;
+  padding-bottom: 20px;
+}
+.roombox .section > .rooms .item {
+  width: 250px;
+  height: 70px;
+  background-color: white;
+  box-shadow: 2px 2px 0px rgb(218, 216, 216);
+  border-radius: 10px;
+  display: inline-flex;
+  text-align: left;
+  justify-content: flex-start;
+  align-items: center;
+  padding-right: 5px;
+  padding-left: 5px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+.roombox .section > .rooms .item:hover {
+  box-shadow: 6px 6px 0px rgb(130, 211, 187);
+  transform: translateX(-4px) translateY(-4px);
+  background-color: rgb(166, 235, 217);
+}
+/* item 房间ID和门 */
+.roombox .section > .rooms .item > .door {
+  display: block;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  right: 10px;
+  bottom: 3px;
+  font-size: 30px;
+  color: deepskyblue;
+}
+.roombox .section > .rooms .item:active {
+  transform: translateX(4px) translateY(4px);
+  background-color: white;
+  box-shadow: 2px 2px 0px rgb(218, 216, 216);
+  transition: all 0.2s;
+}
+.roombox .section > .rooms .item > .roomid {
+  position: absolute;
+  right: 5px;
+  top: 1px;
+  color: #03e2da;
+  font-size: 12px;
+  font-family: "微软雅黑", sans-serif;
+}
+.roombox .section > .rooms .item > .roomid > span {
+  color: #03e2da;
+  font-size: 12px;
+  font-family: "微软雅黑", sans-serif;
+}
+/* item左侧 */
+.roombox .section > .rooms .item > .lef {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.roombox .section > .rooms .item > .lef > .round {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(10, 186, 245);
+  box-shadow: 1px 1px 2px #555;
+}
+.roombox .section > .rooms .item > .lef > .round > img {
+  width: 60px;
+  height: 60px;
+}
+/* item中建部分 */
+.roombox .section > .rooms .item > .mid {
+  height: 100%;
+  width: 50%;
+  margin-left: 3px;
+  display: flex;
+  justify-content: space-around;
+  align-content: flex-start;
+  flex-direction: column;
+}
+.roombox .section > .rooms .item > .mid > .name {
+  color: rgb(80, 80, 80);
+  text-overflow: ellipsis;
+  font-size: 17px;
+  font-weight: bold;
+}
+.roombox .section > .rooms .item > .mid > .homeinfo {
+  color: rgb(115, 26, 228);
+  font-size: 14px;
+  font-weight: bold;
+  font-family: "微软雅黑", sans-serif;
+  display: flex;
+  justify-content: space-between;
+}
+/* 底部区域 */
+.roombox .footer {
+  display: flex;
+  height: 15%;
+  width: 95%;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+}
+.roombox .footer > .lef > button {
+  width: 110px;
+  height: 35px;
+  background-color: #1de0e0;
+  box-shadow: 3px 3px 0px #23bbcf;
+  margin-right: 5px;
+}
+.roombox .footer > .lef > button:hover {
+  background-color: #04fafa;
+  box-shadow: 3px 3px 0px #11cbe4;
+}
+.roombox .footer > .rig > div {
+  width: 200px;
+  height: 35px;
+  background-color: rgba(10, 39, 50, 0.38);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+}
+.roombox .footer > .rig > div div {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.roombox .footer > .rig > div > .input {
+  width: 80%;
+  border-right: 1px solid #ccc;
+}
+.roombox .footer > .rig > div > .btns {
+  width: 20%;
+}
+.roombox .footer > .rig #search {
+  width: 100%;
+  outline: none;
+  border-style: none;
+  background-color: transparent;
+  color: white;
+}
+.roombox .footer > .rig #search::placeholder {
+  color: #999;
+}
+.roombox .footer > .rig #query {
+  background-color: transparent;
+  color: white;
+  border-style: none;
+  outline: none;
+  cursor: pointer;
+}
+.roombox .footer > .rig #query:hover {
+  color: #18e0e0;
+}
+
+/* 信息修改窗口 */
+.infochange {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+.infochange > .center {
+  width: 300px;
+  height: 400px;
+  background-color: rgba(113, 167, 220, 0.63);
+  border-radius: 20px;
+  border: 3px solid rgba(42, 166, 245, 0.54);
+  box-shadow: 3px 3px 7px #333;
+}
+.infochange > .center > div {
+  width: 100%;
+}
+.infochange > .center .head {
+  height: 20%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 5px;
+  flex-grow: 1;
+}
+.infochange > .center .head > .lef {
+  width: 30%;
+}
+.infochange > .center .head > .lef::after {
+  content: "点击修改头像";
+  display: block;
+  width: 100%;
+  color: white;
+  font-size: 12px;
+  font-family: "微软雅黑", sans-serif;
+  text-align: center;
+}
+.infochange > .center .head > .lef > .headback {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  background-color: deepskyblue;
+  box-shadow: 1px 1px 2px #777777;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+.infochange > .center .head > .lef > .headback > img {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.infochange > .center .head > .lef > .headback:hover {
+  background-color: rgb(0, 225, 255);
+}
+
+.infochange > .center .head > .mid {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.infochange .head .mid > div {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  height: 50%;
+}
+.infochange .head .mid > div > div {
+  cursor: pointer;
+  height: 100%;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  line-height: 25px;
+  text-align: center;
+}
+.infochange .head .mid > div .nowsex {
+  background-color: white;
+}
+.infochange #icname {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-style: none;
+  border-radius: 5px;
+  color: white;
+  height: 30px;
+  text-align: center;
+  outline: none;
+}
+.infochange > .center .head > .rig {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.infochange > .center .head > .rig button {
+  flex-grow: 1;
+  margin: 5px auto;
+}
+.infochange .rolebox {
+  height: 80%;
+}
+.infochange .rolebox .role {
+  width: 100%;
+  height: 80%;
+}
+.infochange .rolebox .role > img {
+  display: block;
+  margin: 0 auto;
+  height: 100%;
+}
+.infochange .rolebox .btns {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.infochange .rolebox button {
+  background-color: #18e0e0;
+  box-shadow: 2px 2px 0px #1fa9ba;
+  width: 60px;
+  height: 30px;
+  margin-top: 10px;
+}
+.infochange .rolebox button:hover {
+  background-color: #09f0f0;
+  box-shadow: 2px 2px 0px #17bdd3;
+}
+.infochange #rolelast {
+  margin-right: 10px;
+}
+.infochange #rolenext {
+  margin-left: 10px;
+}
+
+
+/* 房间配置弹出层 */
+.rsetting {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+.rsetting .center {
+  width: 350px;
+  height: 300px;
+  background-color: rgba(113, 167, 220, 0.63);
+  border-radius: 20px;
+  border: 1px solid rgba(42, 166, 245, 0.53);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.rsetting .center > div {
+  width: 100%;
+}
+.rsetting .center #roomlock {
+}
+.rsetting .center .top {
+}
+.rsetting .top .titblk {
+  width: 45%;
+  height: 40px;
+  background-color: #0fcbcb;
+  border-radius: 0 0 30px 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 1px 1px 5px rgb(44, 43, 43);
+  top: -2px;
+}
+.rsetting .top .titblk::after {
+  content: "房间配置";
+  font-size: 1.4rem;
+  font-family: "华文琥珀", sans-serif;
+  color: white;
+}
+.rsetting .top .titblk > div:nth-child(1) {
+  background-color: #1ee4dd;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  color: white;
+  line-height: 50px;
+  font-size: 1.6rem;
+  box-shadow: 1px 1px 5px rgb(44, 43, 43);
+  position: absolute;
+  left: -20px;
+  top: -7px;
+}
+.rsetting .top .titblk > div:nth-child(2) {
+  width: 100px;
+  height: 70%;
+}
+.rsetting .mid {
+  flex-grow: 2;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.rsetting .mid > div {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.rsetting .mid > div > span:first-child {
+  color: white;
+  font-size: 1rem;
+  font-family: "微软雅黑", sans-serif;
+  font-weight: bold;
+  margin-right: 5px;
+}
+#setroompwd,
+#setbtscore {
+  outline: none;
+  padding: 5px;
+  border-radius: 3px;
+  border-style: none;
+}
+
+#setroompwd {
+  background-color: #eee;
+}
+
+.rsetting .mid > div input[type="text"] {
+  border-style: none;
+  padding: 5px;
+  outline: none;
+  border-radius: 5px;
+  box-shadow: inset 1px 1px 2px rgb(177, 173, 173);
+}
+.rsetting .btm {
+  flex-grow: 1;
+}
+.rsetting .btm > button {
+  width: 80px;
+  height: 35px;
+  margin: 10px;
+}
+
+@media all and (max-width: 1200px) {
+  .view {
+    width: 100%;
+    border-style: none;
+  }
+}
+@media all and (max-height: 700px) {
+  .view {
+    height: 100%;
+    border-style: none;
+  }
+}

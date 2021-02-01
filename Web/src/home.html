@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>斗地主主界面</title>
+  </head>
+  <body>
+    <!-- 窗口区域 -->
+    <div class="view msParent flex-center">
+      <!-- 游戏界面区域 -->
+      <div class="region">
+        <header>
+          <!-- 左侧信息区域 -->
+          <div class="userinfo">
+            <!-- 头像 -->
+            <div class="head flex-center">
+              <img id="phead" src="./img/HeadImgs/an1.png" />
+            </div>
+            <!-- 用户信息 -->
+            <div class="ifo">
+              <div>
+                <span id="pname">游客</span>
+                <i id="psex" class="iconfont icon-nan"></i>
+              </div>
+              <hr align="left" />
+              <div id="pip">192.168.1.2</div>
+            </div>
+          </div>
+          <!-- 中间广播区域 -->
+          <div class="radio">
+            <div class="laba"><i class="iconfont icon-laba"></i></div>
+            <div class="content">
+              <div class="innerback"></div>
+              <div class="sendbox">
+                <div class="flex-center">
+                  <input type="text" maxlength="30" id="putradio" placeholder="输入发送内容" />
+                  <span>(<span id="rembyte">0</span>/30)</span>
+                </div>
+                <div class="flex-center">
+                  <button id="sendradio" class="flex-center">
+                    <i class="iconfont icon-fasong"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="jianpan"><i class="iconfont icon-jianpan"></i></div>
+          </div>
+          <!-- 右侧钱币区域 -->
+          <div class="money flex-center">
+            <div class="moneytext flex-center">
+              <span>0</span>
+            </div>
+          </div>
+        </header>
+
+        <section>
+          <!-- 人物区域 -->
+          <div class="roleinfo flex-center">
+            <div class="role">
+              <!-- 底座 -->
+              <img class="btz" src="./img/Home/btzuo.png" />
+              <!-- 人物 -->
+              <img class="rol" id="prole" src="./img/Roles/role1.png" />
+            </div>
+            <div class="change">
+              <button id="setinfo" class="homebtn-color-orange">信息修改</button>
+            </div>
+          </div>
+          <!-- 按钮区域 -->
+          <div class="btns">
+            <!-- 快速匹配 -->
+            <div class="quick">
+              <div class="indiv">
+                <button><span>快速匹配</span></button>
+                <!-- 光效 -->
+                <img class="white1" src="./img/Home/btnwhite.png" />
+                <img class="white2" src="./img/Home/btnwhite.png" />
+              </div>
+              <img class="rol" src="./img/Home/ld.png" alt="" />
+              <img class="sg flashlamp" src="./img/Home/sg.png" alt="" />
+            </div>
+            <!-- 创建房间 -->
+            <div class="create">
+              <div class="indiv">
+                <button><span>寻找房间</span></button>
+                <!-- 光效 -->
+                <img class="white1" src="./img/Home/btnwhite.png" />
+                <img class="white2" src="./img/Home/btnwhite.png" />
+              </div>
+              <img class="rol" src="./img/Home/fm.png" alt="" />
+              <img class="sg flashlamp" src="./img/Home/sg.png" alt="" />
+            </div>
+          </div>
+          <!-- 排行榜区域 -->
+          <div class="rank">
+            <div class="backdiv">
+              <!-- 排名区域 -->
+              <div class="they"></div>
+              <!-- 我的排名 -->
+              <div class="my">
+                <hr />
+                <div>我的排名:<span id="myrank">1</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer>
+          <div class="lokfor flex-center">
+            <div class="innertext">
+              <i class="iconfont icon-sousuo"></i>
+              <span>
+                正在寻找对局
+                <span class="dot">.</span>
+                <span class="dot">.</span>
+                <span class="dot">.</span>
+              </span>
+            </div>
+          </div>
+        </footer>
+        <!-- 房间窗口弹出层 -->
+        <div class="roombox mask">
+          <div class="rolelogo">
+            <img class="rol" src="./img/Home/roomrole.png" />
+            <img class="sg flashlamp" src="./img/Home/sg.png" />
+          </div>
+          <div class="center">
+            <!-- 顶部区域 -->
+            <div class="header">
+              <!-- 左边白块装饰 -->
+              <div class="lef">
+                <div class="wback">
+                  <div><i class="iconfont icon-house"></i></div>
+                </div>
+              </div>
+              <!-- 中间标题 -->
+              <div class="mid">
+                <div class="title"><span>房间列表</span></div>
+              </div>
+              <!-- 右侧按钮 -->
+              <div class="rig">
+                <button id="updateroom" class="homebtn homebtn-color-green">
+                  <i class="iconfont icon-update"></i>
+                </button>
+                <button id="quitroom" class="homebtn homebtn-color-orange">
+                  <i class="iconfont icon-quit"></i>
+                </button>
+              </div>
+            </div>
+            <!-- 中间列表区 -->
+            <div class="section">
+              <div class="rooms">
+                <span class="nullroom">当前没有任何房间</span>
+                <table>
+                  <tr>
+                    <td>
+                      <div class="item">
+                        <div class="lef">
+                          <div class="round">
+                            <img class="head" src="./img/HeadImgs/an16.png" />
+                          </div>
+                        </div>
+                        <div class="mid">
+                          <div class="name">李友是猪的房间</div>
+                          <div class="homeinfo">
+                            <span class="iconfont icon-chengyuan">1/3</span>
+                            <span class="iconfont icon-btscore">200</span>
+                          </div>
+                        </div>
+                        <div class="roomid">ID:<span>14154</span></div>
+                        <i class="iconfont icon-closedoor door"></i>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="item">
+                        <div class="lef">
+                          <div class="round">
+                            <img class="head" src="./img/HeadImgs/an16.png" />
+                          </div>
+                        </div>
+                        <div class="mid">
+                          <div class="name">李友是猪的房间</div>
+                          <div class="homeinfo">
+                            <span class="iconfont icon-chengyuan">1/3</span>
+                            <span class="iconfont icon-btscore">200</span>
+                          </div>
+                        </div>
+                        <div class="roomid">ID:<span>14154</span></div>
+                        <i class="iconfont icon-closedoor door"></i>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <!-- 底部操作区 -->
+            <div class="footer">
+              <!-- 左侧按钮区 -->
+              <div class="lef">
+                <button id="createroom" class="homebtn iconfont icon-createroom">创建房间</button>
+                <button id="quickentry" class="homebtn iconfont icon-kuaisu">快速加入</button>
+              </div>
+              <!-- 右侧输入查找区 -->
+              <div class="rig">
+                <div>
+                  <div class="input">
+                    <input id="search" type="text" placeholder="请输入房间号" />
+                  </div>
+                  <div class="btn">
+                    <button id="query" class="iconfont icon-sousuo"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 信息修改弹出层 -->
+        <div class="infochange mask">
+          <div class="center">
+            <!-- 顶部样式 -->
+            <div class="head">
+              <div class="lef">
+                <div class="headback">
+                  <img id="ichead" src="./img/HeadImgs/an1.png" />
+                </div>
+              </div>
+              <div class="mid">
+                <div class="sexs">
+                  <div id="icsex-nan" class="nan iconfont icon-nan nowsex"></div>
+                  <div id="icsex-nv" class="nv iconfont icon-nv"></div>
+                </div>
+                <div class="setname">
+                  <input type="text" id="icname" placeholder="长度小于等于7" />
+                </div>
+              </div>
+              <div class="rig">
+                <button class="homebtn homebtn-color-cyan" id="icsave">保存</button>
+                <button class="homebtn homebtn-color-red" id="icquit">退出</button>
+              </div>
+            </div>
+            <!-- 人物切换 -->
+            <div class="rolebox">
+              <div class="role">
+                <img id="icrole" src="./img/Roles/role1.png" />
+              </div>
+              <div class="btns">
+                <button class="homebtn" id="rolelast">上一个</button>
+                <button class="homebtn" id="rolenext">下一个</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 房间配置弹出层 -->
+        <div class="rsetting mask">
+          <div class="center">
+            <div class="top">
+              <!-- 顶部标题块 -->
+              <div class="titblk">
+                <div class="iconfont icon-banshou"></div>
+              </div>
+            </div>
+            <div class="mid">
+              <div>
+                <span>房间保护:</span>
+                <input type="checkbox" id="roomlock" class="slider-input" />
+                <label for="roomlock" class="slider-label"></label>
+              </div>
+              <div>
+                <span>房间密码:</span>
+                <input readonly="readonly" type="text" id="setroompwd" placeholder="4~8位房间密码" />
+              </div>
+              <div>
+                <span>对局底分:</span>
+                <input type="number" id="setbtscore" placeholder="10~1000" />
+              </div>
+            </div>
+            <div class="btm flex-center">
+              <button id="rsetting-createroom" class="homebtn homebtn-color-cyan">创建</button>
+              <button id="rsetting-quit" class="homebtn homebtn-color-red">取消</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

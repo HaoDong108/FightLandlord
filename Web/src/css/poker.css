@@ -1,0 +1,125 @@
+
+/* 基本扑克样式 */
+
+/* 扑克公共样式 */
+.pk-box {
+    background-color: whitesmoke;
+    border: 2px solid #333;
+    border-radius: 7px;
+    box-sizing: border-box;
+    position: relative;
+    display:inline-block;
+    line-height: normal;
+    -webkit-text-stroke:0px transparent;
+    text-shadow: none;
+    /* box-shadow: 0 1px 2px 1px #555; */
+}
+
+.pk-box>.lef {
+    height: 100%;
+    width: 37px;
+    overflow: hidden;
+}
+
+.pk-box>.lef>.pk-value {
+    font-family: "宋体", "黑体", sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+    letter-spacing: -5px;     
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;    
+}
+
+
+.pk-box>.lef>.flower_s {
+    color: rgb(230, 230, 230);
+    font-size: 17px;
+    margin-left: 3px;
+    display: block;
+}
+
+.pk-box>.fwbox>.flower_b {
+    font-size: 52px;
+    color: red;
+    visibility: visible;
+}
+
+.pk-box>.fwbox {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
+.pk-box> .lef> .jk-value{
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    font-size: 18px;
+    margin-left: -4px;
+    margin-top: 5px;
+    font-family: "宋体";
+    font-weight: bold;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+
+/* 我方手牌扑克样式 */
+.handpk{
+    width: 97px;
+    height: 120px;
+}
+.handpk>.number{
+    margin-left: -10px;
+}
+.handpk>.number>.pk-value{
+    font-size:37px ;
+}
+
+.handpk:hover{
+    /* box-shadow:0,0,5px, yellow; */
+    border: 2px solid orange;
+    background-color: wheat
+}
+/* 出牌样式 */
+.outpk{
+    width: 82px;
+    height: 105px;
+}
+.outpk>.number{
+    margin-left: -9px;
+}
+.outpk>.fwbox{
+    bottom: 0;
+}
+.outpk>.fwbox>.flower_b{
+    font-size: 42px;
+    margin-left: 3px;
+}
+.outpk>.fwbox>img{
+    transform: translateX(9px) translateY(10px) scale(0.8);
+}
+
+/* 顶部地主牌样式 */
+.threepk{
+    transform: rotateY(180deg);
+    margin-top: 2px;
+    width: 75px;
+    margin-left: 1px;
+    height: 98px;
+}
+
+.threepk>.number{
+    margin-left: -10px;
+}
+.threepk>.fwbox>.flower_b{
+    font-size: 41px;
+}
+.threepk>.fwbox>img{
+    transform: translateX(5px) translateY(3px) scale(0.9);
+    width: 52px;
+    height: 52px;
+}

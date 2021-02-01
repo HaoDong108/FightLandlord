@@ -1,0 +1,447 @@
+@keyframes turnLand {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform-style: preserve-3d;
+    transform: rotateY(180deg);
+  }
+}
+@keyframes mix {
+  form {
+    background-color: whitesmoke;
+  }
+  to {
+    background-color: rgb(250, 230, 150);
+  }
+}
+
+/* 地主牌翻面动画 */
+.nowrol {
+  animation: turnLand 1s forwards;
+  /* animation-timing-function:line; */
+}
+
+.hatam {
+  width: 90px;
+  height: 90px;
+  text-align: center;
+  line-height: 90px;
+  opacity: 0;
+  position: absolute;
+  /* left: 667px; 268
+  top: 284px;    141*/
+  animation: show 2s linear;
+  animation-fill-mode: forwards;
+}
+
+.hatam > img {
+  z-index: 1;
+  position: absolute;
+  left: 0px;
+  top: -3px;
+}
+
+.anbox {
+  height: 37px;
+  width: 37px;
+  background-color: black;
+  text-align: center;
+  line-height: 37px;
+  display: inline-block;
+}
+
+.anbox > ul {
+  width: 22px;
+  height: 22px;
+  background-color: white;
+  border: 1px solid red;
+  border-radius: 50%;
+  -webkit-perspective: 11;
+  transform-style: preserve-3d;
+  animation: rol 8s infinite linear;
+  display: inline-block;
+  line-height: normal;
+  position: relative;
+}
+
+.anbox > ul > li {
+  position: absolute;
+  margin-left: 50%;
+  left: -15px;
+  top: -180px;
+  width: 30px;
+  height: 200px;
+  background-image: linear-gradient(transparent 44%, orange);
+}
+@keyframes show {
+  form {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rol {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 炸弹动画 */
+.bombox {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -200px;
+  margin-top: -250px;
+  z-index: 2;
+}
+
+.bombox > #bom {
+  width: 83px;
+  height: 103px;
+  transform: scale(0.6);
+  position: absolute;
+}
+
+.bombox > #bom > #flame {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  transform: scale(1.5);
+  visibility: hidden;
+}
+
+.bombox > #bom > #flame > img {
+  float: left;
+  position: absolute;
+  /* border: 1px solid tomato; */
+  position: absolute;
+}
+
+.bombox > #bom > #flame > img:nth-child(1) {
+  top: 35px;
+  left: 16px;
+  width: 90px;
+}
+
+.bombox > #bom > #flame > img:nth-child(2) {
+  top: -3px;
+  left: 0px;
+  width: 120px;
+}
+
+.bombox > #bom > #flame > img:nth-child(3) {
+  top: 72px;
+  left: 0px;
+  width: 120px;
+}
+
+.bombox > #bom > #flame > img:nth-child(4) {
+  top: -10px;
+  left: -17px;
+  width: 160px;
+}
+
+.bombox > #bom > #flame > img:nth-child(5) {
+  top: 78px;
+  left: 0px;
+  transform: scaleY(0.4);
+  width: 120px;
+}
+
+/* 顺子动画 */
+.sunbox {
+  width: 500px;
+  height: 500px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -400px;
+  margin-top: -300px;
+  z-index: 2;
+}
+
+.sunbox > div {
+  background: url("../img/CardTypeAnime/Sunzi/sun.png") no-repeat;
+  position: absolute;
+}
+
+.sunbox > #cuan {
+  background-position-y: -231px;
+  width: 300px;
+  height: 221px;
+  top: 114px;
+  left: 93px;
+  opacity: 0;
+}
+
+.sunbox > #cuan > .jiang {
+  background: url("../img/CardTypeAnime/Sunzi/sun.png") no-repeat;
+  background-position-x: -283px;
+  background-position-y: -168px;
+  width: 20px;
+  height: 51px;
+  position: absolute;
+  transform-origin: 50% 5px;
+  border-style: none;
+}
+
+.sunbox > #cuan > #j1 {
+  top: 187px;
+  left: 94px;
+  transform: rotate(12deg);
+}
+
+.sunbox > #cuan > #j2 {
+  top: 189px;
+  left: 119px;
+  transform: rotate(14deg);
+}
+
+.sunbox > #cuan > #j3 {
+  top: 189px;
+  left: 144px;
+  transform: rotate(-1deg);
+}
+
+.sunbox > #cuan > #j4 {
+  top: 190px;
+  left: 169px;
+  transform: rotate(-5deg);
+}
+
+.sunbox > #cuan > #j5 {
+  top: 186px;
+  left: 193px;
+  transform: rotate(-10deg);
+}
+
+.sunbox > #cuan > #bolang {
+  background: url("../img/CardTypeAnime/Sunzi/sun.png") no-repeat;
+  position: absolute;
+  width: 260px;
+  height: 70px;
+  top: 194px;
+  left: 22px;
+}
+
+.sunbox > #sunword {
+  width: 213px;
+  height: 118px;
+  background-position-x: -34px;
+  background-position-y: -93px;
+  top: 147px;
+  left: 194px;
+  /* z-index: -1; */
+  opacity: 0;
+}
+
+.sunbox > #feng {
+  width: 1px;
+  height: 200px;
+  background-position-x: -740px;
+  background-position-y: -513px;
+  top: 180px;
+  left: 150px;
+  transform: rotate(90deg) scale(0.8);
+}
+/* 飞机动画 */
+.pbox {
+  width: 350px;
+  height: 220px;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  /* border: 1px solid yellow; */
+  opacity: 0;
+  z-index: 2;
+}
+
+.pbox > .particle {
+  width: 30px;
+  height: 30px;
+  left: 300px;
+  top: 40px;
+  position: absolute;
+}
+
+/* 连对动画 */
+.lbox {
+  width: 250px;
+  height: 150px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -125px;
+  margin-left: -100px;
+  /* opacity: 0; */
+  z-index: 2;
+}
+
+/* 火箭动画 */
+
+.hjbox {
+  width: 500px;
+  height: 500px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -260px;
+  margin-left: -250px;
+  z-index: 2;
+}
+
+.hjbox > #huojian {
+  position: absolute;
+  bottom: 40%;
+  left: 40%;
+}
+
+.hjbox > #blueql {
+  position: absolute;
+  bottom: 40%;
+  left: 29%;
+  background: url("../img/CardTypeAnime/huojian/h1.png") no-repeat;
+  width: 200px;
+  height: 80px;
+  background-size: 100% 100%;
+  background-position-y: 80px;
+  display: none;
+}
+
+.hjbox > #shanguang {
+  position: absolute;
+  bottom: 37%;
+  left: 19%;
+}
+
+.hjbox > #pense {
+  position: absolute;
+  top: 60%;
+  left: 43%;
+  display: none;
+}
+
+.hjbox > #quan {
+  position: absolute;
+  top: 55%;
+  left: 29%;
+  display: none;
+}
+
+.hjbox > #guangshu {
+  position: absolute;
+  bottom: 40%;
+  left: 41%;
+  display: none;
+}
+
+.hjbox > #wdot {
+  position: absolute;
+  bottom: 40%;
+  left: 29%;
+}
+
+.hjbox > #flame {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  transform: scale(1.5);
+  visibility: hidden;
+  bottom: 20%;
+  left: 40%;
+}
+
+.hjbox > #flame > img {
+  position: absolute;
+}
+
+.hjbox > #flame > img:nth-child(1) {
+  top: 35px;
+  left: 16px;
+  width: 90px;
+}
+
+.hjbox > #flame > img:nth-child(2) {
+  top: -3px;
+  left: 0px;
+  width: 120px;
+}
+
+.hjbox > #flame > img:nth-child(3) {
+  top: 72px;
+  left: 0px;
+  width: 120px;
+}
+
+.hjbox > #flame > img:nth-child(4) {
+  top: -10px;
+  left: -17px;
+  width: 160px;
+}
+
+.hjbox > #flame > img:nth-child(5) {
+  top: 78px;
+  left: 0px;
+  transform: scaleY(0.4);
+  width: 120px;
+}
+
+.hjbox > #hjspec {
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  bottom: 20%;
+  left: 27%;
+}
+
+.hjbox > #hjspec > img {
+  position: absolute;
+}
+
+.hjbox > #hjspec > #mogu {
+  top: 0px;
+  left: 0px;
+  display: none;
+}
+
+.hjbox > #hjspec > #mogu2 {
+  top: 50px;
+  left: 25px;
+  display: none;
+}
+
+#wblk {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: white;
+  transform: ro;
+}
+
+/* 警报灯灯芯旋转 */
+.wringlamp > img {
+  animation: wickrotate 1s 0.2s linear infinite;
+}
+
+@keyframes wickrotate {
+  form {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+/* 主界面 */

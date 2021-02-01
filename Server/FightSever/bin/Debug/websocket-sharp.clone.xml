@@ -1,0 +1,2232 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>websocket-sharp.clone</name>
+  </assembly>
+  <members>
+    <member name="T:WebSocketSharp.ByteOrder">
+      <summary>包含指示字节顺序是小尾数还是大尾数的值。
+Contains the values that indicate whether the byte order is a Little-endian or Big-endian.</summary>
+    </member>
+    <member name="F:WebSocketSharp.ByteOrder.Little">
+      <summary>表示有点端点。
+Indicates a Little-endian.</summary>
+    </member>
+    <member name="F:WebSocketSharp.ByteOrder.Big">
+      <summary>表示大端。
+Indicates a Big-endian.</summary>
+    </member>
+    <member name="T:WebSocketSharp.CloseEventArgs">
+      <summary>包含与事件关联的事件数据。
+Contains the event data associated with a  event.</summary>
+      <remarks>
+        <para>WebSocket连接关闭时发生事件。
+A  event occurs when the WebSocket connection has been  closed.</para>
+        <para>如果您想得到关闭的原因，您应该访问或属性。
+If you would like to get the reason for the close, you should access  the  or  property.</para>
+      </remarks>
+    </member>
+    <member name="P:WebSocketSharp.CloseEventArgs.WasClean">
+      <summary>获取一个值，该值指示WebSocket连接是否已完全关闭。
+Gets a value indicating whether the WebSocket connection has been closed cleanly.</summary>
+      <value>如果WebSocket连接已完全关闭，则为true；否则为false。
+true if the WebSocket connection has been closed cleanly; otherwise, false.</value>
+    </member>
+    <member name="T:WebSocketSharp.CloseStatusCode">
+      <summary>包含WebSocket连接关闭的状态代码值。
+Contains the values of the status code for the WebSocket connection close.</summary>
+      <remarks>
+        <para>第647.55节中定义了RFC的状态值。
+The values of the status code are defined in  Section 7.4  of RFC 6455.</para>
+        <para>端点不得将“保留值”设置为关闭控制框中的状态码。它被指定用于需要状态码来指示由于系统接地而关闭连接的应用程序中。
+"Reserved value" must not be set as a status code in a close control frame  by an endpoint. It's designated for use in applications expecting a status  code to indicate that the connection was closed due to the system grounds.</para>
+      </remarks>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.Normal">
+      <summary>相当于关闭状态1000。表示正常关闭。
+Equivalent to close status 1000.  Indicates a normal close.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.Away">
+      <summary>相当于关闭状态1001。指示终结点正在消失。
+Equivalent to close status 1001.  Indicates that an endpoint is going away.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.ProtocolError">
+      <summary>相当于关闭状态1002。指示终结点由于协议错误而终止连接。
+Equivalent to close status 1002.  Indicates that an endpoint is terminating the connection due to a protocol error.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.IncorrectData">
+      <summary>相当于关闭状态1003。指示终结点由于接收到不可接受的类型消息而终止连接。
+Equivalent to close status 1003.  Indicates that an endpoint is terminating the connection because it has received  an unacceptable type message.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.Undefined">
+      <summary>相当于关闭状态1004。仍然没有定义。保留值。
+Equivalent to close status 1004.  Still undefined. A Reserved value.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.NoStatusCode">
+      <summary>相当于关闭状态1005。表示没有实际存在的状态代码。保留值。
+Equivalent to close status 1005.  Indicates that no status code was actually present. A Reserved value.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.Abnormal">
+      <summary>相当于关闭状态1006。指示连接异常关闭。保留值。
+Equivalent to close status 1006.  Indicates that the connection was closed abnormally. A Reserved value.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.InconsistentData">
+      <summary>相当于关闭状态1007。指示终结点正在终止连接，因为它接收到的消息包含与消息类型不一致的数据。
+Equivalent to close status 1007.  Indicates that an endpoint is terminating the connection because it has received  a message that contains a data that isn't consistent with the type of the message.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.PolicyViolation">
+      <summary>相当于关闭状态1008。指示终结点由于接收到违反其策略的消息而终止连接。
+Equivalent to close status 1008.  Indicates that an endpoint is terminating the connection because it has received  a message that violates its policy.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.TooBig">
+      <summary>相当于关闭状态1009。指示终结点正在终止连接，因为它接收到的消息太大，无法处理。
+Equivalent to close status 1009.  Indicates that an endpoint is terminating the connection because it has received  a message that is too big to process.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.IgnoreExtension">
+      <summary>相当于关闭状态1010。指示客户端正在终止连接，因为它希望服务器协商一个或多个扩展，但服务器没有在握手响应中返回这些扩展。
+Equivalent to close status 1010.  Indicates that the client is terminating the connection because it has expected  the server to negotiate one or more extension, but the server didn't return them  in the handshake response.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.ServerError">
+      <summary>相当于关闭状态1011。指示服务器正在终止连接，因为它遇到了阻止它完成请求的意外情况。
+Equivalent to close status 1011.  Indicates that the server is terminating the connection because it has encountered  an unexpected condition that prevented it from fulfilling the request.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CloseStatusCode.TlsHandshakeFailure">
+      <summary>相当于关闭状态1015。指示连接由于执行TLS握手失败而关闭。保留值。
+Equivalent to close status 1015.  Indicates that the connection was closed due to a failure to perform a TLS handshake.  A Reserved value.</summary>
+    </member>
+    <member name="T:WebSocketSharp.CompressionMethod">
+      <summary>包含用于压缩WebSocket连接上的消息的压缩方法的值。
+Contains the values of the compression method used to compress the message on the WebSocket connection.</summary>
+      <remarks>压缩方法的值在WebSocket的压缩扩展中定义。
+The values of the compression method are defined in Compression Extensions for WebSocket.</remarks>
+    </member>
+    <member name="F:WebSocketSharp.CompressionMethod.None">
+      <summary>表示不压缩。
+Indicates non compression.</summary>
+    </member>
+    <member name="F:WebSocketSharp.CompressionMethod.Deflate">
+      <summary>表示使用DEFLATE。
+Indicates using DEFLATE.</summary>
+    </member>
+    <member name="T:WebSocketSharp.ErrorEventArgs">
+      <summary>包含与事件关联的事件数据。
+Contains the event data associated with a  event.</summary>
+      <remarks>
+        <para>获取错误时发生事件。
+A  event occurs when the  gets  an error.</para>
+        <para>如果要获取错误消息，应该访问属性。
+If you would like to get the error message, you should access  the  property.</para>
+        <para>如果错误是由于异常引起的，则可以通过访问属性来获取实例。
+And if the error is due to an exception, you can get the  instance by accessing the  property.</para>
+      </remarks>
+    </member>
+    <member name="P:WebSocketSharp.ErrorEventArgs.Exception">
+      <summary>获取导致错误的实例。
+Gets the  instance that caused the error.</summary>
+      <value>表示错误原因的实例，或者错误不是由异常引起的实例。
+An  instance that represents the cause of the error,  or  if the error isn't due to an exception.</value>
+    </member>
+    <member name="P:WebSocketSharp.ErrorEventArgs.Message">
+      <summary>获取错误消息。
+Gets the error message.</summary>
+      <value>表示错误消息的。
+A  that represents the error message.</value>
+    </member>
+    <member name="T:WebSocketSharp.Ext">
+      <summary>为websocket提供一组静态方法。
+Provides a set of static methods for websocket-sharp.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Ext.Contains(System.String,System.Char[])">
+      <summary>确定指定的数组中是否包含任何字符。
+Determines whether the specified  contains any of characters  in the specified array of .</summary>
+      <returns>如果包含以下任一项，则为true；否则为false。
+true if  contains any of ;  otherwise, false.</returns>
+      <param name="value">一个测试。
+A  to test.</param>
+      <param name="chars">包含要查找的字符的数组。
+An array of  that contains characters to find.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.Contains(System.Collections.Specialized.NameValueCollection,System.String,System.String)">
+      <summary>确定指定的项目是否包含同时具有指定和的项目。
+Determines whether the specified  contains the entry  with the specified both  and .</summary>
+      <returns>如果同时包含和，则为true；否则为false。
+true if  contains the entry with both  and ; otherwise, false.</returns>
+      <param name="collection">一个测试。
+A  to test.</param>
+      <param name="name">表示要查找的项的项。
+A  that represents the key of the entry to find.</param>
+      <param name="value">表示要查找的项的值。
+A  that represents the value of the entry to find.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.GetCookies(System.Collections.Specialized.NameValueCollection,System.Boolean)">
+      <summary>从指定的HTTP获取HTTP Cookie的集合。
+Gets the collection of the HTTP cookies from the specified HTTP .</summary>
+      <returns>接收HTTP Cookie集合的。
+A  that receives a collection of the HTTP cookies.</returns>
+      <param name="headers">包含HTTP标头集合的。
+A  that contains a collection of the HTTP headers.</param>
+      <param name="response">如果是响应头的集合，则为true；否则为false。
+true if  is a collection of the response headers;  otherwise, false.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.GetDescription(WebSocketSharp.Net.HttpStatusCode)">
+      <summary>获取指定HTTP状态的描述。
+Gets the description of the specified HTTP status .</summary>
+      <returns>表示HTTP状态代码描述的。
+A  that represents the description of the HTTP status code.</returns>
+      <param name="code">枚举值之一，指示HTTP状态代码。
+One of  enum values, indicates the HTTP status code.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.IsEnclosedIn(System.String,System.Char)">
+      <summary>确定指定的是否包含在指定的中。
+Determines whether the specified  is enclosed in the specified  .</summary>
+      <returns>如果包含在中，则为true；否则为false。
+true if  is enclosed in ;  otherwise, false.</returns>
+      <param name="value">一个测试。
+A  to test.</param>
+      <param name="c">表示要查找的角色的。
+A  that represents the character to find.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.IsLocal(System.Net.IPAddress)">
+      <summary>确定指定的值是否表示本地IP地址。
+Determines whether the specified  represents  the local IP address.</summary>
+      <returns>如果表示本地IP地址，则为true；否则为false。
+true if  represents the local IP address;  otherwise, false.</returns>
+      <param name="address">一个测试。
+A  to test.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.MaybeUri(System.String)">
+      <summary>确定指定的字符串是否为URI字符串。
+Determines whether the specified  is a URI string.</summary>
+      <returns>如果可能是URI字符串，则为true；否则为false。
+true if  may be a URI string; otherwise, false.</returns>
+      <param name="value">一个测试。
+A  to test.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.SubArray``1(``0[],System.Int32,System.Int32)">
+      <summary>从指定的数组中检索子数组。子数组从中指定的元素位置开始。
+Retrieves a sub-array from the specified .  A sub-array starts at the specified element position in .</summary>
+      <returns>接收子数组的T数组，如果参数有任何问题，则接收空的T数组。
+An array of T that receives a sub-array, or an empty array of T  if any problems with the parameters.</returns>
+      <param name="array">从中检索子数组的T数组。
+An array of T from which to retrieve a sub-array.</param>
+      <param name="startIndex">表示中子数组从零开始的位置的。
+An  that represents the zero-based starting position of  a sub-array in .</param>
+      <param name="length">表示要检索的元素数的。
+An  that represents the number of elements to retrieve.</param>
+      <typeparam name="T">中元素的类型。
+The type of elements in .</typeparam>
+    </member>
+    <member name="M:WebSocketSharp.Ext.ToUri(System.String)">
+      <summary>将指定的转换为。
+Converts the specified  to a .</summary>
+      <returns>已从转换，或者如果未成功转换。
+A  converted from , or  if  isn't successfully converted.</returns>
+      <param name="uriString">要转换的对象。
+A  to convert.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.UrlDecode(System.String)">
+      <summary>URL解码指定的。
+URL-decodes the specified .</summary>
+      <returns>接收已解码字符串的，或者如果该字符串是或空的。
+A  that receives the decoded string, or the  if it's  or empty.</returns>
+      <param name="value">一个需要解码的密码。
+A  to decode.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.UrlEncode(System.String)">
+      <summary>URL编码指定的。
+URL-encodes the specified .</summary>
+      <returns>接收编码字符串的，或者如果它是或空的。
+A  that receives the encoded string, or  if it's  or empty.</returns>
+      <param name="value">一种编码方法。
+A  to encode.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.EqualsWith(System.Int32,System.Char,System.Action{System.Int32})">
+      <summary>确定指定的是否等于指定的，并调用指定的操作
+Determines whether the specified  equals the specified ,  and invokes the specified Action</summary>
+      <returns>如果等于，则为真；否则为假。
+true if  equals ;  otherwise, false.</returns>
+      <param name="value">一个可以比较的例子。
+An  to compare.</param>
+      <param name="c">一个可以比较的例子。
+A  to compare.</param>
+      <param name="action">与比较同时进行的动作。要传递给方法的参数为。
+An Action  the same time as comparing. An  parameter to pass to  the method(s) is .</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.GetAbsolutePath(System.Uri)">
+      <summary>从指定的路径获取绝对路径。
+Gets the absolute path from the specified .</summary>
+      <returns>表示绝对路径（如果已成功找到）的；否则。
+A  that represents the absolute path if it's successfully found;  otherwise, .</returns>
+      <param name="uri">表示从中获取绝对路径的URI的。
+A  that represents the URI to get the absolute path from.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.GetValue(System.String,System.Char)">
+      <summary>从指定的中获取值，该值包含由分隔符分隔的名称和值对。
+Gets the value from the specified  that contains a pair of name and  value separated by a separator character.</summary>
+      <returns>表示值（如果有）的；否则为null。
+A  that represents the value if any; otherwise, null.</returns>
+      <param name="nameAndValue">包含由分隔符分隔的一对名称和值的。
+A  that contains a pair of name and value separated by a separator  character.</param>
+      <param name="separator">表示分隔符字符的。
+A  that represents the separator character.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.TryCreateWebSocketUri(System.String,System.Uri@,System.String@)">
+      <summary>尝试使用指定的为WebSocket创建。
+Tries to create a  for WebSocket with the specified  .</summary>
+      <returns>如果成功创建，则为true；否则为false。
+true if a  is successfully created; otherwise, false.</returns>
+      <param name="uriString">表示要尝试的WebSocket URL的。
+A  that represents the WebSocket URL to try.</param>
+      <param name="result">当此方法返回时，表示WebSocket URL的值if有效；否则。
+When this method returns, a  that represents the WebSocket URL  if  is valid; otherwise, .</param>
+      <param name="message">当此方法返回时，表示错误消息if的a无效；否则。
+When this method returns, a  that represents the error message  if  is invalid; otherwise, .</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.Contains(System.Collections.Specialized.NameValueCollection,System.String)">
+      <summary>确定指定的项目是否包含具有指定名称的项目。
+Determines whether the specified  contains the entry  with the specified .</summary>
+      <returns>如果包含带有的条目，则为true；否则为false。
+true if  contains the entry  with ; otherwise, false.</returns>
+      <param name="collection">一个测试。
+A  to test.</param>
+      <param name="name">表示要查找的项的项。
+A  that represents the key of the entry to find.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.GetStatusDescription(System.Int32)">
+      <summary>获取指定HTTP状态的描述。
+Gets the description of the specified HTTP status .</summary>
+      <returns>表示HTTP状态代码描述的。
+A  that represents the description of the HTTP status code.</returns>
+      <param name="code">表示HTTP状态代码的。
+An  that represents the HTTP status code.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.IsHostOrder(WebSocketSharp.ByteOrder)">
+      <summary>确定指定的是否为主机（此计算机体系结构）字节顺序。
+Determines whether the specified  is host (this computer  architecture) byte order.</summary>
+      <returns>如果是主机字节顺序，则为true；否则为false。
+true if  is host byte order; otherwise, false.</returns>
+      <param name="order">要测试的枚举值之一。
+One of the  enum values, to test.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.IsPredefinedScheme(System.String)">
+      <summary>确定指定的方案是否为预定义方案。
+Determines whether the specified  is a predefined scheme.</summary>
+      <returns>如果是预定义方案，则为true；否则为false。
+true if  is a predefined scheme; otherwise, false.</returns>
+      <param name="value">一个测试。
+A  to test.</param>
+    </member>
+    <member name="M:WebSocketSharp.Ext.ToHostOrder(System.Byte[],WebSocketSharp.ByteOrder)">
+      <summary>将指定数组的顺序转换为主机字节顺序。
+Converts the order of the specified array of  to the host byte order.</summary>
+      <returns>从转换而来的数组。
+An array of  converted from .</returns>
+      <param name="source">要转换的数组。
+An array of  to convert.</param>
+      <param name="sourceOrder">枚举值之一，指示的字节顺序。
+One of the  enum values, indicates the byte order of  .</param>
+    </member>
+    <member name="T:WebSocketSharp.MessageEventArgs">
+      <summary>包含与事件关联的事件数据。
+Contains the event data associated with a  event.</summary>
+      <remarks>
+        <para>当接收到文本或二进制消息时发生事件。
+A  event occurs when the  receives  a text or binary message.</para>
+        <para>如果要获取消息数据，应访问或属性。
+If you would like to get the message data, you should access  the  or  property.</para>
+      </remarks>
+    </member>
+    <member name="T:WebSocketSharp.Opcode">
+      <summary>包含表示WebSocket帧类型的操作码的值。
+Contains the values of the opcode that indicates the type of a WebSocket frame.</summary>
+      <remarks>操作码的值在RFC 6455的第5.2节中定义。
+The values of the opcode are defined in  Section 5.2 of RFC 6455.</remarks>
+    </member>
+    <member name="F:WebSocketSharp.Opcode.Cont">
+      <summary>等于数值0。表示连续帧。
+Equivalent to numeric value 0.  Indicates a continuation frame.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Opcode.Text">
+      <summary>相当于数值1。表示文本框。
+Equivalent to numeric value 1.  Indicates a text frame.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Opcode.Binary">
+      <summary>相当于数值2。表示二进制帧。
+Equivalent to numeric value 2.  Indicates a binary frame.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Opcode.Close">
+      <summary>相当于数值8。表示连接关闭帧。
+Equivalent to numeric value 8.  Indicates a connection close frame.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Opcode.Ping">
+      <summary>相当于数值9。表示ping帧。
+Equivalent to numeric value 9.  Indicates a ping frame.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Opcode.Pong">
+      <summary>相当于数值10。表示pong帧。
+Equivalent to numeric value 10.  Indicates a pong frame.</summary>
+    </member>
+    <member name="M:WebSocketSharp.SubStream.Flush">
+      <summary>在派生类中重写时，清除此流的所有缓冲区，并将所有缓冲数据写入基础设备。
+When overridden in a derived class, clears all buffers for this stream and causes any buffered data to be written to the underlying device.</summary>
+    </member>
+    <member name="M:WebSocketSharp.SubStream.Seek(System.Int64,System.IO.SeekOrigin)">
+      <summary>在派生类中重写时，设置当前流中的位置。
+When overridden in a derived class, sets the position within the current stream.</summary>
+      <returns>当前流中的新位置。
+The new position within the current stream.</returns>
+      <param name="offset">相对于参数的字节偏移量。
+A byte offset relative to the  parameter.</param>
+      <param name="origin">一种类型的值，表示用于获得新位置的参考点。
+A value of type  indicating the reference point used to obtain the new position.</param>
+    </member>
+    <member name="M:WebSocketSharp.SubStream.SetLength(System.Int64)">
+      <summary>在派生类中重写时，设置当前流的长度。
+When overridden in a derived class, sets the length of the current stream.</summary>
+      <param name="value">当前流的所需长度（字节）。
+The desired length of the current stream in bytes.</param>
+    </member>
+    <member name="M:WebSocketSharp.SubStream.Read(System.Byte[],System.Int32,System.Int32)">
+      <summary>在派生类中重写时，从当前流中读取一个字节序列，并将流中的位置提前读取的字节数。
+When overridden in a derived class, reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.</summary>
+      <returns>读入缓冲区的字节总数。如果许多字节当前不可用，则该值可以小于请求的字节数；如果已到达流的结尾，则该值可以小于零（0）。
+The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.</returns>
+      <param name="buffer">字节数组。当此方法返回时，缓冲区包含指定的字节数组，其值介于和（+-1）之间，由从当前源读取的字节替换。
+An array of bytes. When this method returns, the buffer contains the specified byte array with the values between  and ( +  - 1) replaced by the bytes read from the current source.</param>
+      <param name="offset">从零开始存储从当前流中读取的数据的字节偏移量。
+The zero-based byte offset in  at which to begin storing the data read from the current stream.</param>
+      <param name="count">从当前流中读取的最大字节数。
+The maximum number of bytes to be read from the current stream.</param>
+    </member>
+    <member name="M:WebSocketSharp.SubStream.Write(System.Byte[],System.Int32,System.Int32)">
+      <summary>在派生类中重写时，将字节序列写入当前流，并按写入的字节数前进此流中的当前位置。
+When overridden in a derived class, writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.</summary>
+      <param name="buffer">字节数组。此方法将字节从复制到当前流。
+An array of bytes. This method copies  bytes from  to the current stream.</param>
+      <param name="offset">从零开始向当前流复制字节的偏移量。
+The zero-based byte offset in  at which to begin copying bytes to the current stream.</param>
+      <param name="count">要写入当前流的字节数。
+The number of bytes to be written to the current stream.</param>
+    </member>
+    <member name="P:WebSocketSharp.SubStream.CanRead">
+      <summary>在派生类中重写时，获取一个值，该值指示当前流是否支持读取。
+When overridden in a derived class, gets a value indicating whether the current stream supports reading.</summary>
+      <returns>如果流支持读取，则为true；否则为false。
+true if the stream supports reading; otherwise, false.</returns>
+    </member>
+    <member name="P:WebSocketSharp.SubStream.CanSeek">
+      <summary>在派生类中重写时，获取一个值，该值指示当前流是否支持查找。
+When overridden in a derived class, gets a value indicating whether the current stream supports seeking.</summary>
+      <returns>如果流支持查找，则为true；否则为false。
+true if the stream supports seeking; otherwise, false.</returns>
+    </member>
+    <member name="P:WebSocketSharp.SubStream.CanWrite">
+      <summary>在派生类中重写时，获取一个值，该值指示当前流是否支持写入。
+When overridden in a derived class, gets a value indicating whether the current stream supports writing.</summary>
+      <returns>如果流支持写入，则为true；否则为false。
+true if the stream supports writing; otherwise, false.</returns>
+    </member>
+    <member name="P:WebSocketSharp.SubStream.Length">
+      <summary>在派生类中重写时，获取流的长度（以字节为单位）。
+When overridden in a derived class, gets the length in bytes of the stream.</summary>
+      <returns>一个长值，表示流的长度（字节）。
+A long value representing the length of the stream in bytes.</returns>
+    </member>
+    <member name="P:WebSocketSharp.SubStream.Position">
+      <summary>在派生类中重写时，获取或设置当前流中的位置。
+When overridden in a derived class, gets or sets the position within the current stream.</summary>
+      <returns>流中的当前位置。
+The current position within the stream.</returns>
+    </member>
+    <member name="T:WebSocketSharp.WebSocket">
+      <summary>实现WebSocket接口。
+Implements the WebSocket interface.</summary>
+      <remarks>WebSocket类为使用WebSocket协议（RFC6455）的双向通信提供了一组方法和属性。
+The WebSocket class provides a set of methods and properties for two-way communication using  the WebSocket protocol (RFC 6455).</remarks>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.#ctor(System.String,System.Threading.CancellationToken,System.Int32,System.Func{System.Threading.Tasks.Task},System.Func{WebSocketSharp.CloseEventArgs,System.Threading.Tasks.Task},System.Func{WebSocketSharp.MessageEventArgs,System.Threading.Tasks.Task},System.Func{WebSocketSharp.ErrorEventArgs,System.Threading.Tasks.Task},System.String[])">
+      <summary>使用指定的WebSocket URL和子目录初始化类的新实例。
+Initializes a new instance of the  class with  the specified WebSocket URL and subprotocols.</summary>
+      <param name="url">表示要连接的WebSocket URL的。
+A  that represents the WebSocket URL to connect.</param>
+      <param name="cancellationToken">用于取消websocket操作的。
+The  used to cancel websocket operations.</param>
+      <param name="fragmentSize">设置消息包的大小。较小的大小等于发送流时较少的内存开销。
+Set the size of message packages. Smaller size equals less memory overhead when sending streams.</param>
+      <param name="onOpen">在建立WebSocket连接时调用的委托。
+Delegate to be invoked when the WebSocket connection has been established.</param>
+      <param name="onClose">关闭WebSocket连接时调用的委托。
+Delegate to be invoked when the WebSocket connection has been closed.</param>
+      <param name="onError">在获取错误时调用的委托。
+Delegate to be invoked when the  gets an error.</param>
+      <param name="protocols">包含WebSocket子目录（如果有）的数组。的每个值必须是RFC 2616中定义的令牌。
+An array of  that contains the WebSocket subprotocols if any.  Each value of  must be a token defined in  RFC 2616.</param>
+      <param name="onMessage">当接收到消息时要调用的委托。
+Delegate to be invoked when the  receives a message.</param>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.#ctor(System.String,WebSocketSharp.Net.ClientSslConfiguration,System.Threading.CancellationToken,System.Int32,System.Func{System.Threading.Tasks.Task},System.Func{WebSocketSharp.CloseEventArgs,System.Threading.Tasks.Task},System.Func{WebSocketSharp.MessageEventArgs,System.Threading.Tasks.Task},System.Func{WebSocketSharp.ErrorEventArgs,System.Threading.Tasks.Task},System.String[])">
+      <summary>使用指定的WebSocket URL和子目录初始化类的新实例。
+Initializes a new instance of the  class with  the specified WebSocket URL and subprotocols.</summary>
+      <param name="url">表示要连接的WebSocket URL的。
+A  that represents the WebSocket URL to connect.</param>
+      <param name="sslAuthConfiguration">一种用于固定连接的方法。
+A  for securing the connection.</param>
+      <param name="cancellationToken">用于取消websocket操作的。
+The  used to cancel websocket operations.</param>
+      <param name="fragmentSize">
+      </param>
+      <param name="onOpen">在建立WebSocket连接时调用的委托。
+Delegate to be invoked when the WebSocket connection has been established.</param>
+      <param name="onClose">关闭WebSocket连接时调用的委托。
+Delegate to be invoked when the WebSocket connection has been closed.</param>
+      <param name="onError">在获取错误时调用的委托。
+Delegate to be invoked when the  gets an error.</param>
+      <param name="protocols">包含WebSocket子目录（如果有）的数组。的每个值必须是RFC 2616中定义的令牌。
+An array of  that contains the WebSocket subprotocols if any.  Each value of  must be a token defined in  RFC 2616.</param>
+    </member>
+    <member name="P:WebSocketSharp.WebSocket.Cookies">
+      <summary>获取WebSocket连接请求和响应中包含的HTTP Cookie。
+Gets the HTTP cookies included in the WebSocket connection request and response.</summary>
+      <value>提供枚举器的实例，该枚举器支持对cookie集合的迭代。
+An  instance that provides an enumerator which supports the iteration over the collection of  the cookies.</value>
+    </member>
+    <member name="P:WebSocketSharp.WebSocket.Extensions">
+      <summary>获取服务器选择的WebSocket扩展。
+Gets the WebSocket extensions selected by the server.</summary>
+      <value>表示扩展名（如果有的话）的。默认值为。
+A  that represents the extensions if any.  The default value is .</value>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.IsAlive">
+      <summary>获取一个值，该值指示WebSocket连接是否处于活动状态。
+Gets a value indicating whether the WebSocket connection is alive.</summary>
+      <value>如果连接处于活动状态，则为true；否则为false。
+true if the connection is alive; otherwise, false.</value>
+    </member>
+    <member name="P:WebSocketSharp.WebSocket.IsSecure">
+      <summary>获取一个值，该值指示WebSocket连接是否安全。
+Gets a value indicating whether the WebSocket connection is secure.</summary>
+      <value>如果连接安全，则为true；否则为false。
+true if the connection is secure; otherwise, false.</value>
+    </member>
+    <member name="P:WebSocketSharp.WebSocket.Origin">
+      <summary>获取或设置要与WebSocket连接请求一起发送到服务器的HTTP原始标头的值。
+Gets or sets the value of the HTTP Origin header to send with the WebSocket connection  request to the server.</summary>
+      <remarks>如果此属性有任何原始标头，则发送原始标头。
+The  sends the Origin header if this property has any.</remarks>
+      <value>表示要发送的源标头的值的。默认值为。原始标头具有以下语法：
+A  that represents the value of  the Origin header to send.  The default value is .  The Origin header has the following syntax:<para>表示要发送的源标头的值的。默认值为。
+A  that represents the value of  the Origin header to send.  The default value is .</para><para>原始标头具有以下语法：
+The Origin header has the following syntax:</para></value>
+    </member>
+    <member name="P:WebSocketSharp.WebSocket.Protocol">
+      <summary>获取服务器选择的WebSocket子目录。
+Gets the WebSocket subprotocol selected by the server.</summary>
+      <value>表示子策略（如果有）的。默认值为。
+A  that represents the subprotocol if any.  The default value is .</value>
+    </member>
+    <member name="P:WebSocketSharp.WebSocket.ReadyState">
+      <summary>获取WebSocket连接的状态。
+Gets the state of the WebSocket connection.</summary>
+      <value>枚举值之一，指示WebSocket连接的状态。默认值为。
+One of the  enum values, indicates the state of the WebSocket  connection. The default value is .</value>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.GetUrl">
+      <summary>获取要连接的WebSocket URL。
+Gets the WebSocket URL to connect.</summary>
+      <value>表示要连接的WebSocket URL的。
+A  that represents the WebSocket URL to connect.</value>
+    </member>
+    <member name="P:WebSocketSharp.WebSocket.WaitTime">
+      <summary>获取或设置Ping或Close响应的等待时间。
+Gets or sets the wait time for the response to the Ping or Close.</summary>
+      <value>表示等待时间的。默认值与5秒相同，如果服务器使用，则为1秒。
+A  that represents the wait time. The default value is  the same as 5 seconds, or 1 second if the  is used by  a server.</value>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.Close">
+      <summary>关闭WebSocket连接，并释放所有相关资源。
+Closes the WebSocket connection, and releases all associated resources.</summary>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.Close(WebSocketSharp.CloseStatusCode)">
+      <summary>关闭指定的WebSocket连接，并释放所有关联的资源。
+Closes the WebSocket connection with the specified ,  and releases all associated resources.</summary>
+      <param name="code">枚举值之一，表示指示关闭原因的状态代码。
+One of the  enum values, represents the status code  indicating the reason for the close.</param>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.Close(WebSocketSharp.CloseStatusCode,System.String)">
+      <summary>使用指定的和关闭WebSocket连接，并释放所有关联的资源。
+Closes the WebSocket connection with the specified  and , and releases all associated resources.</summary>
+      <remarks>如果的大小大于123字节，则此方法将发出事件。
+This method emits a  event if the size of  is greater than 123 bytes.</remarks>
+      <param name="code">枚举值之一，表示指示关闭原因的状态代码。
+One of the  enum values, represents the status code  indicating the reason for the close.</param>
+      <param name="reason">表示结束原因的。
+A  that represents the reason for the close.</param>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.Connect">
+      <summary>建立WebSocket连接。
+Establishes a WebSocket connection.</summary>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.Ping">
+      <summary>使用WebSocket连接发送Ping。
+Sends a Ping using the WebSocket connection.</summary>
+      <returns>如果在一段时间内接收到此Ping的Pong，则为true；否则为false。
+true if the  receives a Pong to this Ping in a time;  otherwise, false.</returns>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.Ping(System.String)">
+      <summary>使用WebSocket连接以指定的方式发送Ping。
+Sends a Ping with the specified  using the WebSocket connection.</summary>
+      <returns>如果在一段时间内接收到此Ping的Pong，则为true；否则为false。
+true if the  receives a Pong to this Ping in a time;  otherwise, false.</returns>
+      <param name="message">表示要发送的消息的。
+A  that represents the message to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.Send(System.Byte[])">
+      <summary>使用WebSocket连接发送二进制文件。
+Sends a binary  using the WebSocket connection.</summary>
+      <param name="data">表示要发送的二进制数据的数组。
+An array of  that represents the binary data to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.Send(System.IO.Stream)">
+      <summary>使用WebSocket连接将指定的作为二进制数据发送。
+Sends the specified  as a binary data  using the WebSocket connection.</summary>
+      <param name="stream">表示要发送的文件的。
+A  that represents the file to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.Send(System.IO.Stream,System.Int64)">
+      <summary>使用WebSocket连接将指定的作为二进制数据发送。
+Sends the specified  as a binary data  using the WebSocket connection.</summary>
+      <param name="stream">表示要发送的文件的。
+A  that represents the file to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.Send(System.String)">
+      <summary>使用WebSocket连接发送文本。
+Sends a text  using the WebSocket connection.</summary>
+      <param name="data">表示要发送的文本数据的。
+A  that represents the text data to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.SetCookie(WebSocketSharp.Net.Cookie)">
+      <summary>将HTTP与WebSocket连接请求一起发送到服务器。
+Sets an HTTP  to send with the WebSocket connection request  to the server.</summary>
+      <param name="cookie">表示要发送的cookie的。
+A  that represents the cookie to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.SetCredentials(System.String,System.String,System.Boolean)">
+      <summary>为HTTP身份验证设置一对and（基本/摘要）。
+Sets a pair of  and  for  the HTTP authentication (Basic/Digest).</summary>
+      <param name="username">表示用于身份验证的用户名的。
+A  that represents the user name used to authenticate.</param>
+      <param name="password">表示用于身份验证的密码的。
+A  that represents the password for  used to authenticate.</param>
+      <param name="preAuth">如果向服务器发送带有第一个连接请求的基本身份验证凭据，则为true；否则为false。
+true if the  sends the Basic authentication credentials  with the first connection request to the server; otherwise, false.</param>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.SetProxy(System.String,System.String,System.String)">
+      <summary>设置HTTP代理服务器URL以通过代理服务器身份验证（Basic/Digest）进行连接，如果需要，还设置一对和。
+Sets an HTTP Proxy server URL to connect through, and if necessary, a pair of  and  for the proxy server  authentication (Basic/Digest).</summary>
+      <param name="url">表示要通过其进行连接的代理服务器URL的。
+A  that represents the proxy server URL to connect through.</param>
+      <param name="username">表示用于身份验证的用户名的。
+A  that represents the user name used to authenticate.</param>
+      <param name="password">表示用于身份验证的密码的。
+A  that represents the password for  used to authenticate.</param>
+    </member>
+    <member name="M:WebSocketSharp.WebSocket.Dispose">
+      <summary>关闭WebSocket连接，并释放所有相关资源。
+Closes the WebSocket connection, and releases all associated resources.</summary>
+      <remarks>此方法关闭与的连接。
+This method closes the connection with .</remarks>
+    </member>
+    <member name="T:WebSocketSharp.WebSocketException">
+      <summary>获取致命错误时引发的异常。
+The exception that is thrown when a  gets a fatal error.</summary>
+    </member>
+    <member name="P:WebSocketSharp.WebSocketException.Code">
+      <summary>获取指示异常原因的状态代码。
+Gets the status code indicating the cause of the exception.</summary>
+      <value>枚举值之一，表示指示异常原因的状态代码。
+One of the  enum values, represents the status code  indicating the cause of the exception.</value>
+    </member>
+    <member name="T:WebSocketSharp.WebSocketState">
+      <summary>包含WebSocket连接的状态值。
+Contains the values of the state of the WebSocket connection.</summary>
+      <remarks>状态值在WebSocket API中定义。
+The values of the state are defined in  The WebSocket API.</remarks>
+    </member>
+    <member name="F:WebSocketSharp.WebSocketState.Connecting">
+      <summary>等于数值0。表示尚未建立连接。
+Equivalent to numeric value 0.  Indicates that the connection hasn't yet been established.</summary>
+    </member>
+    <member name="F:WebSocketSharp.WebSocketState.Open">
+      <summary>相当于数值1。表示已建立连接并且可以进行通信。
+Equivalent to numeric value 1.  Indicates that the connection is established and the communication is possible.</summary>
+    </member>
+    <member name="F:WebSocketSharp.WebSocketState.Closing">
+      <summary>相当于数值2。表示连接正在通过结束握手或WebSocket.关闭方法已被调用。
+Equivalent to numeric value 2.  Indicates that the connection is going through the closing handshake or  the WebSocket.Close method has been invoked.</summary>
+    </member>
+    <member name="F:WebSocketSharp.WebSocketState.Closed">
+      <summary>相当于数值3。表示连接已关闭或无法打开。
+Equivalent to numeric value 3.  Indicates that the connection has been closed or couldn't be opened.</summary>
+    </member>
+    <member name="T:WebSocketSharp.Net.AuthenticationSchemes">
+      <summary>包含用于身份验证的方案的值。
+Contains the values of the schemes for authentication.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.AuthenticationSchemes.None">
+      <summary>指示不允许身份验证。
+Indicates that no authentication is allowed.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.AuthenticationSchemes.Digest">
+      <summary>表示摘要身份验证。
+Indicates digest authentication.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.AuthenticationSchemes.Basic">
+      <summary>表示基本身份验证。
+Indicates basic authentication.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.AuthenticationSchemes.Anonymous">
+      <summary>表示匿名身份验证。
+Indicates anonymous authentication.</summary>
+    </member>
+    <member name="T:WebSocketSharp.Net.ClientSslConfiguration">
+      <summary>存储用于将实例配置为客户端的参数。
+Stores the parameters used to configure a  instance as a client.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Net.ClientSslConfiguration.#ctor(System.String,System.Security.Cryptography.X509Certificates.X509CertificateCollection,System.Security.Authentication.SslProtocols,System.Net.Security.LocalCertificateSelectionCallback,System.Boolean,System.Net.Security.RemoteCertificateValidationCallback)">
+      <summary>使用指定的、和初始化类的新实例。
+Initializes a new instance of the  class with  the specified , ,  , and .</summary>
+      <param name="targetHost">表示共享安全连接的服务器的名称的。
+A  that represents the name of the server that shares  a secure connection.</param>
+      <param name="clientCertificates">包含客户端证书的。
+A  that contains client certificates.</param>
+      <param name="enabledSslProtocols">表示用于身份验证的协议的枚举值。
+The  enum value that represents the protocols used for  authentication.</param>
+      <param name="checkCertificateRevocation">如果在身份验证期间检查了证书吊销列表，则为true；否则为false。
+true if the certificate revocation list is checked during authentication;  otherwise, false.</param>
+    </member>
+    <member name="P:WebSocketSharp.Net.ClientSslConfiguration.ClientCertificates">
+      <summary>获取或设置包含客户端证书的集合。
+Gets or sets the collection that contains client certificates.</summary>
+      <value>包含客户端证书的。
+A  that contains client certificates.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.ClientSslConfiguration.ClientCertificateSelectionCallback">
+      <summary>获取或设置用于选择要提供给服务器的客户端证书的回调。
+Gets or sets the callback used to select a client certificate to supply to the server.</summary>
+      <remarks>如果此回调返回，则不会提供客户端证书。
+If this callback returns , no client certificate will be supplied.</remarks>
+      <value>引用用于选择客户端证书的方法的委托。只返回默认值的函数。
+A  delegate that references the method  used to select the client certificate. The default value is a function that only returns  .</value>
+    </member>
+    <member name="T:WebSocketSharp.Net.Cookie">
+      <summary>提供一组用于管理HTTP Cookie的方法和属性。
+Provides a set of methods and properties used to manage an HTTP Cookie.</summary>
+      <remarks>
+        <para>Cookie类支持以下Cookie格式：Netscape规范、RFC 2109和RFC 2965
+The Cookie class supports the following cookie formats:  Netscape specification,  RFC 2109, and  RFC 2965</para>
+        <para>无法继承Cookie类。
+The Cookie class cannot be inherited.</para>
+      </remarks>
+    </member>
+    <member name="M:WebSocketSharp.Net.Cookie.#ctor">
+      <summary>初始化类的新实例。
+Initializes a new instance of the  class.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Net.Cookie.#ctor(System.String,System.String)">
+      <summary>用指定的和初始化类的新实例。
+Initializes a new instance of the  class with the specified  and .</summary>
+      <param name="name">表示cookie名称的。
+A  that represents the Name of the cookie.</param>
+      <param name="value">表示cookie值的。
+A  that represents the Value of the cookie.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.Cookie.#ctor(System.String,System.String,System.String)">
+      <summary>使用指定的和初始化类的新实例。
+Initializes a new instance of the  class with the specified  , , and .</summary>
+      <param name="name">表示cookie名称的。
+A  that represents the Name of the cookie.</param>
+      <param name="value">表示cookie值的。
+A  that represents the Value of the cookie.</param>
+      <param name="path">表示cookie的路径属性值的。
+A  that represents the value of the Path attribute of the cookie.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.Cookie.#ctor(System.String,System.String,System.String,System.String)">
+      <summary>使用指定的、和初始化类的新实例。
+Initializes a new instance of the  class with the specified  , , , and  .</summary>
+      <param name="name">表示cookie名称的。
+A  that represents the Name of the cookie.</param>
+      <param name="value">表示cookie值的。
+A  that represents the Value of the cookie.</param>
+      <param name="path">表示cookie的路径属性值的。
+A  that represents the value of the Path attribute of the cookie.</param>
+      <param name="domain">表示cookie的域属性值的。
+A  that represents the value of the Domain attribute of the cookie.</param>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.Comment">
+      <summary>获取或设置cookie的Comment属性的值。
+Gets or sets the value of the Comment attribute of the cookie.</summary>
+      <value>表示用于记录cookie的预期用途的注释的。
+A  that represents the comment to document intended use of the cookie.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.CommentUri">
+      <summary>获取或设置cookie的CommentURL属性的值。
+Gets or sets the value of the CommentURL attribute of the cookie.</summary>
+      <value>表示提供注释以记录cookie预期用途的URI的。
+A  that represents the URI that provides the comment to document intended  use of the cookie.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.Discard">
+      <summary>获取或设置一个值，该值指示客户端终止时是否无条件丢弃cookie。
+Gets or sets a value indicating whether the client discards the cookie unconditionally  when the client terminates.</summary>
+      <value>如果客户端终止时无条件丢弃cookie，则为true；否则为false。默认值为false。
+true if the client discards the cookie unconditionally when the client terminates;  otherwise, false. The default value is false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.Domain">
+      <summary>获取或设置cookie的域属性的值。
+Gets or sets the value of the Domain attribute of the cookie.</summary>
+      <value>表示cookie对其有效的URI的。
+A  that represents the URI for which the cookie is valid.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.Expired">
+      <summary>获取或设置一个值，该值指示cookie是否已过期。
+Gets or sets a value indicating whether the cookie has expired.</summary>
+      <value>如果cookie已过期，则为true；否则为false。默认值为false。
+true if the cookie has expired; otherwise, false.  The default value is false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.Expires">
+      <summary>获取或设置cookie的Expires属性的值。
+Gets or sets the value of the Expires attribute of the cookie.</summary>
+      <value>表示cookie过期的日期和时间的。默认值为。
+A  that represents the date and time at which the cookie expires.  The default value is .</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.HttpOnly">
+      <summary>获取或设置一个值，该值指示非HTTP API是否可以访问cookie。
+Gets or sets a value indicating whether non-HTTP APIs can access the cookie.</summary>
+      <value>如果非HTTP api无法访问cookie，则为true；否则为false。默认值为false。
+true if non-HTTP APIs cannot access the cookie; otherwise, false.  The default value is false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.Name">
+      <summary>获取或设置cookie的名称。
+Gets or sets the Name of the cookie.</summary>
+      <value>表示cookie名称的。
+A  that represents the Name of the cookie.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.Path">
+      <summary>获取或设置cookie的路径属性的值。
+Gets or sets the value of the Path attribute of the cookie.</summary>
+      <value>表示应用cookie的源服务器上的URI子集的。
+A  that represents the subset of URI on the origin server  to which the cookie applies.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.Port">
+      <summary>获取或设置cookie的端口属性的值。
+Gets or sets the value of the Port attribute of the cookie.</summary>
+      <value>表示应用cookie的TCP端口列表的。
+A  that represents the list of TCP ports to which the cookie applies.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.Secure">
+      <summary>获取或设置一个值，该值指示cookie的安全级别是否安全。
+Gets or sets a value indicating whether the security level of the cookie is secure.</summary>
+      <remarks>当此属性为true时，只有通过HTTPS传输请求时，才会在HTTP请求中包含cookie。
+When this property is true, the cookie may be included in the HTTP request  only if the request is transmitted over the HTTPS.</remarks>
+      <value>如果cookie的安全级别是安全的，则为true；否则为false。默认值为false。
+true if the security level of the cookie is secure; otherwise, false.  The default value is false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.TimeStamp">
+      <summary>获取发出cookie的时间。
+Gets the time when the cookie was issued.</summary>
+      <value>表示发出cookie的时间的。
+A  that represents the time when the cookie was issued.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.Value">
+      <summary>获取或设置cookie的值。
+Gets or sets the Value of the cookie.</summary>
+      <value>表示cookie值的。
+A  that represents the Value of the cookie.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.Cookie.Version">
+      <summary>获取或设置cookie的Version属性的值。
+Gets or sets the value of the Version attribute of the cookie.</summary>
+      <value>表示cookie所符合的HTTP状态管理版本的。
+An  that represents the version of the HTTP state management  to which the cookie conforms.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.Cookie.Equals(System.Object)">
+      <summary>确定指定的值是否等于当前值。
+Determines whether the specified  is equal to the current  .</summary>
+      <param name="comparand">一个可以与当前进行比较的方法。
+An  to compare with the current .</param>
+      <returns>如果等于当前值，则为true；否则为false。
+true if  is equal to the current ;  otherwise, false.</returns>
+    </member>
+    <member name="M:WebSocketSharp.Net.Cookie.GetHashCode">
+      <summary>用作对象的哈希函数。
+Serves as a hash function for a  object.</summary>
+      <returns>表示当前的哈希代码的。
+An  that represents the hash code for the current .</returns>
+    </member>
+    <member name="M:WebSocketSharp.Net.Cookie.ToString">
+      <summary>返回表示当前值的。
+Returns a  that represents the current .</summary>
+      <remarks>此方法返回用于将HTTP Cookie发送到源服务器的。
+This method returns a  to use to send an HTTP Cookie to  an origin server.</remarks>
+      <returns>表示电流的。
+A  that represents the current .</returns>
+    </member>
+    <member name="T:WebSocketSharp.Net.CookieCollection">
+      <summary>提供类实例的集合容器。
+Provides a collection container for instances of the  class.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Net.CookieCollection.#ctor">
+      <summary>初始化类的新实例。
+Initializes a new instance of the  class.</summary>
+    </member>
+    <member name="P:WebSocketSharp.Net.CookieCollection.Count">
+      <summary>获取集合中的Cookie数。
+Gets the number of cookies in the collection.</summary>
+      <value>表示集合中Cookie数的。
+An  that represents the number of cookies in the collection.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.CookieCollection.IsReadOnly">
+      <summary>获取一个值，该值指示集合是否为只读。
+Gets a value indicating whether the collection is read-only.</summary>
+      <value>如果集合是只读的，则为true；否则为false。默认值为true。
+true if the collection is read-only; otherwise, false.  The default value is true.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.CookieCollection.Item(System.Int32)">
+      <summary>从集合中获取指定位置的。
+Gets the  at the specified  from  the collection.</summary>
+      <value>集合中指定的。
+A  at the specified  in the collection.</value>
+      <param name="index">表示要查找的从零开始的索引的。
+An  that represents the zero-based index of the  to find.</param>
+    </member>
+    <member name="P:WebSocketSharp.Net.CookieCollection.Item(System.String)">
+      <summary>从集合中获取具有指定属性的。
+Gets the  with the specified  from  the collection.</summary>
+      <value>集合中指定的。
+A  with the specified  in the collection.</value>
+      <param name="name">表示要查找的对象的名称的。
+A  that represents the name of the  to find.</param>
+    </member>
+    <member name="P:WebSocketSharp.Net.CookieCollection.SyncRoot">
+      <summary>获取用于同步对集合的访问的对象。
+Gets an object used to synchronize access to the collection.</summary>
+      <value>用于同步对集合的访问的。
+An  used to synchronize access to the collection.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.CookieCollection.Add(WebSocketSharp.Net.Cookie)">
+      <summary>向集合中添加指定的。
+Adds the specified  to the collection.</summary>
+      <param name="cookie">要添加的。
+A  to add.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.CookieCollection.CopyTo(WebSocketSharp.Net.Cookie[],System.Int32)">
+      <summary>从中指定的开始，将集合的元素复制到的指定数组。
+Copies the elements of the collection to the specified array of ,  starting at the specified  in the .</summary>
+      <param name="array">表示从集合中复制的元素的目标的数组。
+An array of  that represents the destination of the elements  copied from the collection.</param>
+      <param name="index">表示从中开始复制的从零开始的索引的。
+An  that represents the zero-based index in  at which copying begins.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.CookieCollection.GetEnumerator">
+      <summary>获取用于遍历集合的枚举数。
+Gets the enumerator used to iterate through the collection.</summary>
+      <returns>用于遍历集合的实例。
+An  instance used to iterate through the collection.</returns>
+    </member>
+    <member name="T:WebSocketSharp.Net.CookieException">
+      <summary>获取错误时引发的异常。
+The exception that is thrown when a  gets an error.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Net.CookieException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <summary>从指定的和初始化类的新实例。
+Initializes a new instance of the  class from  the specified  and .</summary>
+      <param name="serializationInfo">包含序列化对象数据的。
+A  that contains the serialized object data.</param>
+      <param name="streamingContext">指定反序列化源的。
+A  that specifies the source for the deserialization.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.CookieException.#ctor">
+      <summary>初始化类的新实例。
+Initializes a new instance of the  class.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Net.CookieException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <summary>用序列化当前所需的数据填充指定的。
+Populates the specified  with the data needed to serialize  the current .</summary>
+      <param name="serializationInfo">保存序列化对象数据的。
+A  that holds the serialized object data.</param>
+      <param name="streamingContext">指定序列化目标的。
+A  that specifies the destination for the serialization.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.CookieException.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <summary>用序列化当前所需的数据填充指定的。
+Populates the specified  with the data needed to serialize  the current .</summary>
+      <param name="serializationInfo">保存序列化对象数据的。
+A  that holds the serialized object data.</param>
+      <param name="streamingContext">指定序列化目标的。
+A  that specifies the destination for the serialization.</param>
+    </member>
+    <member name="T:WebSocketSharp.Net.HttpBasicIdentity">
+      <summary>保存HTTP基本身份验证凭据中的用户名和密码。
+Holds the user name and password from the HTTP Basic authentication credentials.</summary>
+    </member>
+    <member name="P:WebSocketSharp.Net.HttpBasicIdentity.Password">
+      <summary>从HTTP基本身份验证凭据获取密码。
+Gets the password from the HTTP Basic authentication credentials.</summary>
+      <value>表示密码的。
+A  that represents the password.</value>
+    </member>
+    <member name="T:WebSocketSharp.Net.HttpDigestIdentity">
+      <summary>保存HTTP摘要身份验证凭据中的用户名和其他参数。
+Holds the user name and other parameters from the HTTP Digest authentication credentials.</summary>
+    </member>
+    <member name="T:WebSocketSharp.Net.HttpStatusCode">
+      <summary>包含HTTP状态码的值。
+Contains the values of the HTTP status codes.</summary>
+      <remarks>HttpStatusCode枚举包含RFC 2616中为HTTP 1.1定义的HTTP状态代码的值。
+The HttpStatusCode enumeration contains the values of the HTTP status codes defined in  RFC 2616 for HTTP 1.1.</remarks>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Continue">
+      <summary>相当于状态代码100。指示客户端应继续其请求。
+Equivalent to status code 100.  Indicates that the client should continue with its request.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.SwitchingProtocols">
+      <summary>相当于状态代码101。指示服务器正在切换连接上的HTTP版本或协议。
+Equivalent to status code 101.  Indicates that the server is switching the HTTP version or protocol on the connection.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Ok">
+      <summary>相当于状态代码200。指示客户端的请求已成功。
+Equivalent to status code 200.  Indicates that the client's request has succeeded.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Created">
+      <summary>相当于状态代码201。指示客户端的请求已完成，并导致正在创建新资源。
+Equivalent to status code 201.  Indicates that the client's request has been fulfilled and resulted in a new resource being  created.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Accepted">
+      <summary>相当于状态代码202。指示已接受客户端的请求进行处理，但处理尚未完成。
+Equivalent to status code 202.  Indicates that the client's request has been accepted for processing, but the processing  hasn't been completed.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.NonAuthoritativeInformation">
+      <summary>相当于状态代码203。指示返回的元信息来自本地或第三方副本，而不是源服务器。
+Equivalent to status code 203.  Indicates that the returned metainformation is from a local or a third-party copy instead of  the origin server.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.NoContent">
+      <summary>相当于状态代码204。指示服务器已满足客户端的请求，但不需要返回实体正文。
+Equivalent to status code 204.  Indicates that the server has fulfilled the client's request but doesn't need to return  an entity-body.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.ResetContent">
+      <summary>相当于状态代码205。指示服务器已满足客户端的请求，并且用户代理应重置导致发送请求的文档视图。
+Equivalent to status code 205.  Indicates that the server has fulfilled the client's request, and the user agent should  reset the document view which caused the request to be sent.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.PartialContent">
+      <summary>相当于状态代码206。指示服务器已完成资源的部分GET请求。
+Equivalent to status code 206.  Indicates that the server has fulfilled the partial GET request for the resource.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.MultipleChoices">
+      <summary>
+        <para>相当于状态代码300。请求的多个表示对应于任何资源。
+Equivalent to status code 300.  Indicates that the requested resource corresponds to any of multiple representations.</para>
+        <para>多重回声是含糊不清的同义词。
+MultipleChoices is a synonym for Ambiguous.</para>
+      </summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Ambiguous">
+      <summary>
+        <para>相当于状态代码300。指示请求的资源对应于多个表示中的任意一个。
+Equivalent to status code 300.  Indicates that the requested resource corresponds to any of multiple representations.</para>
+        <para>暧昧是多重回声的同义词。
+Ambiguous is a synonym for MultipleChoices.</para>
+      </summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.MovedPermanently">
+      <summary>
+        <para>相当于状态代码301。指示已为请求的资源分配了新的永久URI，将来对此资源的任何引用都应使用其中一个返回的URI。
+Equivalent to status code 301.  Indicates that the requested resource has been assigned a new permanent URI and  any future references to this resource should use one of the returned URIs.</para>
+        <para>MovedPermanently是Moved的同义词。
+MovedPermanently is a synonym for Moved.</para>
+      </summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Moved">
+      <summary>
+        <para>相当于状态代码301。指示已为请求的资源分配了新的永久URI，将来对此资源的任何引用都应使用其中一个返回的URI。
+Equivalent to status code 301.  Indicates that the requested resource has been assigned a new permanent URI and  any future references to this resource should use one of the returned URIs.</para>
+        <para>Moved是MovedPermanently的同义词。
+Moved is a synonym for MovedPermanently.</para>
+      </summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Found">
+      <summary>
+        <para>相当于状态代码302。指示请求的资源临时位于其他URI下。
+Equivalent to status code 302.  Indicates that the requested resource is located temporarily under a different URI.</para>
+        <para>Found是重定向的同义词。
+Found is a synonym for Redirect.</para>
+      </summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Redirect">
+      <summary>
+        <para>相当于状态代码302。指示请求的资源临时位于其他URI下。
+Equivalent to status code 302.  Indicates that the requested resource is located temporarily under a different URI.</para>
+        <para>重定向是Found的同义词。
+Redirect is a synonym for Found.</para>
+      </summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.SeeOther">
+      <summary>
+        <para>相当于状态代码303。指示可以在不同的URI下找到对请求的响应，并应使用该资源上的GET方法检索该响应。
+Equivalent to status code 303.  Indicates that the response to the request can be found under a different URI and  should be retrieved using a GET method on that resource.</para>
+        <para>SeeOther是RedirectMethod的同义词。
+SeeOther is a synonym for RedirectMethod.</para>
+      </summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.RedirectMethod">
+      <summary>
+        <para>相当于状态代码303。指示可以在不同的URI下找到对请求的响应，并应使用该资源上的GET方法检索该响应。
+Equivalent to status code 303.  Indicates that the response to the request can be found under a different URI and  should be retrieved using a GET method on that resource.</para>
+        <para>RedirectMethod是SeeOther的同义词。
+RedirectMethod is a synonym for SeeOther.</para>
+      </summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.NotModified">
+      <summary>相当于状态代码304。指示客户端已执行条件GET请求，允许访问，但文档尚未修改。
+Equivalent to status code 304.  Indicates that the client has performed a conditional GET request and access is allowed,  but the document hasn't been modified.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.UseProxy">
+      <summary>相当于状态代码305。指示必须通过位置字段给定的代理访问请求的资源。
+Equivalent to status code 305.  Indicates that the requested resource must be accessed through the proxy given by  the Location field.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Unused">
+      <summary>相当于状态代码306。此状态代码已在规范的早期版本中使用，不再使用，保留供将来使用。
+Equivalent to status code 306.  This status code was used in a previous version of the specification, is no longer used,  and is reserved for future use.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.TemporaryRedirect">
+      <summary>
+        <para>相当于状态代码307。指示请求的资源临时位于其他URI下。
+Equivalent to status code 307.  Indicates that the requested resource is located temporarily under a different URI.</para>
+        <para>临时重定向是RedirectKeepVerb的同义词。
+TemporaryRedirect is a synonym for RedirectKeepVerb.</para>
+      </summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.RedirectKeepVerb">
+      <summary>
+        <para>相当于状态代码307。指示请求的资源临时位于其他URI下。
+Equivalent to status code 307.  Indicates that the requested resource is located temporarily under a different URI.</para>
+        <para>RedirectKeepVerb是TemporaryRedirect的同义词。
+RedirectKeepVerb is a synonym for TemporaryRedirect.</para>
+      </summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.BadRequest">
+      <summary>相当于状态代码400。表示由于语法错误，服务器无法理解客户端的请求。
+Equivalent to status code 400.  Indicates that the client's request couldn't be understood by the server due to  malformed syntax.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Unauthorized">
+      <summary>相当于状态代码401。指示客户端的请求需要用户身份验证。
+Equivalent to status code 401.  Indicates that the client's request requires user authentication.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.PaymentRequired">
+      <summary>相当于状态代码402。此状态代码保留供将来使用。
+Equivalent to status code 402.  This status code is reserved for future use.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Forbidden">
+      <summary>相当于状态代码403。表示服务器已理解客户端的请求，但拒绝执行该请求。
+Equivalent to status code 403.  Indicates that the server understood the client's request but is refusing to fulfill it.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.NotFound">
+      <summary>相当于状态码404。指示服务器未找到任何与请求URI匹配的内容。
+Equivalent to status code 404.  Indicates that the server hasn't found anything matching the request URI.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.MethodNotAllowed">
+      <summary>相当于状态代码405。指示请求行中指定的方法不允许用于由请求URI标识的资源。
+Equivalent to status code 405.  Indicates that the method specified in the request line isn't allowed for the resource  identified by the request URI.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.NotAcceptable">
+      <summary>相当于状态代码406。指示服务器没有适当的资源来响应客户端请求中的Accept标头。
+Equivalent to status code 406.  Indicates that the server doesn't have the appropriate resource to respond to the Accept  headers in the client's request.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.ProxyAuthenticationRequired">
+      <summary>相当于状态代码407。指示客户端必须首先使用代理对其自身进行身份验证。
+Equivalent to status code 407.  Indicates that the client must first authenticate itself with the proxy.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.RequestTimeout">
+      <summary>相当于状态代码408。指示客户端未在服务器准备等待的时间内生成请求。
+Equivalent to status code 408.  Indicates that the client didn't produce a request within the time that the server was  prepared to wait.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Conflict">
+      <summary>相当于状态码409。指示由于服务器上的冲突而无法完成客户端的请求。
+Equivalent to status code 409.  Indicates that the client's request couldn't be completed due to a conflict on the server.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.Gone">
+      <summary>相当于状态代码410。表示请求的资源在服务器上不再可用，并且不知道转发地址。
+Equivalent to status code 410.  Indicates that the requested resource is no longer available at the server and  no forwarding address is known.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.LengthRequired">
+      <summary>相当于状态代码411。指示服务器拒绝接受未定义内容长度的客户端请求。
+Equivalent to status code 411.  Indicates that the server refuses to accept the client's request without a defined  Content-Length.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.PreconditionFailed">
+      <summary>相当于状态代码412。指示在服务器上测试时，一个或多个请求头中给定的前提条件计算为false。
+Equivalent to status code 412.  Indicates that the precondition given in one or more of the request headers evaluated to  false when it was tested on the server.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.RequestEntityTooLarge">
+      <summary>相当于状态代码413。指示客户端请求的实体大于服务器愿意或能够处理的实体。
+Equivalent to status code 413.  Indicates that the entity of the client's request is larger than the server is willing or  able to process.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.RequestUriTooLong">
+      <summary>相当于状态代码414。指示请求URI比服务器愿意解释的长度长。
+Equivalent to status code 414.  Indicates that the request URI is longer than the server is willing to interpret.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.UnsupportedMediaType">
+      <summary>相当于状态代码415。指示客户端请求的实体的格式不受所请求方法的所请求资源的支持。
+Equivalent to status code 415.  Indicates that the entity of the client's request is in a format not supported by  the requested resource for the requested method.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.RequestedRangeNotSatisfiable">
+      <summary>相当于状态代码416。指示范围请求标头中的范围说明符值均不与选定资源的当前范围重叠。
+Equivalent to status code 416.  Indicates that none of the range specifier values in a Range request header overlap  the current extent of the selected resource.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.ExpectationFailed">
+      <summary>相当于状态代码417。指示服务器无法满足Expect请求标头中给定的期望。
+Equivalent to status code 417.  Indicates that the expectation given in an Expect request header couldn't be met by  the server.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.InternalServerError">
+      <summary>相当于状态代码500。指示服务器遇到意外情况，使其无法满足客户端的请求。
+Equivalent to status code 500.  Indicates that the server encountered an unexpected condition which prevented it from  fulfilling the client's request.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.NotImplemented">
+      <summary>相当于状态代码501。指示服务器不支持满足客户端请求所需的功能。
+Equivalent to status code 501.  Indicates that the server doesn't support the functionality required to fulfill the client's  request.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.BadGateway">
+      <summary>相当于状态代码502。指示网关或代理服务器从上游服务器接收到无效响应。
+Equivalent to status code 502.  Indicates that a gateway or proxy server received an invalid response from the upstream  server.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.ServiceUnavailable">
+      <summary>相当于状态代码503。表示由于服务器临时过载或维护，服务器当前无法处理客户端的请求。
+Equivalent to status code 503.  Indicates that the server is currently unable to handle the client's request due to  a temporary overloading or maintenance of the server.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.GatewayTimeout">
+      <summary>相当于状态代码504。表示网关或代理服务器没有从上游服务器或其他辅助服务器接收到及时响应。
+Equivalent to status code 504.  Indicates that a gateway or proxy server didn't receive a timely response from the upstream  server or some other auxiliary server.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpStatusCode.HttpVersionNotSupported">
+      <summary>相当于状态代码505。指示服务器不支持客户端请求中使用的HTTP版本。
+Equivalent to status code 505.  Indicates that the server doesn't support the HTTP version used in the client's request.</summary>
+    </member>
+    <member name="T:WebSocketSharp.Net.HttpVersion">
+      <summary>提供HTTP版本号。
+Provides the HTTP version numbers.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpVersion.Version10">
+      <summary>提供HTTP 1.0的实例。
+Provides a  instance for HTTP 1.0.</summary>
+    </member>
+    <member name="F:WebSocketSharp.Net.HttpVersion.Version11">
+      <summary>提供HTTP 1.1的实例。
+Provides a  instance for HTTP 1.1.</summary>
+    </member>
+    <member name="T:WebSocketSharp.Net.NetworkCredential">
+      <summary>提供HTTP身份验证的凭据（基本/摘要）。
+Provides the credentials for HTTP authentication (Basic/Digest).</summary>
+    </member>
+    <member name="M:WebSocketSharp.Net.NetworkCredential.#ctor(System.String,System.String)">
+      <summary>使用指定的用户名和密码初始化类的新实例。
+Initializes a new instance of the  class  with the specified user name and password.</summary>
+      <param name="username">表示与凭据关联的用户名的。
+A  that represents the user name associated with the  credentials.</param>
+      <param name="password">表示与凭据关联的用户名的密码的。
+A  that represents the password for the user name  associated with the credentials.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.NetworkCredential.#ctor(System.String,System.String,System.String,System.String[])">
+      <summary>使用指定的用户名、密码、域和角色初始化类的新实例。
+Initializes a new instance of the  class  with the specified user name, password, domain, and roles.</summary>
+      <param name="username">表示与凭据关联的用户名的。
+A  that represents the user name associated with the  credentials.</param>
+      <param name="password">表示与凭据关联的用户名的密码的。
+A  that represents the password for the user name  associated with the credentials.</param>
+      <param name="domain">表示与凭据关联的用户域的名称的。
+A  that represents the name of the user domain  associated with the credentials.</param>
+      <param name="roles">包含与凭据关联的用户所属的角色名称（如果有的话）的数组。
+An array of  that contains the role names to which  the user associated with the credentials belongs if any.</param>
+    </member>
+    <member name="P:WebSocketSharp.Net.NetworkCredential.Domain">
+      <summary>获取与凭据关联的用户域的名称。
+Gets the name of the user domain associated with the credentials.</summary>
+      <value>表示与凭据关联的用户域的名称的。
+A  that represents the name of the user domain  associated with the credentials.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.NetworkCredential.Password">
+      <summary>获取与凭据关联的用户名的密码。
+Gets the password for the user name associated with the credentials.</summary>
+      <value>表示与凭据关联的用户名的密码的。
+A  that represents the password for the user name  associated with the credentials.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.NetworkCredential.Roles">
+      <summary>获取与凭据关联的用户所属的角色名称。
+Gets the role names to which the user associated with the credentials  belongs.</summary>
+      <value>包含与凭据关联的用户所属角色名称的数组。
+An array of  that contains the role names to which  the user associated with the credentials belongs.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.NetworkCredential.UserName">
+      <summary>获取与凭据关联的用户名。
+Gets the user name associated with the credentials.</summary>
+      <value>表示与凭据关联的用户名的。
+A  that represents the user name associated with the  credentials.</value>
+    </member>
+    <member name="T:WebSocketSharp.Net.ServerSslConfiguration">
+      <summary>存储用于将实例配置为服务器的参数。
+Stores the parameters used to configure a  instance as a server.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Net.ServerSslConfiguration.#ctor(System.Security.Cryptography.X509Certificates.X509Certificate2,System.Boolean,System.Security.Authentication.SslProtocols,System.Boolean,System.Net.Security.RemoteCertificateValidationCallback,System.Net.Security.LocalCertificateSelectionCallback)">
+      <summary>使用指定的、和初始化类的新实例。
+Initializes a new instance of the  class with  the specified ,  , ,  and .</summary>
+      <param name="serverCertificate">表示用于对服务器进行身份验证的证书的。
+A  that represents the certificate used to authenticate  the server.</param>
+      <param name="clientCertificateRequired">如果客户端必须提供用于身份验证的证书，则为true；否则为false。
+true if the client must supply a certificate for authentication;  otherwise, false.</param>
+      <param name="enabledSslProtocols">表示用于身份验证的协议的枚举值。
+The  enum value that represents the protocols used for  authentication.</param>
+      <param name="checkCertificateRevocation">如果在身份验证期间检查了证书吊销列表，则为true；否则为false。
+true if the certificate revocation list is checked during authentication;  otherwise, false.</param>
+      <param name="clientCertificateValidationCallback">用于验证远程SSL证书的用户委托
+A user delegate used to verify remote SSL certificate</param>
+      <param name="userCertificateSelectionCallback">用于选择本地SSL证书的用户委托
+A user delegate used to select local SSL certificate</param>
+    </member>
+    <member name="P:WebSocketSharp.Net.ServerSslConfiguration.ClientCertificateRequired">
+      <summary>获取或设置一个值，该值指示客户端是否必须提供用于身份验证的证书。
+Gets or sets a value indicating whether the client must supply a certificate for  authentication.</summary>
+      <value>如果客户端必须提供证书，则为true；否则为false。
+true if the client must supply a certificate; otherwise, false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.ServerSslConfiguration.ClientCertificateValidationCallback">
+      <summary>获取或设置用于验证客户端提供的证书的回调。
+Gets or sets the callback used to validate the certificate supplied by the client.</summary>
+      <remarks>如果此回调返回true，则客户端证书将有效。
+If this callback returns true, the client certificate will be valid.</remarks>
+      <value>引用用于验证客户端证书的方法的委托。默认值是只返回true的函数。
+A  delegate that references the method  used to validate the client certificate. The default value is a function that only returns  true.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.ServerSslConfiguration.ServerCertificate">
+      <summary>获取或设置用于在安全连接上对服务器进行身份验证的证书。
+Gets or sets the certificate used to authenticate the server on the secure connection.</summary>
+      <value>表示用于对服务器进行身份验证的证书的。
+A  that represents the certificate used to authenticate  the server.</value>
+    </member>
+    <member name="T:WebSocketSharp.Net.SslConfiguration">
+      <summary>存储用于配置实例的参数。
+Stores the parameters used to configure a  instance.</summary>
+      <remarks>SslConfiguration类是一个抽象类。
+The SslConfiguration class is an abstract class.</remarks>
+    </member>
+    <member name="M:WebSocketSharp.Net.SslConfiguration.#ctor(System.Security.Authentication.SslProtocols,System.Boolean)">
+      <summary>用指定的和初始化类的新实例。
+Initializes a new instance of the  class with  the specified  and  .</summary>
+      <param name="enabledSslProtocols">表示用于身份验证的协议的枚举值。
+The  enum value that represents the protocols used for  authentication.</param>
+      <param name="checkCertificateRevocation">如果在身份验证期间检查了证书吊销列表，则为true；否则为false。
+true if the certificate revocation list is checked during authentication;  otherwise, false.</param>
+    </member>
+    <member name="P:WebSocketSharp.Net.SslConfiguration.CertificateSelectionCallback">
+      <summary>获取或设置用于选择要提供给远程方的证书的回调。
+Gets or sets the callback used to select a certificate to supply to the remote party.</summary>
+      <remarks>如果此回调返回，则不会提供证书。
+If this callback returns , no certificate will be supplied.</remarks>
+      <value>引用用于选择证书的方法的委托。只返回默认值的函数。
+A  delegate that references the method  used to select a certificate. The default value is a function that only returns  .</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.SslConfiguration.CertificateValidationCallback">
+      <summary>获取或设置用于验证远程方提供的证书的回调。
+Gets or sets the callback used to validate the certificate supplied by the remote party.</summary>
+      <remarks>如果此回调返回true，则证书将有效。
+If this callback returns true, the certificate will be valid.</remarks>
+      <value>引用用于验证证书的方法的委托。默认值是只返回true的函数。
+A  delegate that references the method  used to validate the certificate. The default value is a function that only returns  true.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.SslConfiguration.CheckCertificateRevocation">
+      <summary>获取或设置一个值，该值指示在身份验证期间是否检查证书吊销列表。
+Gets or sets a value indicating whether the certificate revocation list is checked  during authentication.</summary>
+      <value>如果选中证书吊销列表，则为true；否则为false。
+true if the certificate revocation list is checked; otherwise, false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.SslConfiguration.EnabledSslProtocols">
+      <summary>获取或设置用于身份验证的SSL协议。
+Gets or sets the SSL protocols used for authentication.</summary>
+      <value>表示用于身份验证的协议的枚举值。
+The  enum value that represents the protocols used for  authentication.</value>
+    </member>
+    <member name="T:WebSocketSharp.Net.WebHeaderCollection">
+      <summary>提供与请求或响应关联的HTTP标头的集合。
+Provides a collection of the HTTP headers associated with a request or response.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebHeaderCollection.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <summary>从指定的和初始化类的新实例。
+Initializes a new instance of the  class from  the specified  and .</summary>
+      <param name="serializationInfo">包含序列化对象数据的。
+A  that contains the serialized object data.</param>
+      <param name="streamingContext">指定反序列化源的。
+A  that specifies the source for the deserialization.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebHeaderCollection.#ctor">
+      <summary>初始化类的新实例。
+Initializes a new instance of the  class.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebHeaderCollection.Add(System.String,System.String)">
+      <summary>将具有指定和的标头添加到集合中。
+Adds a header with the specified  and  to the collection.</summary>
+      <param name="name">表示要添加的头的名称的。
+A  that represents the name of the header to add.</param>
+      <param name="value">表示要添加的标头的值的。
+A  that represents the value of the header to add.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebHeaderCollection.Clear">
+      <summary>从集合中删除所有标头。
+Removes all headers from the collection.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebHeaderCollection.GetValues(System.Int32)">
+      <summary>获取存储在集合的指定位置的标头值数组。
+Gets an array of header values stored in the specified  position  of the collection.</summary>
+      <returns>如果找到则接收头值的数组；否则。
+An array of  that receives the header values if found; otherwise,  .</returns>
+      <param name="index">表示要查找的标头的从零开始的索引的。
+An  that represents the zero-based index of the header to find.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebHeaderCollection.GetValues(System.String)">
+      <summary>获取存储在指定文件中的头值数组。
+Gets an array of header values stored in the specified .</summary>
+      <returns>如果找到则接收头值的数组；否则。
+An array of  that receives the header values if found; otherwise,  .</returns>
+      <param name="header">表示要查找的头的名称的。
+A  that represents the name of the header to find.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebHeaderCollection.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <summary>用序列化所需的数据填充指定的。
+Populates the specified  with the data needed to serialize  the .</summary>
+      <param name="serializationInfo">保存序列化对象数据的。
+A  that holds the serialized object data.</param>
+      <param name="streamingContext">指定序列化目标的。
+A  that specifies the destination for the serialization.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebHeaderCollection.OnDeserialization(System.Object)">
+      <summary>实现接口并在反序列化完成时引发反序列化事件。
+Implements the  interface and raises the deserialization event  when the deserialization is complete.</summary>
+      <param name="sender">表示反序列化事件源的。
+An  that represents the source of the deserialization event.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebHeaderCollection.Remove(System.String)">
+      <summary>从集合中移除指定的标头。
+Removes the specified header from the collection.</summary>
+      <param name="name">表示要删除的头的名称的。
+A  that represents the name of the header to remove.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebHeaderCollection.Set(System.String,System.String)">
+      <summary>将指定的标头设置为指定值。
+Sets the specified header to the specified value.</summary>
+      <param name="name">表示要设置的头的名称的。
+A  that represents the name of the header to set.</param>
+      <param name="value">表示要设置的标头的值的。
+A  that represents the value of the header to set.</param>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebHeaderCollection.ToString">
+      <summary>返回表示当前值的。
+Returns a  that represents the current  .</summary>
+      <returns>表示电流的。
+A  that represents the current .</returns>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebHeaderCollection.System#Runtime#Serialization#ISerializable#GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <summary>用序列化当前所需的数据填充指定的。
+Populates the specified  with the data needed to serialize  the current .</summary>
+      <param name="serializationInfo">保存序列化对象数据的。
+A  that holds the serialized object data.</param>
+      <param name="streamingContext">指定序列化目标的。
+A  that specifies the destination for the serialization.</param>
+    </member>
+    <member name="T:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext">
+      <summary>提供用于访问由接收的WebSocket连接请求中的信息的属性。
+Provides the properties used to access the information in a WebSocket connection request  received by the .</summary>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.GetCookieCollection">
+      <summary>获取请求中包含的HTTP Cookie。
+Gets the HTTP cookies included in the request.</summary>
+      <value>一个包含cookies的。
+A  that contains the cookies.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.GetHeader(System.String)">
+      <summary>获取请求中包含的HTTP头。
+Gets the HTTP headers included in the request.</summary>
+      <value>包含的标头。
+A  that contains the headers.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.GetHost">
+      <summary>获取请求中包含的主机标头的值。
+Gets the value of the Host header included in the request.</summary>
+      <value>表示主机标头值的。
+A  that represents the value of the Host header.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.IsAuthenticated">
+      <summary>获取一个值，该值指示客户端是否经过身份验证。
+Gets a value indicating whether the client is authenticated.</summary>
+      <value>如果客户端经过身份验证，则为true；否则为false。
+true if the client is authenticated; otherwise, false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.IsLocal">
+      <summary>获取一个值，该值指示客户端是否从本地计算机连接。
+Gets a value indicating whether the client connected from the local computer.</summary>
+      <value>如果客户端从本地计算机连接，则为true；否则为false。
+true if the client connected from the local computer; otherwise, false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.IsSecureConnection">
+      <summary>获取一个值，该值指示WebSocket连接是否安全。
+Gets a value indicating whether the WebSocket connection is secured.</summary>
+      <value>如果连接安全，则为true；否则为false。
+true if the connection is secured; otherwise, false.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.IsWebSocketRequest">
+      <summary>获取一个值，该值指示请求是否为WebSocket连接请求。
+Gets a value indicating whether the request is a WebSocket connection request.</summary>
+      <value>如果请求是WebSocket连接请求，则为true；否则为false。
+true if the request is a WebSocket connection request; otherwise, false.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.GetOrigin">
+      <summary>获取请求中包含的原始标头的值。
+Gets the value of the Origin header included in the request.</summary>
+      <value>表示原始标头值的。
+A  that represents the value of the Origin header.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.GetQueryString">
+      <summary>获取请求中包含的查询字符串。
+Gets the query string included in the request.</summary>
+      <value>包含查询字符串参数的。
+A  that contains the query string parameters.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.GetRequestUri">
+      <summary>获取客户端请求的URI。
+Gets the URI requested by the client.</summary>
+      <value>表示请求的URI的。
+A  that represents the requested URI.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.GetSecWebSocketKey">
+      <summary>获取请求中包含的Sec-WebSocket密钥头的值。
+Gets the value of the Sec-WebSocket-Key header included in the request.</summary>
+      <remarks>此属性提供服务器用于证明其接收到有效的WebSocket连接请求的部分信息。
+This property provides a part of the information used by the server to prove that it  received a valid WebSocket connection request.</remarks>
+      <value>表示Sec-WebSocket键头的值的。
+A  that represents the value of the Sec-WebSocket-Key header.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.GetSecWebSocketProtocols">
+      <summary>获取请求中包含的Sec-WebSocket协议头的值。
+Gets the values of the Sec-WebSocket-Protocol header included in the request.</summary>
+      <remarks>客户端请求的子目录表示该属性。
+This property represents the subprotocols requested by the client.</remarks>
+      <value>提供枚举器的实例，该枚举器支持对Sec-WebSocket协议头的值进行迭代。
+An  instance that provides  an enumerator which supports the iteration over the values of the Sec-WebSocket-Protocol  header.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.GetSecWebSocketVersion">
+      <summary>获取请求中包含的Sec-WebSocket版本头的值。
+Gets the value of the Sec-WebSocket-Version header included in the request.</summary>
+      <remarks>此属性表示WebSocket协议版本。
+This property represents the WebSocket protocol version.</remarks>
+      <value>表示Sec-WebSocket版本头的值的。
+A  that represents the value of the Sec-WebSocket-Version header.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.ServerEndPoint">
+      <summary>以IP地址和端口号的形式获取服务器终结点。
+Gets the server endpoint as an IP address and a port number.</summary>
+      <value>表示服务器终结点的。
+A  that represents the server endpoint.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.User">
+      <summary>获取客户端信息（身份、身份验证和安全角色）。
+Gets the client information (identity, authentication, and security roles).</summary>
+      <value>表示客户机信息的。
+A  that represents the client information.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.UserEndPoint">
+      <summary>以IP地址和端口号的形式获取客户端终结点。
+Gets the client endpoint as an IP address and a port number.</summary>
+      <value>表示客户端终结点的。
+A  that represents the client endpoint.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.WebSocket">
+      <summary>获取用于客户端和服务器之间双向通信的实例。
+Gets the  instance used for two-way communication  between client and server.</summary>
+      <value>一个。
+A .</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.TcpListenerWebSocketContext.ToString">
+      <summary>返回表示当前值的。
+Returns a  that represents the current  .</summary>
+      <returns>表示电流的。
+A  that represents the current  .</returns>
+    </member>
+    <member name="T:WebSocketSharp.Net.WebSockets.WebSocketContext">
+      <summary>公开用于访问WebSocket连接请求中的信息的属性。
+Exposes the properties used to access the information in a WebSocket connection request.</summary>
+      <remarks>WebSocketContext类是一个抽象类。
+The WebSocketContext class is an abstract class.</remarks>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.WebSocketContext.GetCookieCollection">
+      <summary>获取请求中包含的HTTP Cookie。
+Gets the HTTP cookies included in the request.</summary>
+      <value>一个包含cookies的。
+A  that contains the cookies.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.WebSocketContext.GetHeader(System.String)">
+      <summary>获取请求中包含的HTTP头。
+Gets the HTTP headers included in the request.</summary>
+      <value>包含的标头。
+A  that contains the headers.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.WebSocketContext.GetHost">
+      <summary>获取请求中包含的主机标头的值。
+Gets the value of the Host header included in the request.</summary>
+      <value>表示主机标头值的。
+A  that represents the value of the Host header.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.WebSocketContext.IsAuthenticated">
+      <summary>获取一个值，该值指示客户端是否经过身份验证。
+Gets a value indicating whether the client is authenticated.</summary>
+      <value>如果客户端经过身份验证，则为true；否则为false。
+true if the client is authenticated; otherwise, false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.WebSocketContext.IsLocal">
+      <summary>获取一个值，该值指示客户端是否从本地计算机连接。
+Gets a value indicating whether the client connected from the local computer.</summary>
+      <value>如果客户端从本地计算机连接，则为true；否则为false。
+true if the client connected from the local computer; otherwise, false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.WebSocketContext.IsSecureConnection">
+      <summary>获取一个值，该值指示WebSocket连接是否安全。
+Gets a value indicating whether the WebSocket connection is secured.</summary>
+      <value>如果连接安全，则为true；否则为false。
+true if the connection is secured; otherwise, false.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.WebSocketContext.IsWebSocketRequest">
+      <summary>获取一个值，该值指示请求是否为WebSocket连接请求。
+Gets a value indicating whether the request is a WebSocket connection request.</summary>
+      <value>如果请求是WebSocket连接请求，则为true；否则为false。
+true if the request is a WebSocket connection request; otherwise, false.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.WebSocketContext.GetOrigin">
+      <summary>获取请求中包含的原始标头的值。
+Gets the value of the Origin header included in the request.</summary>
+      <value>表示原始标头值的。
+A  that represents the value of the Origin header.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.WebSocketContext.GetQueryString">
+      <summary>获取请求中包含的查询字符串。
+Gets the query string included in the request.</summary>
+      <value>包含查询字符串参数的。
+A  that contains the query string parameters.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.WebSocketContext.GetRequestUri">
+      <summary>获取客户端请求的URI。
+Gets the URI requested by the client.</summary>
+      <value>表示请求的URI的。
+A  that represents the requested URI.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.WebSocketContext.GetSecWebSocketKey">
+      <summary>获取请求中包含的Sec-WebSocket密钥头的值。
+Gets the value of the Sec-WebSocket-Key header included in the request.</summary>
+      <remarks>此属性提供服务器用于证明其接收到有效的WebSocket连接请求的部分信息。
+This property provides a part of the information used by the server to prove that it  received a valid WebSocket connection request.</remarks>
+      <value>表示Sec-WebSocket键头的值的。
+A  that represents the value of the Sec-WebSocket-Key header.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.WebSocketContext.GetSecWebSocketProtocols">
+      <summary>获取请求中包含的Sec-WebSocket协议头的值。
+Gets the values of the Sec-WebSocket-Protocol header included in the request.</summary>
+      <remarks>客户端请求的子目录表示该属性。
+This property represents the subprotocols requested by the client.</remarks>
+      <value>提供枚举器的实例，该枚举器支持对Sec-WebSocket协议头的值进行迭代。
+An  instance that provides  an enumerator which supports the iteration over the values of the Sec-WebSocket-Protocol  header.</value>
+    </member>
+    <member name="M:WebSocketSharp.Net.WebSockets.WebSocketContext.GetSecWebSocketVersion">
+      <summary>获取请求中包含的Sec-WebSocket版本头的值。
+Gets the value of the Sec-WebSocket-Version header included in the request.</summary>
+      <remarks>此属性表示WebSocket协议版本。
+This property represents the WebSocket protocol version.</remarks>
+      <value>表示Sec-WebSocket版本头的值的。
+A  that represents the value of the Sec-WebSocket-Version header.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.WebSocketContext.ServerEndPoint">
+      <summary>以IP地址和端口号的形式获取服务器终结点。
+Gets the server endpoint as an IP address and a port number.</summary>
+      <value>表示服务器终结点的。
+A  that represents the server endpoint.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.WebSocketContext.User">
+      <summary>获取客户端信息（身份、身份验证和安全角色）。
+Gets the client information (identity, authentication, and security roles).</summary>
+      <value>表示客户机信息的。
+A  that represents the client information.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.WebSocketContext.UserEndPoint">
+      <summary>以IP地址和端口号的形式获取客户端终结点。
+Gets the client endpoint as an IP address and a port number.</summary>
+      <value>表示客户端终结点的。
+A  that represents the client endpoint.</value>
+    </member>
+    <member name="P:WebSocketSharp.Net.WebSockets.WebSocketContext.WebSocket">
+      <summary>获取用于客户端和服务器之间双向通信的实例。
+Gets the  instance used for two-way communication  between client and server.</summary>
+      <value>一个。
+A .</value>
+    </member>
+    <member name="T:WebSocketSharp.Server.IWebSocketSession">
+      <summary>公开用于访问WebSocket服务会话中的信息的属性。
+Exposes the properties used to access the information in a session in a WebSocket service.</summary>
+    </member>
+    <member name="P:WebSocketSharp.Server.IWebSocketSession.Context">
+      <summary>获取WebSocket服务的连接请求中的信息。
+Gets the information in the connection request to the WebSocket service.</summary>
+      <value>提供对连接请求的访问的。
+A  that provides the access to the connection request.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.IWebSocketSession.Id">
+      <summary>获取会话的唯一ID。
+Gets the unique ID of the session.</summary>
+      <value>表示会话的唯一ID的。
+A  that represents the unique ID of the session.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.IWebSocketSession.Protocol">
+      <summary>获取会话中使用的WebSocket子策略。
+Gets the WebSocket subprotocol used in the session.</summary>
+      <value>表示子策略（如果有）的。
+A  that represents the subprotocol if any.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.IWebSocketSession.StartTime">
+      <summary>获取会话开始的时间。
+Gets the time that the session has started.</summary>
+      <value>表示会话开始时间的。
+A  that represents the time that the session has started.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.IWebSocketSession.State">
+      <summary>获取会话中使用的的的状态。
+Gets the state of the  used in the session.</summary>
+      <value>枚举值之一，指示会话中使用的的的状态。
+One of the  enum values, indicates the state of  the  used in the session.</value>
+    </member>
+    <member name="T:WebSocketSharp.Server.WebSocketBehavior">
+      <summary>公开用于定义由或提供的WebSocket服务的行为的方法和属性。
+Exposes the methods and properties used to define the behavior of a WebSocket service  provided by the  or .</summary>
+      <remarks>WebSocketBehavior类是一个抽象类。
+The WebSocketBehavior class is an abstract class.</remarks>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketBehavior.#ctor">
+      <summary>初始化类的新实例。
+Initializes a new instance of the  class.</summary>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketBehavior.Context">
+      <summary>获取WebSocket服务的当前连接请求中的信息。
+Gets the information in the current connection request to the WebSocket service.</summary>
+      <value>提供对当前连接请求的访问的，或者如果未建立WebSocket连接。
+A  that provides the access to the current connection request,  or  if the WebSocket connection isn't established.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketBehavior.CookiesValidator">
+      <summary>获取或设置调用的委托，以验证到WebSocket服务的连接请求中包含的HTTP Cookie。
+Gets or sets the delegate called to validate the HTTP cookies included in a connection  request to the WebSocket service.</summary>
+      <remarks>当当前会话中使用的验证连接请求时，将调用委托。
+The delegate is called when the  used in the current session  validates the connection request.</remarks>
+      <value>用于验证Cookie的方法。传递给此委托的第一个包含要验证的Cookie（如果有）。传递给此委托的第二个代理接收要发送给客户端的cookies。如果cookies有效，则此委托应返回true。默认值为，不进行任何验证。
+A Func  the method(s) used to validate the cookies. 1st  passed to  this delegate contains the cookies to validate if any. 2nd  passed to this delegate receives the cookies to send to the client.  This delegate should return true if the cookies are valid.  The default value is , and it does nothing to validate.<para>用于验证Cookie的方法。传递给此委托的第一个包含要验证的Cookie（如果有）。传递给此委托的第二个代理接收要发送给客户端的cookies。
+A Func  the method(s) used to validate the cookies. 1st  passed to  this delegate contains the cookies to validate if any. 2nd  passed to this delegate receives the cookies to send to the client.</para><para>如果cookies有效，则此委托应返回true。
+This delegate should return true if the cookies are valid.</para><para>默认值为，不进行任何验证。
+The default value is , and it does nothing to validate.</para></value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketBehavior.Id">
+      <summary>获取当前会话的唯一ID。
+Gets the unique ID of the current session.</summary>
+      <value>表示当前会话的唯一ID的，或者如果未建立WebSocket连接。
+A  that represents the unique ID of the current session,  or  if the WebSocket connection isn't established.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketBehavior.OriginValidator">
+      <summary>获取或设置调用的委托，以验证到WebSocket服务的连接请求中包含的源标头。
+Gets or sets the delegate called to validate the Origin header included in a connection  request to the WebSocket service.</summary>
+      <remarks>当当前会话中使用的验证连接请求时，将调用委托。
+The delegate is called when the  used in the current session  validates the connection request.</remarks>
+      <value>原点标题的Func。传递给此委托的值表示要验证的原始标头的值（如果有）。如果原始标头有效，则此委托应返回true。默认值为，不进行任何验证。
+A Func  the origin header. A  passed to this delegate represents the value of  the origin header to validate if any.  This delegate should return true if the origin header is valid.  The default value is , and it does nothing to validate.<para>原点标题的Func。传递给此委托的值表示要验证的原始标头的值（如果有）。
+A Func  the origin header. A  passed to this delegate represents the value of  the origin header to validate if any.</para><para>如果原始标头有效，则此委托应返回true。
+This delegate should return true if the origin header is valid.</para><para>默认值为，不进行任何验证。
+The default value is , and it does nothing to validate.</para></value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketBehavior.Protocol">
+      <summary>获取或设置当前会话中使用的WebSocket子策略。
+Gets or sets the WebSocket subprotocol used in the current session.</summary>
+      <remarks>在建立WebSocket连接之前，此属性的设置操作可用。
+Set operation of this property is available before the WebSocket connection has been  established.</remarks>
+      <value>表示子策略（如果有）的。默认值为。要设置的值必须是RFC 2616中定义的令牌。
+A  that represents the subprotocol if any.  The default value is .  The value to set must be a token defined in  RFC 2616.<para>表示子策略（如果有）的。默认值为。
+A  that represents the subprotocol if any.  The default value is .</para><para>要设置的值必须是RFC 2616中定义的令牌。
+The value to set must be a token defined in  RFC 2616.</para></value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketBehavior.StartTime">
+      <summary>获取当前会话开始的时间。
+Gets the time that the current session has started.</summary>
+      <value>表示当前会话已启动的时间，或者如果未建立WebSocket连接，则表示该时间。
+A  that represents the time that the current session has started,  or  if the WebSocket connection isn't established.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketBehavior.State">
+      <summary>获取当前会话中使用的的的状态。
+Gets the state of the  used in the current session.</summary>
+      <value>枚举值之一，指示当前会话中使用的的的状态。
+One of the  enum values, indicates the state of  the  used in the current session.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketBehavior.Sessions">
+      <summary>获取对WebSocket服务中会话的访问权限。
+Gets the access to the sessions in the WebSocket service.</summary>
+      <value>提供对会话的访问的，或者如果未建立WebSocket连接。
+A  that provides the access to the sessions, or  if the WebSocket connection isn't established.</value>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketBehavior.Error(System.String,System.Exception)">
+      <summary>使用指定的和调用方法。
+Calls the  method with the specified  and  .</summary>
+      <remarks>如果为或为空，则此方法不调用该方法。
+This method doesn't call the  method if  is  or empty.</remarks>
+      <param name="message">表示错误消息的。
+A  that represents the error message.</param>
+      <param name="exception">表示错误原因（如果有）的实例。
+An  instance that represents the cause of the error if any.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketBehavior.OnClose(WebSocketSharp.CloseEventArgs)">
+      <summary>在当前会话中使用的WebSocket连接已关闭时调用。
+Called when the WebSocket connection used in the current session has been closed.</summary>
+      <param name="e">表示传递给事件的事件数据的。
+A  that represents the event data passed to  a  event.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketBehavior.OnError(WebSocketSharp.ErrorEventArgs)">
+      <summary>在当前会话中使用的获取错误时调用。
+Called when the  used in the current session gets an error.</summary>
+      <param name="e">表示传递给事件的事件数据的。
+A  that represents the event data passed to  a  event.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketBehavior.OnMessage(WebSocketSharp.MessageEventArgs)">
+      <summary>在当前会话中使用的接收到消息时调用。
+Called when the  used in the current session receives a message.</summary>
+      <param name="e">表示传递给事件的事件数据的。
+A  that represents the event data passed to  a  event.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketBehavior.OnOpen">
+      <summary>在建立当前会话中使用的WebSocket连接时调用。
+Called when the WebSocket connection used in the current session has been established.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketBehavior.Send(System.Byte[])">
+      <summary>在当前会话中将二进制文件发送到客户端。
+Sends a binary  to the client on the current session.</summary>
+      <remarks>此方法在建立WebSocket连接后可用。
+This method is available after the WebSocket connection has been established.</remarks>
+      <param name="data">表示要发送的二进制数据的数组。
+An array of  that represents the binary data to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketBehavior.Send(System.IO.Stream)">
+      <summary>在当前会话中将指定为二进制数据的发送到客户端。
+Sends the specified  as a binary data to the client  on the current session.</summary>
+      <remarks>此方法在建立WebSocket连接后可用。
+This method is available after the WebSocket connection has been established.</remarks>
+      <param name="stream">表示要发送的文件的。
+A  that represents the file to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketBehavior.Send(System.String)">
+      <summary>在当前会话中向客户端发送文本。
+Sends a text  to the client on the current session.</summary>
+      <remarks>此方法在建立WebSocket连接后可用。
+This method is available after the WebSocket connection has been established.</remarks>
+      <param name="data">表示要发送的文本数据的。
+A  that represents the text data to send.</param>
+    </member>
+    <member name="T:WebSocketSharp.Server.WebSocketServer">
+      <summary>提供WebSocket协议服务器。
+Provides a WebSocket protocol server.</summary>
+      <remarks>WebSocketServer类可以提供多个WebSocket服务。
+The WebSocketServer class can provide multiple WebSocket services.</remarks>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServer.#ctor(System.Net.IPAddress,System.Int32,WebSocketSharp.Net.ServerSslConfiguration,WebSocketSharp.Net.AuthenticationSchemes,System.Int32)">
+      <summary>使用指定的和初始化类的新实例。
+Initializes a new instance of the  class with the specified  , , and .</summary>
+      <remarks>此构造函数初始化的实例侦听上的传入连接请求。
+An instance initialized by this constructor listens for the incoming connection requests  on .</remarks>
+      <param name="address">表示服务器的本地IP地址的。
+A  that represents the local IP address of the server.</param>
+      <param name="port">表示要侦听的端口号的。
+An  that represents the port number on which to listen.</param>
+      <param name="certificate">用于保护连接的。
+A  used to secure the connection.</param>
+      <param name="authenticationSchemes">支持的身份验证方案。
+Supported authentication schemes.</param>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServer.IsListening">
+      <summary>获取一个值，该值指示服务器是否已启动。
+Gets a value indicating whether the server has started.</summary>
+      <value>如果服务器已启动，则为true；否则为false。
+true if the server has started; otherwise, false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServer.IsSecure">
+      <summary>获取一个值，该值指示服务器是否提供安全连接。
+Gets a value indicating whether the server provides a secure connection.</summary>
+      <value>如果服务器提供安全连接，则为true；否则为false。
+true if the server provides a secure connection; otherwise, false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServer.Port">
+      <summary>获取侦听传入连接请求的端口。
+Gets the port on which to listen for incoming connection requests.</summary>
+      <value>表示要侦听的端口号的。
+An  that represents the port number on which to listen.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServer.Realm">
+      <summary>获取或设置与服务器关联的域的名称。
+Gets or sets the name of the realm associated with the server.</summary>
+      <value>表示领域名称的。默认值为“秘密区域”。
+A  that represents the name of the realm.  The default value is "SECRET AREA".</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServer.ReuseAddress">
+      <summary>获取或设置一个值，该值指示是否允许服务器绑定到已在使用的地址。
+Gets or sets a value indicating whether the server is allowed to be bound to an address  that is already in use.</summary>
+      <remarks>如果要解析为在TIME\u wait状态下等待套接字，则应将此属性设置为true。
+If you would like to resolve to wait for socket in TIME_WAIT state, you should set  this property to true.</remarks>
+      <value>如果允许服务器绑定到已在使用的地址，则为true；否则为false。默认值为false。
+true if the server is allowed to be bound to an address that is already in use;  otherwise, false. The default value is false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServer.UserCredentialsFinder">
+      <summary>获取或设置调用的委托，以查找用于对客户端进行身份验证的标识的凭据。
+Gets or sets the delegate called to find the credentials for an identity used to  authenticate a client.</summary>
+      <value>Func引用用于查找凭据的方法。默认值是只返回的函数。
+A Func  references the method(s) used to find the credentials. The default value is a function  that only returns .</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServer.WaitTime">
+      <summary>获取或设置对WebSocket Ping或Close的响应的等待时间。
+Gets or sets the wait time for the response to the WebSocket Ping or Close.</summary>
+      <value>表示等待时间的。默认值与1秒相同。
+A  that represents the wait time. The default value is  the same as 1 second.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServer.WebSocketServices">
+      <summary>获取对服务器提供的WebSocket服务的访问权限。
+Gets the access to the WebSocket services provided by the server.</summary>
+      <value>管理WebSocket服务的。
+A  that manages the WebSocket services.</value>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServer.AddWebSocketService``1(System.String)">
+      <summary>添加具有指定行为和属性的WebSocket服务。
+Adds a WebSocket service with the specified behavior and .</summary>
+      <remarks>此方法将转换为URL解码字符串，并将“/”从字符串的末尾移除。
+This method converts  to URL-decoded string,  and removes '/' from tail end of .</remarks>
+      <param name="path">表示要添加的服务的绝对路径的。
+A  that represents the absolute path to the service to add.</param>
+      <typeparam name="TBehaviorWithNew">要添加的服务的行为类型。TBehaviorWithNew必须继承类，并且必须具有公共的无参数构造函数。
+The type of the behavior of the service to add. The TBehaviorWithNew must inherit  the  class, and must have a public parameterless  constructor.</typeparam>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServer.AddWebSocketService``1(System.String,System.Func{``0})">
+      <summary>添加具有指定行为的WebSocket服务，然后。
+Adds a WebSocket service with the specified behavior, ,  and .</summary>
+      <remarks>
+        <para>此方法将转换为URL解码字符串，并将“/”从字符串的末尾移除。
+This method converts  to URL-decoded string,  and removes '/' from tail end of .</para>
+        <para>返回已初始化的指定类型化实例。
+returns an initialized specified typed  instance.</para>
+      </remarks>
+      <param name="path">表示要添加的服务的绝对路径的。
+A  that represents the absolute path to the service to add.</param>
+      <param name="initializer">Func类型的实例（新实例）。
+A Func  typed  instance (a new  instance).</param>
+      <typeparam name="TBehavior">要添加的服务的行为类型。TBehavior必须继承类。
+The type of the behavior of the service to add. The TBehavior must inherit  the  class.</typeparam>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServer.RemoveWebSocketService(System.String)">
+      <summary>删除具有指定名称的WebSocket服务。
+Removes the WebSocket service with the specified .</summary>
+      <remarks>此方法将转换为URL解码字符串，并将“/”从字符串的末尾移除。
+This method converts  to URL-decoded string,  and removes '/' from tail end of .</remarks>
+      <returns>如果成功找到并删除服务，则为true；否则为false。
+true if the service is successfully found and removed; otherwise, false.</returns>
+      <param name="path">表示要查找的服务的绝对路径的。
+A  that represents the absolute path to the service to find.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServer.Start">
+      <summary>开始接收WebSocket连接请求。
+Starts receiving the WebSocket connection requests.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServer.Stop">
+      <summary>停止接收WebSocket连接请求。
+Stops receiving the WebSocket connection requests.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServer.Stop(WebSocketSharp.CloseStatusCode,System.String)">
+      <summary>停止接收具有指定的和的WebSocket连接请求。
+Stops receiving the WebSocket connection requests with the specified  and .</summary>
+      <param name="code">枚举值之一，表示指示停止原因的状态代码。
+One of the  enum values, represents the status code  indicating the reason for stop.</param>
+      <param name="reason">表示停止原因的。
+A  that represents the reason for stop.</param>
+    </member>
+    <member name="T:WebSocketSharp.Server.WebSocketServiceHost">
+      <summary>公开用于访问由提供的WebSocket服务中的信息的方法和属性。
+Exposes the methods and properties used to access the information in a WebSocket service provided by the .</summary>
+      <remarks>WebSocketServiceHost类是一个抽象类。
+The WebSocketServiceHost class is an abstract class.</remarks>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServiceHost.KeepClean">
+      <summary>获取或设置一个值，该值指示WebSocket服务是否定期清理非活动会话。
+Gets or sets a value indicating whether the WebSocket service cleans up  the inactive sessions periodically.</summary>
+      <value>如果服务定期清理非活动会话，则为true；否则为false。
+true if the service cleans up the inactive sessions periodically;  otherwise, false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServiceHost.Path">
+      <summary>获取WebSocket服务的路径。
+Gets the path to the WebSocket service.</summary>
+      <value>表示服务的绝对路径的。
+A  that represents the absolute path to the service.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServiceHost.Sessions">
+      <summary>获取对WebSocket服务中会话的访问权限。
+Gets the access to the sessions in the WebSocket service.</summary>
+      <value>管理服务中会话的。
+A  that manages the sessions in the service.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServiceHost.Type">
+      <summary>获取WebSocket服务的行为的名称。
+Gets the  of the behavior of the WebSocket service.</summary>
+      <value>表示服务行为类型的。
+A  that represents the type of the behavior of the service.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServiceHost.WaitTime">
+      <summary>获取或设置对WebSocket Ping或Close的响应的等待时间。
+Gets or sets the wait time for the response to the WebSocket Ping or Close.</summary>
+      <value>表示等待时间的。默认值与1秒相同。
+A  that represents the wait time. The default value is  the same as 1 second.</value>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServiceHost.CreateSession">
+      <summary>在WebSocket服务中创建新会话。
+Creates a new session in the WebSocket service.</summary>
+      <returns>表示新会话的实例。
+A  instance that represents a new session.</returns>
+    </member>
+    <member name="T:WebSocketSharp.Server.WebSocketServiceManager">
+      <summary>管理由或提供的WebSocket服务。
+Manages the WebSocket services provided by the  or  .</summary>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServiceManager.Count">
+      <summary>获取WebSocket服务的编号。
+Gets the number of the WebSocket services.</summary>
+      <value>表示服务数量的。
+An  that represents the number of the services.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServiceManager.Hosts">
+      <summary>获取Websocket服务的主机实例。
+Gets the host instances for the Websocket services.</summary>
+      <value>支持对服务的主机实例集合进行迭代的IEnumerable。
+An IEnumerable  which supports the iteration over the collection of the host instances for the services.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServiceManager.Item(System.String)">
+      <summary>获取具有指定名称的WebSocket服务主机。
+Gets the WebSocket service host with the specified .</summary>
+      <value>提供对服务中的信息的访问的实例，或者如果找不到它的话。
+A  instance that provides the access to  the information in the service, or  if it's not found.</value>
+      <param name="path">表示要查找的服务的绝对路径的。
+A  that represents the absolute path to the service to find.</param>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServiceManager.Paths">
+      <summary>获取WebSocket服务的路径。
+Gets the paths for the WebSocket services.</summary>
+      <value>IEnumerable用于在服务的路径集合上执行迭代。
+An IEnumerable  the iteration over the collection of the paths for the services.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServiceManager.SessionCount">
+      <summary>获取WebSocket服务中的会话总数。
+Gets the total number of the sessions in the WebSocket services.</summary>
+      <value>表示服务中会话总数的。
+An  that represents the total number of the sessions in the services.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketServiceManager.WaitTime">
+      <summary>获取响应WebSocket Ping或Close的等待时间。
+Gets the wait time for the response to the WebSocket Ping or Close.</summary>
+      <value>表示等待时间的。
+A  that represents the wait time.</value>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServiceManager.Broadcast(System.Byte[])">
+      <summary>向WebSocket服务中的每个客户端广播二进制文件。
+Broadcasts a binary  to every client in the WebSocket services.</summary>
+      <param name="data">表示要广播的二进制数据的数组。
+An array of  that represents the binary data to broadcast.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServiceManager.Broadcast(System.String)">
+      <summary>向WebSocket服务中的每个客户端广播文本。
+Broadcasts a text  to every client in the WebSocket services.</summary>
+      <param name="data">表示要广播的文本数据的。
+A  that represents the text data to broadcast.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServiceManager.Broadcast(System.IO.Stream)">
+      <summary>向WebSocket服务中的每个客户端广播文本。
+Broadcasts a text  to every client in the WebSocket services.</summary>
+      <param name="data">表示要广播的文本数据的。
+A  that represents the text data to broadcast.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServiceManager.Broadping">
+      <summary>向WebSocket服务中的每个客户端发送Ping。
+Sends a Ping to every client in the WebSocket services.</summary>
+      <returns>字典是服务路径对的集合，会话ID对的集合，以及一个值，该值指示管理器是否在一段时间内从每个客户机接收到一个Pong，或者如果此方法不可用。
+A Dictionary  a collection of pairs of a service path and a collection of pairs of a session ID  and a value indicating whether the manager received a Pong from each client in a time,  or  if this method isn't available.</returns>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServiceManager.Broadping(System.String)">
+      <summary>向WebSocket服务中的每个客户端发送具有指定值的Ping。
+Sends a Ping with the specified  to every client  in the WebSocket services.</summary>
+      <returns>字典是服务路径对的集合，会话ID对的集合，以及一个值，该值指示管理器是否在一段时间内从每个客户机接收到一个Pong，或者该方法是否不可用或无效。
+A Dictionary  a collection of pairs of a service path and a collection of pairs of a session ID  and a value indicating whether the manager received a Pong from each client in a time,  or  if this method isn't available or  is invalid.</returns>
+      <param name="message">表示要发送的消息的。
+A  that represents the message to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketServiceManager.TryGetServiceHost(System.String,WebSocketSharp.Server.WebSocketServiceHost@)">
+      <summary>尝试获取具有指定名称的WebSocket服务主机。
+Tries to get the WebSocket service host with the specified .</summary>
+      <returns>如果成功找到服务，则为true；否则为false。
+true if the service is successfully found; otherwise, false.</returns>
+      <param name="path">表示要查找的服务的绝对路径的。
+A  that represents the absolute path to the service to find.</param>
+      <param name="host">当这个方法返回时，一个实例提供对服务中信息的访问，或者如果找不到它。此参数未初始化。
+When this method returns, a  instance that provides  the access to the information in the service, or  if it's not found.  This parameter is passed uninitialized.</param>
+    </member>
+    <member name="T:WebSocketSharp.Server.WebSocketSessionManager">
+      <summary>管理Websocket服务中的会话。
+Manages the sessions in a Websocket service.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.ActiveIDs">
+      <summary>获取Websocket服务中活动会话的ID。
+Gets the IDs for the active sessions in the Websocket service.</summary>
+      <value>IEnumerable支持对活动会话的ID集合进行迭代。
+An IEnumerable  supports the iteration over the collection of the IDs for the active sessions.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketSessionManager.Count">
+      <summary>获取Websocket服务中的会话数。
+Gets the number of the sessions in the Websocket service.</summary>
+      <value>表示会话数的。
+An  that represents the number of the sessions.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketSessionManager.Ds">
+      <summary>获取Websocket服务中会话的ID。
+Gets the IDs for the sessions in the Websocket service.</summary>
+      <value>IEnumerable支持对会话的ID集合进行迭代。
+An IEnumerable  supports the iteration over the collection of the IDs for the sessions.</value>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.InactiveIDs">
+      <summary>获取Websocket服务中非活动会话的ID。
+Gets the IDs for the inactive sessions in the Websocket service.</summary>
+      <value>IEnumerable支持对非活动会话的ID集合进行迭代。
+An IEnumerable  supports the iteration over the collection of the IDs for the inactive sessions.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketSessionManager.Item(System.String)">
+      <summary>获取具有指定名称的会话。
+Gets the session with the specified .</summary>
+      <value>提供对会话中的信息的访问的实例，或者如果找不到该信息。
+A  instance that provides the access to  the information in the session, or  if it's not found.</value>
+      <param name="id">表示要查找的会话的ID的。
+A  that represents the ID of the session to find.</param>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketSessionManager.KeepClean">
+      <summary>获取一个值，该值指示管理器是否定期清理WebSocket服务中的非活动会话。
+Gets a value indicating whether the manager cleans up the inactive sessions  in the WebSocket service periodically.</summary>
+      <value>如果管理器每60秒清理一次非活动会话，则为true；否则为false。
+true if the manager cleans up the inactive sessions every 60 seconds;  otherwise, false.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketSessionManager.Sessions">
+      <summary>获取Websocket服务中的会话。
+Gets the sessions in the Websocket service.</summary>
+      <value>一个IEnumerable，支持对服务中的会话集合进行迭代。
+An IEnumerable  which supports the iteration over the collection of the sessions in the service.</value>
+    </member>
+    <member name="P:WebSocketSharp.Server.WebSocketSessionManager.WaitTime">
+      <summary>获取响应WebSocket Ping或Close的等待时间。
+Gets the wait time for the response to the WebSocket Ping or Close.</summary>
+      <value>表示等待时间的。
+A  that represents the wait time.</value>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.Broadcast(System.Byte[])">
+      <summary>向WebSocket服务中的每个客户端广播二进制文件。
+Broadcasts a binary  to every client in the WebSocket service.</summary>
+      <param name="data">表示要广播的二进制数据的数组。
+An array of  that represents the binary data to broadcast.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.Broadcast(System.IO.Stream)">
+      <summary>向WebSocket服务中的每个客户端广播二进制文件。
+Broadcasts a binary  to every client in the WebSocket service.</summary>
+      <param name="data">表示要广播的二进制数据的数组。
+An array of  that represents the binary data to broadcast.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.Broadcast(System.String)">
+      <summary>向WebSocket服务中的每个客户端广播文本。
+Broadcasts a text  to every client in the WebSocket service.</summary>
+      <param name="data">表示要广播的文本数据的。
+A  that represents the text data to broadcast.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.Broadping">
+      <summary>向WebSocket服务中的每个客户端发送Ping。
+Sends a Ping to every client in the WebSocket service.</summary>
+      <returns>字典包含会话ID和一个值，该值指示管理器是否在一段时间内从每个客户端接收到一个Pong。
+A Dictionary  a session ID and a value indicating whether the manager received a Pong from  each client in a time.</returns>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.Broadping(System.String)">
+      <summary>向WebSocket服务中的每个客户端发送具有指定值的Ping。
+Sends a Ping with the specified  to every client  in the WebSocket service.</summary>
+      <returns>字典包含会话ID和一个值，该值指示管理器是否在一段时间内从每个客户端接收到一个Pong。
+A Dictionary  a session ID and a value indicating whether the manager received a Pong from  each client in a time.</returns>
+      <param name="message">表示要发送的消息的。
+A  that represents the message to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.CloseSession(System.String)">
+      <summary>关闭具有指定名称的会话。
+Closes the session with the specified .</summary>
+      <param name="id">表示要关闭的会话的ID的。
+A  that represents the ID of the session to close.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.CloseSession(System.String,WebSocketSharp.CloseStatusCode,System.String)">
+      <summary>使用指定的和关闭会话。
+Closes the session with the specified , ,  and .</summary>
+      <param name="id">表示要关闭的会话的ID的。
+A  that represents the ID of the session to close.</param>
+      <param name="code">枚举值之一，表示指示关闭原因的状态代码。
+One of the  enum values, represents the status code  indicating the reason for the close.</param>
+      <param name="reason">表示结束原因的。
+A  that represents the reason for the close.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.PingTo(System.String)">
+      <summary>在会话上使用指定的。
+Sends a Ping to the client on the session with the specified .</summary>
+      <returns>如果管理器在一段时间内收到来自客户机的Pong，则为true；否则为false。
+true if the manager receives a Pong from the client in a time;  otherwise, false.</returns>
+      <param name="id">表示要查找的会话的ID的。
+A  that represents the ID of the session to find.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.PingTo(System.String,System.String)">
+      <summary>使用指定的将Ping发送到具有指定的会话的客户端。
+Sends a Ping with the specified  to the client  on the session with the specified .</summary>
+      <returns>如果管理器在一段时间内收到来自客户机的Pong，则为true；否则为false。
+true if the manager receives a Pong from the client in a time;  otherwise, false.</returns>
+      <param name="id">表示要查找的会话的ID的。
+A  that represents the ID of the session to find.</param>
+      <param name="message">表示要发送的消息的。
+A  that represents the message to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.SendTo(System.String,System.Byte[])">
+      <summary>将二进制文件发送到会话中具有指定名称的客户端。
+Sends a binary  to the client on the session  with the specified .</summary>
+      <param name="id">表示要查找的会话的ID的。
+A  that represents the ID of the session to find.</param>
+      <param name="data">表示要发送的二进制数据的数组。
+An array of  that represents the binary data to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.SendTo(System.String,System.String)">
+      <summary>在会话中向客户端发送文本，并使用指定的。
+Sends a text  to the client on the session  with the specified .</summary>
+      <param name="id">表示要查找的会话的ID的。
+A  that represents the ID of the session to find.</param>
+      <param name="data">表示要发送的文本数据的。
+A  that represents the text data to send.</param>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.Sweep">
+      <summary>清理WebSocket服务中的非活动会话。
+Cleans up the inactive sessions in the WebSocket service.</summary>
+    </member>
+    <member name="M:WebSocketSharp.Server.WebSocketSessionManager.TryGetSession(System.String,WebSocketSharp.Server.IWebSocketSession@)">
+      <summary>尝试获取具有指定名称的会话。
+Tries to get the session with the specified .</summary>
+      <returns>如果成功找到会话，则为true；否则为false。
+true if the session is successfully found; otherwise, false.</returns>
+      <param name="id">表示要查找的会话的ID的。
+A  that represents the ID of the session to find.</param>
+      <param name="session">当这个方法返回时，一个实例提供对会话中信息的访问，或者如果没有找到它。此参数未初始化。
+When this method returns, a  instance that  provides the access to the information in the session, or  if it's not found. This parameter is passed uninitialized.</param>
+    </member>
+  </members>
+</doc>
