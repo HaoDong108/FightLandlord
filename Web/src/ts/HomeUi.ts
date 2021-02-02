@@ -11,11 +11,11 @@ namespace HomeUi {
   let temp_gender = 0;
   let temp_roleid = 1;
   var event: EventEmitter = new EventEmitter();
-  export var Event_开始匹配 = "startMatching";
-  export var Event_取消匹配 = "stopMatching";
-  export var Event_创建房间 = "createRoom";
-  export var Event_信息保存 = "changeinfo";
-
+  export var event_开始匹配 = "startMatching";
+  export var event_取消匹配 = "stopMatching";
+  export var event_创建房间 = "createRoom";
+  export var event_信息保存 = "changeinfo";
+  export var event_请求房间 = "requstRoom";
   export function init() {
     //取消全局鼠标选中以及拖功能
     document.body.ondrag = () => false;
@@ -58,15 +58,15 @@ namespace HomeUi {
   }
 
   function eventbind() {
-    let btnlock = false;
+    let quickbtnlock = false;
     //快速匹配按钮
     $(".quick>.indiv").on("click", function (e) {
-      if (btnlock) return;
-      btnlock = true;
+      if (quickbtnlock) return;
+      quickbtnlock = true;
       e.stopPropagation();
       if (!onloking) {
         //触发开始匹配事件
-        event.emit(Event_开始匹配);
+        event.emit(event_开始匹配);
         $("footer>.lokfor");
         anime({
           targets: "footer>.lokfor",
@@ -83,7 +83,7 @@ namespace HomeUi {
         $(this).children().children().text("取消匹配");
       } else {
         //触发取消匹配事件
-        event.emit(Event_取消匹配);
+        event.emit(event_取消匹配);
         anime({
           targets: "footer>.lokfor>.innertext",
           scale: 0,
@@ -101,7 +101,7 @@ namespace HomeUi {
       }
       onloking = !onloking;
       setTimeout(() => {
-        btnlock = false;
+        quickbtnlock = false;
       }, 500);
     });
 
@@ -112,6 +112,9 @@ namespace HomeUi {
         return;
       }
       e.stopPropagation();
+      event.emit(event_请求房间);
+      if ($(".rooms .table .item").length > 0) $(".nullroom").hide();
+      else $(".nullroom").show();
       $(".roombox").fadeIn(500).css("display", "flex");
       let role = $(".roombox>.rolelogo")[0];
       let content = $(".roombox>.center")[0];
@@ -127,6 +130,28 @@ namespace HomeUi {
         duration: 1500,
         translateY: 0,
         delay: 600,
+      });
+    });
+
+    let updateroom_btnlock = false;
+    //房间列表刷新按钮
+    $("#updateroom").on("click", function () {
+      if (updateroom_btnlock) return;
+      updateroom_btnlock = true;
+      event.emit(event_请求房间);
+      anime({
+        targets: $("#updateroom i")[0],
+        duration: 5000,
+        rotate: 7200,
+        easing: "easeInOutQuart",
+        complete: () => {
+          updateroom_btnlock = false;
+          $("#updateroom i").removeAttr("style");
+          $("#updateroom i").css("text-shadow", "rgb(51, 51, 51) 1px 1px 3px");
+        },
+        begin: () => {
+          $("#updateroom i").css("text-shadow", "none");
+        },
       });
     });
 
@@ -213,7 +238,7 @@ namespace HomeUi {
         headid: temp_headid,
         gender: temp_gender,
       };
-      event.emit(Event_信息保存, ags);
+      event.emit(event_信息保存, ags);
     });
 
     //信息修改退出按钮
@@ -331,7 +356,7 @@ namespace HomeUi {
       var obj = {
         lok: $("#setroompwd").attr("readonly") == "readonly",
         pwd: <string>$("#setroompwd").val(),
-        bs: <number>$("#setbtscore").val(),
+        bts: <number>$("#setbtscore").val(),
       };
       var patt = /^\d{4,8}$/;
 
@@ -341,11 +366,11 @@ namespace HomeUi {
           return;
         }
       }
-      if (obj.bs < 10 || obj.bs > 1000) {
+      if (obj.bts < 10 || obj.bts > 1000) {
         Tools.shwoPrompt("房间底分只能是10~1000");
         return;
       }
-      event.emit(Event_创建房间, obj);
+      event.emit(event_创建房间, { pwd: obj.pwd, bts: obj.lok ? "" : obj.bts });
     });
   }
 
@@ -376,6 +401,34 @@ namespace HomeUi {
     $("#icname").val($("#pname").text().replace("昵称: ", ""));
     $(".infochange .mid .sexs>div").removeClass("nowsex");
     $($("#psex").hasClass("icon-nan") ? "#icsex-nan" : "#icsex-nv").addClass("nowsex");
+  }
+
+  /**添加房间,若房间存在则覆盖 */
+  export function addRoom(roomid: string, masterName: string, count: number, btscore: number, headid: number) {
+    let item = ` <div class="lef">
+      <div class="round">
+        <img class="head" src="../static/img/HeadImgs/an${headid}.png" />
+      </div>
+    </div>
+    <div class="mid">
+      <div class="name">${masterName}的房间</div>
+      <div class="homeinfo">
+        <span class="iconfont icon-chengyuan">${count}/3</span>
+        <span class="iconfont icon-btscore">${btscore}</span>
+      </div>
+    </div>
+    <div class="roomid">ID:<span>${roomid}</span></div>
+    <i class="iconfont icon-closedoor door"></i>`;
+    let div = document.createElement("div");
+    div.className = "item";
+    div.id = "rom" + roomid;
+    div.innerHTML = item;
+    $(".rooms .table").append(div);
+  }
+
+  /**删除房间 */
+  export function removeRoom(rid: string) {
+    $("#rom" + rid).remove();
   }
 }
 

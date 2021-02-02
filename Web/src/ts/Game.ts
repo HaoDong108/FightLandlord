@@ -80,7 +80,7 @@ class Game {
   }
 
   set multiple(value: number) {
-    if (value === this._multiple) return;
+    if (value == this._multiple) return;
     this._multiple = value;
     var span = document.getElementsByClassName("multiple")[0].lastElementChild;
     anime({
@@ -90,7 +90,7 @@ class Game {
       duration: 600,
       easing: "easeInExpo",
       begin: function () {
-        span.innerHTML = "&nbspx" + value;
+        $(span).text(" " + value);
       },
     });
   }
@@ -169,6 +169,9 @@ class Game {
       GameUi.showClock(tis.activity.dct);
       GameUi.hideButton();
       GameUi.outMsg("不要", OutDct.bottom);
+      tis.p_my.selectPks.forEach((w) => {
+        w.onSelect = false;
+      });
       tis.event.removeAllListeners(tis.timeOutEventName);
     });
 
@@ -245,32 +248,41 @@ class Game {
     switch (bas.OrderType) {
       case GameOrderType.出牌: {
         let obj = JSON.parse(bas.JsonData);
-        let ply = this.idToPlayer(obj.PlayerID);
+        let sendply = this.idToPlayer(obj.PlayerID);
         let npks = <NetPoker[]>obj.OutPks;
         let pks = Poker.npksToPks(npks);
         //如果没有牌信息则说明不要
         if (pks.length == 0) {
-          GameUi.outMsg("不要", ply.dct);
+          GameUi.outMsg("不要", sendply.dct);
+          //如果下一个玩家还是上一个出牌的玩家,则将其出牌区清空
+          if (this.lastSendPly == sendply.next) {
+            let dct = sendply.next.dct;
+            $(dct == OutDct.left ? ".theyOutbox .lef" : dct == OutDct.right ? ".theyOutbox .rig" : ".myOutbox").html("");
+          }
         } else {
-          this.lastSendPly = ply;
-          this.lastGroup = pks;
-          this.outPoker(ply.dct, pks);
-          if (ply.dct == OutDct.left) this.plcount -= pks.length;
-          if (ply.dct == OutDct.right) this.prcount -= pks.length;
+          this.lastSendPly = sendply; //设置上一个出牌的玩家
+          this.lastGroup = pks; // 设置上一组出牌牌组
+          this.outPoker(sendply.dct, pks);
+          //更新玩家剩余牌数
+          if (sendply.dct == OutDct.left) this.plcount -= pks.length;
+          if (sendply.dct == OutDct.right) this.prcount -= pks.length;
         }
-        GameUi.showClock(ply.next.dct);
-        this.activity = ply.next; //设置活动玩家
-        //判断下一家出牌玩家是否为我方,若是则显示出牌按钮
-        if (ply.next == this.p_my) {
+        GameUi.showClock(sendply.next.dct); //显示倒计时时钟到下一个玩家
+
+        this.activity = sendply.next; //设置活动玩家
+
+        //判断下一家出牌玩家是否为我方
+        if (sendply.next == this.p_my) {
+          //如果上一次出牌的玩家是我自己则说明其他玩家都选择了不要,进入出牌阶段
           if (this.lastSendPly == this.p_my) {
             this.lastGroup = null;
-            $(".myOutbox").html("");
             GameUi.showButton(BtnSituation.出牌);
             this.setStage(GameStage.出牌阶段);
             this.bigofGroups = null;
           } else {
             this.bigofGroups = this.p_my.hand.getBiggerOfGroups(new PokerGroup(this.lastGroup));
             this.promptIndex = 0;
+            //如果提示牌组长度为0则说明要不起
             if (this.bigofGroups.length > 0) GameUi.showButton(BtnSituation.接牌_要的起);
             else GameUi.showButton(BtnSituation.接牌_要不起);
             this.setStage(GameStage.接牌阶段);
@@ -348,7 +360,9 @@ class Game {
 
       case GameOrderType.倍数更新: {
         let m = parseInt(bas.Tag);
-        this.multiple = m;
+        if (m) {
+          this.multiple = m;
+        }
       }
     }
   }
@@ -360,32 +374,32 @@ class Game {
 
   /** 阶段超时处理 */
   private timeOutHandle() {
-    let ply = this.activity;
-    this.activity = ply.next;
+    let ply = this.activity; //获取当前正在出牌的玩家
+    this.activity = ply.next; //设置活动玩家为其下家
+    //间隔一秒后移动闹钟到下一家
     setTimeout(() => {
       GameUi.showClock(ply.next.dct);
     }, 1000);
+    //玩家超时行为会在服务器处理后发送,所以只需做超时后的本地界面操作
     if (ply.dct != OutDct.bottom) return;
     GameUi.hideButton();
     switch (this.gameStage) {
       case GameStage.叫分阶段: {
         GameUi.outMsg("不叫", OutDct.bottom);
-        //服务器超时会自动向其他玩家发送'不叫'
         break;
       }
       case GameStage.出牌阶段: {
-        //出牌阶段必须出牌,所以超时会自动打出最小牌,服务器会在超时后进行相同操作
-        let out = ply.hand.pgAsc.splice(0, 1);
-        this.outPoker(OutDct.bottom, out);
+        //出牌阶段必须出牌,所以超时会自动打出最小牌
+        let out = ply.hand.pgAsc.splice(0, 1); //获取最小牌
+        this.outPoker(OutDct.bottom, out); //打出最小牌
         this.lastSendPly = ply;
         this.lastGroup = out;
         GameUi.hideButton();
-        ply.hand.removePks(out);
+        ply.hand.removePks(out); //删除最小牌
         break;
       }
       case GameStage.接牌阶段: {
         GameUi.outMsg("不要", OutDct.bottom);
-        //服务器超时会自动向其他玩家发送'不要'
         break;
       }
     }
@@ -398,7 +412,7 @@ class Game {
    * @param isShow 仅将牌添加到牌区中(用于玩家结束时亮牌)
    **/
   public outPoker(dct: OutDct, pks: Poker[], isShow: boolean = false) {
-    if (!isShow) $(".outbox>li").remove();
+    if (!isShow) $(".outbox>li").remove(); //如果非展示手牌,则将其他出牌区清空
     var ul: HTMLUListElement;
     switch (dct) {
       case OutDct.left:
@@ -472,6 +486,7 @@ class Game {
     let iswin = winply == this.p_my || (!winply.isLand && !this.p_my.isLand); //是否胜利
     let sumScore = this.multiple * this.btScore; //结算分数
     let sub = this.p_my.isLand ? sumScore * 2 : sumScore; //如果是地主翻倍
+    let oldmark = this.p_my.mark; //原本分数
     //结算玩家剩余分数
     if (winply.isLand) {
       winply.mark += sumScore * 2;
@@ -503,14 +518,14 @@ class Game {
     setTimeout(() => {
       //显示农民/地主胜利标签
       GameUi.showWLFlg(iswin, this.p_my.isLand);
+      $(".myPkList").html("");
       this.outPoker(ply1.dct, pks1, true);
       this.outPoker(ply2.dct, pks2, true);
       this.outPoker(ply3.dct, pks3, true);
-      $(".myPkList").html("");
     }, 2000);
     //延迟显示面板
     setTimeout(() => {
-      GameUi.showWLPanel(this.btScore, this.multiple, Math.abs(sub), this.p_my.mark, iswin);
+      GameUi.showWLPanel(this.btScore, this.multiple, Math.abs(sub), oldmark, iswin);
     }, 6000);
   }
 
@@ -534,6 +549,7 @@ class Game {
         t += 100;
       });
   }
+
   private addOnePoker(p: Poker) {
     var n = 0;
     if ($(".myPkList").children("#" + p.elementID).length == 0) {
@@ -559,6 +575,7 @@ class Game {
       });
     };
   }
+
   /**展示地主动画,添加手牌*/
   private setLandEff(dct: OutDct, landpk: Poker[]) {
     var img;

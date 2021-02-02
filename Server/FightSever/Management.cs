@@ -28,7 +28,7 @@ namespace FightLand_Sever
         static Dictionary<string, Game> onRuningGames = new Dictionary<string, Game>();
 
         // 房间列表
-        static Dictionary<string, GameRoom> roomDic = new Dictionary<string, GameRoom>();
+        static Dictionary<string, GameRoom> rooms = new Dictionary<string, GameRoom>();
 
         // 所有玩家对象(IP:Player)
         static Dictionary<string, NetPlayer> allPlayers = new Dictionary<string, NetPlayer>();
@@ -61,18 +61,18 @@ namespace FightLand_Sever
             var p2 = plys[1];
             //为他们创建房间,并添加到房间列表
             var p3 = plys[2];
-            GameRoom r = new GameRoom(p1, 100, "");
+            GameRoom r = new GameRoom(p1, 100,RoomModels.Matched, "");
             r.AddPlayer(p2);
             r.AddPlayer(p3);
-            roomDic.Add(r.RoomID, r);
+            rooms.Add(r.RoomID, r);
             //绑定房间
             p1.RoomWhich = p2.RoomWhich = p3.RoomWhich = r;
             r.AllReady += Room_AllReady;
             Log.Print("房间已生成:ID" + r.RoomID);
             //发送
-            p1.HallWebsok.SendOrder(JsonConvert.SerializeObject(new { roomid = r.RoomID, pid = p1.PlayerID }), HallOrderType.匹配成功);
-            p2.HallWebsok.SendOrder(JsonConvert.SerializeObject(new { roomid = r.RoomID, pid = p2.PlayerID }), HallOrderType.匹配成功);
-            p3.HallWebsok.SendOrder(JsonConvert.SerializeObject(new { roomid = r.RoomID, pid = p3.PlayerID }), HallOrderType.匹配成功);
+            p1.HallWebsok.SendData(JsonConvert.SerializeObject(new { roomid = r.RoomID, pid = p1.PlayerID }), HallOrderType.房间创建完毕);
+            p2.HallWebsok.SendData(JsonConvert.SerializeObject(new { roomid = r.RoomID, pid = p2.PlayerID }), HallOrderType.房间创建完毕);
+            p3.HallWebsok.SendData(JsonConvert.SerializeObject(new { roomid = r.RoomID, pid = p3.PlayerID }), HallOrderType.房间创建完毕);
         }
 
         private static void Room_AllReady(object sender, EventArgs e)
@@ -138,20 +138,91 @@ namespace FightLand_Sever
             }
         }
 
+        #region 添加
         /// <summary>
-        /// 更新所有玩家的排名信息
+        /// 添加玩家到在线列表
         /// </summary>
-        private static void UpdateRankInfo()
+        /// <param name="p"></param>
+        public static void AddToOnline(Player p)
         {
-            var rks = GetAllPlayers().OrderBy(e => long.Parse(e.Mark)).ToArray();
-            var json = JsonConvert.SerializeObject(rks);
-            Task.Run(() =>
+            onLinePlayers.Add(p.PlayerID, p);
+        }
+
+        /// <summary>
+        /// 添加玩家到数据列表
+        /// </summary>
+        /// <param name="p"></param>
+        public static void AddToData(NetPlayer p)
+        {
+            allPlayers.Add(p.IP, p);
+        }
+
+        /// <summary>
+        /// 添加房间
+        /// </summary>
+        /// <param name="rom"></param>
+        public static void AddRoom(GameRoom rom)
+        {
+            rooms.Add(rom.RoomID, rom);
+        }
+        #endregion
+
+        #region 删除
+        /// <summary>
+        /// 将指定玩家下线
+        /// </summary>
+        /// <param name="pid"></param>
+        public static void OffLine(string pid)
+        {
+            //if (onLinePlayers.ContainsKey(pid))
+            //{
+            //    offLinePlayers.Add(pid, onLinePlayers[pid]); //将玩家添加到离线列表,将在下次数据保存后清空
+            //    onLinePlayers.Remove(pid);
+            //}
+            onLinePlayers.Remove(pid);
+        }
+
+        /// <summary>
+        /// 删除房间
+        /// </summary>
+        /// <param name="rid"></param>
+        public static void RemoveRoom(string rid)
+        {
+            if (rooms.ContainsKey(rid))
             {
-                foreach (var p in onLinePlayers.Values)
-                {
-                    p.HallWebsok.SendOrder(json, HallOrderType.更新排名信息);
-                }
-            });
+                rooms.Remove(rid);
+            }
+        }
+        #endregion
+
+        #region 获取
+        /// <summary>
+        /// 获取所有玩家数据列表
+        /// </summary>
+        /// <returns></returns>
+        public static List<NetPlayer> GetAllPlayers()
+        {
+            return allPlayers.Values.ToList();
+        }
+
+        /// <summary>
+        /// 获取房间对象
+        /// </summary>
+        /// <param name="roomid"></param>
+        /// <returns></returns>
+        public static GameRoom GetRoom(string roomid)
+        {
+            if (rooms.ContainsKey(roomid)) return rooms[roomid];
+            else return null;
+        }
+
+        /// <summary>
+        /// 获取所有房间
+        /// </summary>
+        /// <returns></returns>
+        public static GameRoom[] GetRooms()
+        {
+            return rooms.Values.ToArray();
         }
 
         /// <summary>
@@ -175,6 +246,24 @@ namespace FightLand_Sever
             if (onLinePlayers.ContainsKey(pid)) return onLinePlayers[pid];
             return null;
         }
+        #endregion
+
+        /// <summary>
+        /// 更新所有玩家的排名信息
+        /// </summary>
+        private static void UpdateRankInfo()
+        {
+            var rks = GetAllPlayers().OrderBy(e => long.Parse(e.Mark)).ToArray();
+            var json = JsonConvert.SerializeObject(rks);
+            Task.Run(() =>
+            {
+                foreach (var p in onLinePlayers.Values)
+                {
+                    p.HallWebsok.SendData(json, HallOrderType.更新排名信息);
+                }
+            });
+        }
+
 
         /// <summary>
         /// 判断玩家当前是否在线
@@ -184,58 +273,6 @@ namespace FightLand_Sever
         public static bool HasPlayerInOnline(string pid)
         {
             return onLinePlayers.ContainsKey(pid);
-        }
-
-        /// <summary>
-        /// 获取所有玩家数据列表
-        /// </summary>
-        /// <returns></returns>
-        public static List<NetPlayer> GetAllPlayers()
-        {
-            return allPlayers.Values.ToList();
-        }
-
-        /// <summary>
-        /// 获取房间对象
-        /// </summary>
-        /// <param name="roomid"></param>
-        /// <returns></returns>
-        public static GameRoom GetRoom(string roomid)
-        {
-            if (roomDic.ContainsKey(roomid)) return roomDic[roomid];
-            else return null;
-        }
-
-        /// <summary>
-        /// 添加玩家到在线列表
-        /// </summary>
-        /// <param name="p"></param>
-        public static void AddToOnline(Player p)
-        {
-            onLinePlayers.Add(p.PlayerID, p);
-        }
-
-        /// <summary>
-        /// 添加玩家到数据列表
-        /// </summary>
-        /// <param name="p"></param>
-        public static void AddToData(NetPlayer p)
-        {
-            allPlayers.Add(p.IP, p);
-        }
-
-        /// <summary>
-        /// 将指定玩家下线
-        /// </summary>
-        /// <param name="pid"></param>
-        public static void OffLine(string pid)
-        {
-            //if (onLinePlayers.ContainsKey(pid))
-            //{
-            //    offLinePlayers.Add(pid, onLinePlayers[pid]); //将玩家添加到离线列表,将在下次数据保存后清空
-            //    onLinePlayers.Remove(pid);
-            //}
-            onLinePlayers.Remove(pid);
         }
 
         /// <summary>

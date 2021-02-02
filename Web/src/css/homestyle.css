@@ -743,16 +743,19 @@ div::-webkit-scrollbar-thumb:hover {
   height: 35px;
 }
 .roombox .header .rig > button > i {
+  display: inline-block;
   font-size: 22px;
 }
 .roombox .header .rig > button:nth-child(2) {
   margin-left: 10px;
 }
-.roombox .header .rig > button:nth-child(1):hover > i {
+
+/* .roombox .header .rig > button:nth-child(1):hover > i {
   animation: shuaxinrol 3s infinite linear;
   display: inline-block;
   text-shadow: none;
-}
+} */
+
 @keyframes shuaxinrol {
   from {
     transform: rotate(0deg);
@@ -773,27 +776,15 @@ div::-webkit-scrollbar-thumb:hover {
   padding-top: 5px;
   position: relative;
 }
-.roombox .section > .rooms > .nullroom {
-  display: block;
-  position: absolute;
-  width: 100%;
-  top: 48%;
-  font-family: "华文琥珀", sans-serif;
-  color: white;
-  font-size: 1.8rem;
-  text-align: center;
-  opacity: 0.8;
-  transform: rotate();
+.roombox .section > .rooms .table {
+  display: grid;
+  grid-template-columns: repeat(2, 280px);
+  justify-content: center;
+  justify-items: center;
+  grid-row-gap: 15px;
 }
-.roombox .section > .rooms table {
-  width: 95%;
-  margin: 0 auto;
-}
-.roombox .section > .rooms table td {
-  text-align: center;
-  padding-bottom: 20px;
-}
-.roombox .section > .rooms .item {
+
+.roombox .section > .rooms .table .item {
   width: 250px;
   height: 70px;
   background-color: white;
@@ -808,11 +799,68 @@ div::-webkit-scrollbar-thumb:hover {
   position: relative;
   cursor: pointer;
   transition: all 0.5s;
+  flex-grow: 1;
+}
+.roombox .section > .rooms > .nullroom {
+  display: block;
+  position: absolute;
+  width: 100%;
+  top: 48%;
+  font-family: "华文琥珀", sans-serif;
+  color: white;
+  font-size: 1.8rem;
+  text-align: center;
+  opacity: 0.8;
+  transform: rotate();
 }
 .roombox .section > .rooms .item:hover {
   box-shadow: 6px 6px 0px rgb(130, 211, 187);
   transform: translateX(-4px) translateY(-4px);
   background-color: rgb(166, 235, 217);
+}
+.roombox .section > .rooms .loaderbox {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -100px;
+  margin-left: -100px;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.roombox .section > .rooms .loaderbox::after {
+  content: "正在获取房间...";
+  color: white;
+  font-size: "1.4rem";
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.roombox .section > .rooms .loader {
+  margin-bottom: 5px;
+  text-align: center;
+}
+.loader::before {
+  content: "";
+  display: inline-block;
+  border: 10px solid rgba(210, 238, 255, 0.3);
+  border-radius: 50%;
+  border-top: 10px solid white;
+  width: 40px;
+  height: 40px;
+  animation: load 1.5s linear infinite;
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 /* item 房间ID和门 */
 .roombox .section > .rooms .item > .door {
@@ -1093,7 +1141,6 @@ div::-webkit-scrollbar-thumb:hover {
 .infochange #rolenext {
   margin-left: 10px;
 }
-
 
 /* 房间配置弹出层 */
 .rsetting {

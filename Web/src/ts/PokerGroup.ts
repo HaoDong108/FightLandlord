@@ -8,12 +8,12 @@ class PokerGroup {
   /**当前牌组权值 */
   private weight: number; //牌组权值
 
-  /**获取降序排列的扑克牌组 */
+  /**获取降序排列的扑克牌组(副本) */
   get pgDsc() {
     return this._pkGroup.slice(0).reverse();
   }
 
-  /**获取升序排列的扑克牌组 */
+  /**获取升序排列的扑克牌组(副本) */
   get pgAsc() {
     return this._pkGroup.slice(0);
   }

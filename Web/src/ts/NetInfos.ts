@@ -67,6 +67,9 @@ export class NetRoom {
   public BtScore: number;
   public Title: string;
   public OnStart: boolean;
+  public MasterName: string;
+  public MasterHead: number;
+  public NowCount: number;
 }
 
 export enum HallOrderType {
@@ -75,10 +78,11 @@ export enum HallOrderType {
   退出匹配队列,
   返回退出结果,
   获取房间列表,
+  返回房间列表,
   更新排名信息,
   获取房间成员,
   更新玩家信息,
-  匹配成功,
+  房间创建完毕,
   创建房间,
 }
 

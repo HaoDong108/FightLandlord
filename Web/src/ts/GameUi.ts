@@ -900,13 +900,13 @@ export namespace GameUi {
   export function showWLPanel(btscore: number, mup: number, score: number, plyscore: number, win: boolean) {
     let tag = document.getElementsByClassName("wlbox")[0];
     $(tag).addClass(win ? "winbox" : "losebox");
-    $("#btsc").text(btscore.toString());
-    $("#mple").text(mup.toString());
+    $("#btsc").text(btscore); //底分
+    $("#mple").text(mup); //倍数
     $("#score")
       .text("0")
       .prev()
       .text(win ? "本局得分:" : "本局扣分:");
-    $("#remsc").text(plyscore);
+    $("#remsc").text(plyscore); //剩余分数
     $(".wlmask").show();
     let zf = win ? "+" : "-";
     var obj = {
@@ -914,11 +914,13 @@ export namespace GameUi {
       rem: plyscore,
     };
     let line = anime.timeline();
+    //面板弹出
     line.add({
       targets: tag,
       scale: [0, 1],
       duration: 1500,
     });
+    //得扣分动画
     line.add({
       targets: obj,
       sco: score,
@@ -940,11 +942,11 @@ export namespace GameUi {
     $(tag).show();
     let t = setInterval(() => {
       if ($(tag).css("display") == "none") {
-        console.log("计时器已停止");
         clearInterval(t);
       }
       addLeaf();
     }, 300);
+    //添加叶子
     function addLeaf() {
       let img = document.createElement("img");
       $(img).attr("src", `../static/img/${win ? "Win" : "Lose"}/p1.png`);
@@ -989,7 +991,7 @@ export namespace GameUi {
       duration: 700,
       complete: () => {
         $(tag).removeClass("winbox").removeClass("losebox").hide();
-        $(".blkm").hide();
+        $(".wlmask").hide();
       },
     });
   }

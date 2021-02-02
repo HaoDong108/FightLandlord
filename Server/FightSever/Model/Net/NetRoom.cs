@@ -14,11 +14,11 @@ namespace FightLand_Sever.Model.Net
         public int BtScore { get; set; }
         public string Title { get; set; }
         public bool OnStart { get; set; }
+        public string MasterName { get; set; }
+        public int MasterHead { get; set; }
+        public int NowCount { get; set; }
 
-        public NetRoom()
-        {
-
-        }
+        public NetRoom(){}
         public NetRoom(GameRoom rom)
         {
             this.RoomID = rom.RoomID;

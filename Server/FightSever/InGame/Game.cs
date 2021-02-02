@@ -67,7 +67,7 @@ namespace FightLand_Sever.InGame
         int btScore = 1; //当局底分
         int multiple = 1; //当局倍数
 
-        public Game(Player p1, Player p2, Player p3,int btScore)
+        public Game(Player p1, Player p2, Player p3, int btScore)
         {
             this.GameID = (id++).ToString();
             this.Dodge = false;
@@ -224,7 +224,6 @@ namespace FightLand_Sever.InGame
         {
             this.gameStage = GameStage.设置地主阶段;
             this.Multiple = this.maxScore; //设置倍数为当前叫分倍数
-            Log.Print("地主是:" + this.maxScorePly.Name);
             //给出地主牌信息
             string json = JsonConvert.SerializeObject(new { this.maxScorePly.PlayerID, LandPks = this.pokerHeap.landPks });
             this.maxScorePly.AddHandPk(this.pokerHeap.landPks.ToArray());
@@ -233,7 +232,7 @@ namespace FightLand_Sever.InGame
             this.farmers[1] = this.maxScorePly.NextPlayer;
             this.SendBase(GameOrderType.设置地主, json);
             //设置完地主后准备进入出牌阶段,接收出牌信息
-            clock.TagPlayer = this.maxScorePly;
+            clock.TagPlayer = this.maxScorePly;//将地主绑定到闹钟
             this.clock.Start(3);
             this.gameStage = GameStage.出牌阶段;
         }
@@ -242,7 +241,7 @@ namespace FightLand_Sever.InGame
         private void SomeoneOutPoker(Player ply, NetPoker[] pks)
         {
             if (pks == null) pks = new NetPoker[0];
-            //向其他玩家给出出牌信息,客户端会根据信息决定是否轮到我方出牌
+            //向其他玩家给出出牌信息
             string json = JsonConvert.SerializeObject(new { ply.PlayerID, OutPks = pks });
             this.SendBase(GameOrderType.出牌, json, ply.LastPlayer);
             this.SendBase(GameOrderType.出牌, json, ply.NextPlayer);
@@ -254,11 +253,15 @@ namespace FightLand_Sever.InGame
                 this.SomeoneWin(ply);
                 return;
             }
-            //判断当前出牌的玩家是否还为上次出牌的玩家,如果是则说明其他玩家都不要,进入出牌阶段
-            if (ply == this.lastSendPly) this.gameStage = GameStage.出牌阶段;
-            else this.gameStage = GameStage.接牌阶段;
+            //如果出牌了，则将其设置为上一个出牌的玩家
             if (pks.Length > 0) this.lastSendPly = ply;
-            //重新计时
+            //如果上一个出牌的玩家是出牌玩家的下一家，则下一个玩家进入出牌阶段
+            if (lastSendPly == ply.NextPlayer)
+                this.gameStage = GameStage.出牌阶段;
+            //否则下一个玩家还得继续接牌
+            else
+                this.gameStage = GameStage.接牌阶段;
+            //重新计时,绑定下家
             this.clock.TagPlayer = ply.NextPlayer;
             this.clock.ReStart();
         }
@@ -302,19 +305,22 @@ namespace FightLand_Sever.InGame
                     win.NextPlayer.Mark -= sumScore * 2;
                 }
             }
-            
+            GameOver();
         }
 
         //游戏结束
         private void GameOver()
         {
+            Console.WriteLine(this.p1.Name + "剩余分数:" + this.p1.Mark);
+            Console.WriteLine(this.p2.Name + "剩余分数:" + this.p2.Mark);
+            Console.WriteLine(this.p3.Name + "剩余分数:" + this.p3.Mark);
             this.gameStage = GameStage.结束阶段;
-            if (this.GameEnd != null) this.GameEnd(this,new EventArgs());
+            if (this.GameEnd != null) this.GameEnd(this, new EventArgs());
             Log.Print("游戏结束", ConsoleColor.Red);
         }
 
         //发送数据给局内玩家
-        private void SendBase(GameOrderType order, string json="", Player p = null, string tag = null)
+        private void SendBase(GameOrderType order, string json = "", Player p = null, string tag = null)
         {
             if (p == null)
             {

@@ -7,6 +7,17 @@ using System.Threading.Tasks;
 
 namespace FightLand_Sever.Room
 {
+    enum RoomModels
+    {
+        /// <summary>
+        /// 匹配模式
+        /// </summary>
+        Matched,
+        /// <summary>
+        /// 房间模式
+        /// </summary>
+        Room,
+    }
     class GameRoom
     {
         public delegate void RoomPlayerEventHandler(GameRoom sender, MasterChangeEventArgs e);
@@ -53,6 +64,10 @@ namespace FightLand_Sever.Room
         /// </summary>
         public Player RoomMaster { get; private set; }
         /// <summary>
+        /// 指定房间的创建模式
+        /// </summary>
+        public RoomModels RoomModels { get; private set; }
+        /// <summary>
         /// 房间底分
         /// </summary>
         public int BtScore { get; set; }
@@ -68,10 +83,11 @@ namespace FightLand_Sever.Room
         bool onStart = false;
         List<Player> players = new List<Player>();
 
-        public GameRoom(Player master, int btScore, string pwd = "")
+        public GameRoom(Player master, int btScore, RoomModels mode, string pwd = "")
         {
             this.RoomID = (ids++).ToString();
             this.BtScore = btScore;
+            this.RoomModels = mode;
             master.IsRoomMaster = true;
             master.RoomSokDisconnect += PlayerDisconnect;
             this.RoomMaster = master;

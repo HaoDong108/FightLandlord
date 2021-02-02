@@ -14,11 +14,15 @@ namespace Tools {
   }
 
   /**设置cookie */
-  export function setCookie(key: string, value: string, second: number = 900) {
-    let exp = new Date();
-    let ms = new Date().getTime() + second * 1000;
-    exp.setTime(ms);
-    document.cookie = `${key}=${value};expires=${exp.toUTCString()};path=/`;
+  export function setCookie(key: string, value: string, second?: number) {
+    if (second) {
+      let exp = new Date();
+      let ms = new Date().getTime() + second * 1000;
+      exp.setTime(ms);
+      document.cookie = `${key}=${value};expires=${exp.toUTCString()};path=/`;
+    } else {
+      document.cookie = `${key}=${value}`;
+    }
   }
 
   /**返回cookie */

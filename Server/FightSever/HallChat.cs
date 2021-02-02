@@ -8,6 +8,7 @@ using WebSocketSharp;
 using WebSocketSharp.Server;
 using Newtonsoft.Json;
 using FightLand_Sever.Model.Net;
+using FightLand_Sever.Room;
 
 namespace FightLand_Sever.Hall
 {
@@ -46,7 +47,7 @@ namespace FightLand_Sever.Hall
         /// </summary>
         /// <param name="data"></param>
         /// <param name="type"></param>
-        public void SendOrder(string data, HallOrderType type)
+        public void SendData(string data, HallOrderType type)
         {
             if (this.Context.WebSocket.ReadyState == WebSocketState.Open)
             {
@@ -71,7 +72,7 @@ namespace FightLand_Sever.Hall
                 IsFirstLogin = isflogin //指示该玩家是否为第一次登陆
             };
             var json = JsonConvert.SerializeObject(obj);
-            this.SendOrder(json, HallOrderType.大厅基本数据);
+            this.SendData(json, HallOrderType.大厅基本数据);
         }
 
         protected override async Task OnMessage(MessageEventArgs e)
@@ -88,33 +89,55 @@ namespace FightLand_Sever.Hall
                 }
                 try
                 {
-                   
                     switch ((HallOrderType)hallbase.OrderType)
                     {
                         case HallOrderType.进入匹配队列:
-                            MatchingQueue.Enqueue(ply);
-                            Log.Print("玩家" + this.BindPlayer.Name + "进入了匹配队列");
-                            break;
-                        case HallOrderType.退出匹配队列:
-                            Log.Print("玩家" + this.BindPlayer.Name + "退出了匹配队列");
-                            MatchingQueue.Remove(ply.PlayerID);
-                            break;
-                        case HallOrderType.更新玩家信息:
-                            var info = JsonConvert.DeserializeAnonymousType(json, new
                             {
-                                name = "",
-                                roleid = 1,
-                                headid = 1,
-                                gender = 0,
-                            });
-                            Management.UpdatePlayer(ply.PlayerID, info.headid, info.roleid, info.gender, info.name);
-                            break;
+                                MatchingQueue.Enqueue(ply);
+                                Log.Print("玩家" + this.BindPlayer.Name + "进入了匹配队列");
+                                break;
+                            }
+                        case HallOrderType.退出匹配队列:
+                            {
+                                Log.Print("玩家" + this.BindPlayer.Name + "退出了匹配队列");
+                                MatchingQueue.Remove(ply.PlayerID);
+                                break;
+                            }
+                        case HallOrderType.更新玩家信息:
+                            {
+                                var info = JsonConvert.DeserializeAnonymousType(json, new
+                                {
+                                    name = "",
+                                    roleid = 1,
+                                    headid = 1,
+                                    gender = 0,
+                                });
+                                Management.UpdatePlayer(ply.PlayerID, info.headid, info.roleid, info.gender, info.name);
+                                break;
+                            }
                         case HallOrderType.获取房间列表:
-
-                            break;
+                            {
+                                var roms = Management.GetRooms().Select(r =>
+                                {
+                                    return new NetRoom()
+                                    {
+                                        RoomID=r.RoomID,
+                                        BtScore = r.BtScore,
+                                        MasterName = r.RoomMaster.Name,
+                                        MasterHead = r.RoomMaster.HeadID,
+                                        NowCount = r.MemberCount,
+                                    };
+                                }).ToArray();
+                                this.SendData(JsonConvert.SerializeObject(roms), HallOrderType.返回房间列表);
+                                break;
+                            }
                         case HallOrderType.创建房间:
-
-                            break;
+                            {
+                                var rom = JsonConvert.DeserializeAnonymousType(json, new {pwd = "", bts = 0 });
+                                GameRoom room = new GameRoom(ply, rom.bts,RoomModels.Room, rom.pwd);
+                                Management.AddRoom(room);
+                                break;
+                            }
                     }
                 }
                 catch (Exception ex)

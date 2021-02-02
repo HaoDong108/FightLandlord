@@ -1,4 +1,4 @@
-import { NetPlayer } from "./NetInfos";
+import { NetPlayer, NetRoom } from "./NetInfos";
 import $ from "jquery";
 import HomeUi from "./HomeUi";
 import { NetInfoBase, HallOrderType } from "./NetInfos";
@@ -7,7 +7,7 @@ import Tools from "./Tools";
 
 const host = window.document.location.host;
 const hostIp = host.split(":")[0];
-var myPlayer;
+var myPlayer: NetPlayer;
 var ws: WebSocket = null;
 
 HomeUi.init();
@@ -22,18 +22,26 @@ function init() {
 }
 
 function eventbind() {
-  HomeUi.addEventLinstener(HomeUi.Event_开始匹配, () => {
+  HomeUi.addEventLinstener(HomeUi.event_开始匹配, () => {
     sendData("", HallOrderType.进入匹配队列);
   });
-  HomeUi.addEventLinstener(HomeUi.Event_取消匹配, () => {
+  HomeUi.addEventLinstener(HomeUi.event_取消匹配, () => {
     sendData("", HallOrderType.退出匹配队列);
   });
-  HomeUi.addEventLinstener(HomeUi.Event_信息保存, (e) => {
+  HomeUi.addEventLinstener(HomeUi.event_信息保存, (e) => {
     let json = JSON.stringify(e);
     sendData(json, HallOrderType.更新玩家信息);
     console.log("信息已发出");
   });
-  HomeUi.addEventLinstener(HomeUi.Event_创建房间, (e) => {});
+  HomeUi.addEventLinstener(HomeUi.event_创建房间, (e) => {
+    let data = JSON.stringify(e);
+    sendData(data, HallOrderType.创建房间);
+  });
+  HomeUi.addEventLinstener(HomeUi.event_请求房间, () => {
+    $(".rooms .loaderbox").show(); //显示加载标签
+    $(".rooms .nullroom").hide();
+    sendData("", HallOrderType.获取房间列表);
+  });
 }
 
 /**Callback->成功连接websocket时触发 */
@@ -43,11 +51,11 @@ function playerConnect(e: Event) {
 
 /**Callback->收到数据触发*/
 function onData(e: MessageEvent<string>) {
-  let base = <NetInfoBase>JSON.parse(e.data);
-  let data = base.JsonData;
-  console.log(base);
+  let bas = <NetInfoBase>JSON.parse(e.data);
+  let data = bas.JsonData;
+  console.log(bas);
 
-  switch (base.OrderType) {
+  switch (bas.OrderType) {
     case HallOrderType.大厅基本数据: {
       var obj = JSON.parse(data);
       let pinfo: NetPlayer = obj.Player;
@@ -59,12 +67,28 @@ function onData(e: MessageEvent<string>) {
       if (flogin) HomeUi.showChangeInfoPanel();
       break;
     }
-    case HallOrderType.匹配成功: {
+    case HallOrderType.房间创建完毕: {
       let obj = JSON.parse(data);
       Tools.setCookie("pid", obj.pid);
       Tools.setCookie("roomid", obj.roomid);
       console.log("匹配成功!");
       window.location.href = `http://${hostIp}:8080/game.html?pid=${obj.pid}&roomid=${obj.roomid}`;
+      break;
+    }
+    case HallOrderType.返回房间列表: {
+      var roms = <NetRoom[]>JSON.parse(bas.JsonData);
+      $(".rooms .table").html("");
+      $(".rooms .loaderbox").hide();
+      if (roms.length > 0) {
+        $(".rooms .nullroom").hide();
+        roms.forEach((r) => {
+          HomeUi.addRoom(r.RoomID, r.MasterName, r.NowCount, r.BtScore, r.MasterHead);
+        });
+      } else {
+        $(".rooms .nullroom").show();
+      }
+
+      break;
     }
   }
 }
