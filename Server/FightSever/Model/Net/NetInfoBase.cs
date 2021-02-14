@@ -8,7 +8,8 @@ namespace FightLand_Sever.Model.Net
 {
     public enum HallOrderType
     {
-        大厅基本数据 = 0,
+        请求大厅数据=0,
+        返回大厅数据,
         进入匹配队列,
         退出匹配队列,
         返回退出结果,
@@ -18,6 +19,7 @@ namespace FightLand_Sever.Model.Net
         获取房间成员,
         更新玩家信息,
         房间创建完毕,
+        请求进入房间,
         创建房间,
     }
     public enum RoomOrderType
@@ -29,6 +31,7 @@ namespace FightLand_Sever.Model.Net
         玩家准备,
         玩家退出,
         玩家加入,
+        踢出玩家,
         房主切换,
     }
     enum GameOrderType
@@ -71,6 +74,15 @@ namespace FightLand_Sever.Model.Net
             this.OrderType = type;
             this.JsonData = json;
             this.Tag = tag;
+        }
+
+        /// <summary>
+        /// 返回Json对象
+        /// </summary>
+        public static string GetJson(int type, string json, string tag = "")
+        {
+            NetInfoBase bas = new NetInfoBase(type, json, tag);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(bas);
         }
     }
 }

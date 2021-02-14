@@ -1,4 +1,5 @@
-﻿using FightLand_Sever.Model.Net;
+﻿using FightLand_Sever.InGame;
+using FightLand_Sever.Model.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FightLand_Sever.Room
 {
-    enum RoomModels
+    enum RoomModel
     {
         /// <summary>
         /// 匹配模式
@@ -21,16 +22,15 @@ namespace FightLand_Sever.Room
     class GameRoom
     {
         public delegate void RoomPlayerEventHandler(GameRoom sender, MasterChangeEventArgs e);
+        /// <summary>
+        /// 玩家断开与房间连接时触发
+        /// </summary>
+        public event Action<GameRoom, Player> PlayerDisconnect;
 
         /// <summary>
         /// 房间玩家已到齐
         /// </summary>
         public event EventHandler RoomFill;
-
-        /// <summary>
-        /// 房间玩家已全部到齐且准备
-        /// </summary>
-        public event EventHandler AllReady;
 
         /// <summary>
         /// 房间销毁时触发
@@ -46,7 +46,7 @@ namespace FightLand_Sever.Room
         /// <summary>
         /// 房间ID
         /// </summary>
-        public string RoomID { get; private set; }
+        public long RoomID { get; private set; }
         /// <summary>
         /// 房间标题
         /// </summary>
@@ -66,7 +66,7 @@ namespace FightLand_Sever.Room
         /// <summary>
         /// 指定房间的创建模式
         /// </summary>
-        public RoomModels RoomModels { get; private set; }
+        public RoomModel RoomModel { get; private set; }
         /// <summary>
         /// 房间底分
         /// </summary>
@@ -80,16 +80,15 @@ namespace FightLand_Sever.Room
         /// </summary>
         public bool OnAllReady { get { return players.Count == 3 && players.All(e => e.OnReady); } }
 
-        bool onStart = false;
         List<Player> players = new List<Player>();
 
-        public GameRoom(Player master, int btScore, RoomModels mode, string pwd = "")
+        public GameRoom(Player master, int btScore, RoomModel mode, string pwd = "")
         {
-            this.RoomID = (ids++).ToString();
+            this.RoomID = (ids++);
             this.BtScore = btScore;
-            this.RoomModels = mode;
+            this.RoomModel = mode;
             master.IsRoomMaster = true;
-            master.RoomSokDisconnect += PlayerDisconnect;
+            master.RoomSokDisconnect +=GamerDisconnect;
             this.RoomMaster = master;
             this.RoomTitle = master.Name + "的房间";
             this.RoomPwd = pwd;
@@ -107,24 +106,24 @@ namespace FightLand_Sever.Room
             players[2].LastPlayer = players[1];
         }
 
-        private void PlayerDisconnect(object sender, EventArgs e)
+        private void GamerDisconnect(Player p)
         {
-            var p = sender as Player;
             p.OnReady = false;
-            if (this.players.Count == 1)
+            //玩家下线时触发事件
+            if (this.PlayerDisconnect != null) this.PlayerDisconnect(this, p);
+            //如果房间剩余多名玩家,则转交房主
+            if (this.players.Count > 1)
             {
-                if (this.RoomDestroy!=null) this.RoomDestroy(this, new EventArgs());
-                return;
+                if (p.IsRoomMaster)
+                {
+                    var np = players.Where(r => r.PlayerID != p.PlayerID).First();
+                    this.RoomMaster = np;
+                    p.IsRoomMaster = false;
+                    np.IsRoomMaster = true;
+                    if (this.MasterChange != null) this.MasterChange(this, new MasterChangeEventArgs(p, np));
+                }
             }
-            if (this.players.Count > 1 && p.IsRoomMaster)
-            {
-                var np = players.Where(r => r.PlayerID != p.PlayerID).First();
-                this.RoomMaster = np;
-                p.IsRoomMaster = false;
-                np.IsRoomMaster = true;
-                if (this.MasterChange != null) this.MasterChange(this, new MasterChangeEventArgs(p, np));
-                return;
-            }
+            this.RemovePlayer(p.PlayerID);
         }
 
         /// <summary>
@@ -134,11 +133,19 @@ namespace FightLand_Sever.Room
         public void SetReady(Player p)
         {
             p.OnReady = true;
-            if(AllReady != null&&
-                players.Count==3 &&
+            if (players.Count==3 &&
                players.All(e => e.OnReady))
             {
-                AllReady(this, new EventArgs());
+                //开始游戏
+                var pls = this.players;
+                Game g = new Game(pls[0], pls[1], pls[2], this.BtScore,RoomID);
+                Management.AddGame(g);
+                g.GameEnd += (s, ev) =>
+                {
+                    Management.RemoveGame(g.GameID.ToString());
+                    g = null;
+                };
+                this.BroadCast("", RoomOrderType.开始游戏指令);
             }
         }
 
@@ -150,7 +157,7 @@ namespace FightLand_Sever.Room
         {
             if (this.HasPlayer(p.PlayerID)) return;
             players.Add(p);
-            p.RoomSokDisconnect += PlayerDisconnect;
+            p.RoomSokDisconnect += GamerDisconnect;
             if (RoomMaster.LastPlayer == null)
             {
                 RoomMaster.LastPlayer = p;
@@ -185,6 +192,11 @@ namespace FightLand_Sever.Room
                     players.RemoveAt(i);
                     return;
                 }
+            }
+            //玩家全部退出时销毁房间
+            if (MemberCount<=0)
+            {
+                if (this.RoomDestroy != null) this.RoomDestroy(this, new EventArgs());
             }
         }
 
@@ -261,12 +273,6 @@ namespace FightLand_Sever.Room
                 }
             }
         }
-    }
-
-
-    class RoomErrorEventArgs:EventArgs
-    {
-        
     }
 
     class MasterChangeEventArgs : EventArgs

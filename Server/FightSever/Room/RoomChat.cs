@@ -17,8 +17,7 @@ namespace FightLand_Sever.Room
         public delegate void OnErrorHandler(RoomChat sender, WebSocketSharp.ErrorEventArgs e);
 
         public event OnMessageHandler OnGameData;
-        public event EventHandler OnOpend;
-        public event EventHandler OnClosed;
+        public event Action<RoomChat> OnDisconnetc;
         public event OnErrorHandler OnErrord;
 
         /// <summary>
@@ -43,7 +42,7 @@ namespace FightLand_Sever.Room
 
         protected override async Task OnClose(CloseEventArgs e)
         {
-            if (this.OnClosed != null) this.OnClosed(this, new EventArgs());
+            if (this.OnDisconnetc != null) this.OnDisconnetc(this);
             Log.Print("玩家" + this.BindPlayer.Name + "已经退出房间");
         }
 
@@ -53,12 +52,6 @@ namespace FightLand_Sever.Room
             Log.Print("房间内错误:" + e.Message);
         }
 
-        protected override async Task OnOpen()
-        {
-            if (this.OnOpend != null) this.OnOpend(this, new EventArgs());
-        }
-
-        static readonly object connectLock = new object();
         protected override async Task OnMessage(MessageEventArgs e)
         {
             using (StreamReader sr = new StreamReader(e.Data))
@@ -85,6 +78,7 @@ namespace FightLand_Sever.Room
                             if (!room.HasPlayer(pid))
                             {
                                 room.AddPlayer(p);
+                                p.RoomWhich = room;
                             }
                             //绑定玩家到会话
                             this.BindPlayer = p;
@@ -92,11 +86,10 @@ namespace FightLand_Sever.Room
                             p.SetRoomWebSok(this);
                             //创建房间实体类
                             NetRoom nr = new NetRoom(room);
-                            var dt = JsonConvert.SerializeObject(nr);
-                            this.SendData(dt, (int)RoomOrderType.回送房间信息);
+                            //广播房间信息
+                            room.BroadCast(JsonConvert.SerializeObject(nr), RoomOrderType.回送房间信息);
+                            p.Jumping = false;
                             Log.Print("玩家" + this.BindPlayer.Name + "成功连接到房间");
-                            //广播房主
-                            BindRoom.BroadCast("", RoomOrderType.房主切换, BindRoom.RoomMaster.PlayerID);
                             break;
                         }
                     case RoomOrderType.玩家准备:
@@ -106,19 +99,42 @@ namespace FightLand_Sever.Room
                             this.BindPlayer.NextSendRoomData("", RoomOrderType.玩家准备, this.BindPlayer.PlayerID);
                             break;
                         }
+                    case RoomOrderType.踢出玩家:
+                        {
+                            var pid = bas.Tag;
+                            if (Management.HasPlayerInOnline(pid))
+                            {
+                                Player p = Management.GetOnlinePlayer(pid);
+                                p.Jumping = true;
+                            }
+                            this.BindRoom.BroadCast("", RoomOrderType.踢出玩家,pid);
+                            //将玩家从房间删除
+                            this.BindRoom.RemovePlayer(pid);
+                            break;
+                        }
                 }
             }
         }
 
+        //CallBack->玩家退出房间触发
+        private void Room_PlayerDisconnect(GameRoom sender, Player ply)
+        {
+            sender.BroadCast("", RoomOrderType.玩家退出, ply.PlayerID);
+            Management.OffLine(ply.PlayerID);
+        }
+
+        //CallBack->房主切换时触发
+        private void Room_MasterChange(GameRoom sender, MasterChangeEventArgs e)
+        {
+            sender.BroadCast("", RoomOrderType.房主切换, e.NewMaster.PlayerID);
+        }
+
+        //绑定房间到会话
         private void RoomBinding(GameRoom rom)
         {
             this.BindRoom = rom;
-            rom.MasterChange += Rom_MasterChange;
-        }
-
-        private void Rom_MasterChange(GameRoom sender, MasterChangeEventArgs e)
-        {
-           sender.BroadCast("",RoomOrderType.房主切换, e.NewMaster.PlayerID);
+            rom.MasterChange += Room_MasterChange;
+            rom.PlayerDisconnect += Room_PlayerDisconnect;
         }
 
         /// <summary>
@@ -129,18 +145,10 @@ namespace FightLand_Sever.Room
         {
             if (!this.IsDisconnect)
             {
-                NetInfoBase info = new NetInfoBase(order, data,tag);
+                NetInfoBase info = new NetInfoBase(order, data, tag);
                 var json = JsonConvert.SerializeObject(info);
                 base.Send(json);
             }
-        }
-
-        /// <summary>
-        /// 关闭与客户端的连接
-        /// </summary>
-        public void Colse()
-        {
-            base.Context.WebSocket.Close();
         }
     }
 }

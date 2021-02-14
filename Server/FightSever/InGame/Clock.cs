@@ -28,6 +28,7 @@ namespace FightLand_Sever.InGame
 
         private bool isStoped = true;
         private int initTok;
+        private bool delFlg = false;
         private int delay = 0;
         private int tik;
         public int Tik
@@ -44,7 +45,7 @@ namespace FightLand_Sever.InGame
                     delay--;
                     return;
                 }
-                if (this.tik != value && this.TikChange != null&&value>=0) this.TikChange(this, value);
+                if (this.tik != value && this.TikChange != null && value >= 0) this.TikChange(this, value);
                 this.tik = value;
                 if (this.tik <= -1)
                 {
@@ -72,7 +73,16 @@ namespace FightLand_Sever.InGame
 
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            clocks.ForEach(c => { c.Tik -= 1;});
+            for (int i = 0; i < clocks.Count; i++)
+            {
+                if (clocks[i].delFlg)
+                {
+                    clocks.RemoveAt(i);
+                    --i;
+                    continue;
+                }
+                clocks[i].Tik -= 1;
+            }
         }
 
         /// <summary>
@@ -102,16 +112,16 @@ namespace FightLand_Sever.InGame
         /// </summary>
         public void ReStart()
         {
-                this.tik = this.initTok;
-                this.isStoped = false;
+            this.tik = this.initTok;
+            this.isStoped = false;
         }
 
         /// <summary>
-        /// 将当前计时器从队列中移除
+        /// 给闹钟设置删除标志
         /// </summary>
-        public void DelClock()
+        public void Del()
         {
-            if (clocks.Contains(this)) clocks.Remove(this);
+            this.delFlg = true;
         }
     }
 }

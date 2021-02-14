@@ -26,11 +26,11 @@ namespace FightLand_Sever.InGame
         /// </summary>
         public event EventHandler GameEnd;
 
-        private static long id = 3001;
+        private static long idpool= 3001;
         /// <summary>
         /// 游戏ID
         /// </summary>
-        public string GameID { get; private set; }
+        public long GameID { get; private set; }
         /// <summary>
         /// 指示玩家是否已到齐
         /// </summary>
@@ -67,9 +67,9 @@ namespace FightLand_Sever.InGame
         int btScore = 1; //当局底分
         int multiple = 1; //当局倍数
 
-        public Game(Player p1, Player p2, Player p3, int btScore)
+        public Game(Player p1, Player p2, Player p3, int btScore,long id=-1)
         {
-            this.GameID = (id++).ToString();
+            this.GameID = id>0?(id++):id;
             this.Dodge = false;
             this.clock.TikChange += Clock_TikChange;
             this.clock.Stopped += Clock_Stopped;
@@ -150,7 +150,7 @@ namespace FightLand_Sever.InGame
             if (p == this.p1) this.p1 = null;
             if (p == this.p2) this.p2 = null;
             if (p == this.p3) this.p3 = null;
-            clock.DelClock();
+            clock.Del();
         }
 
         //玩家全部准备后调用
@@ -315,6 +315,7 @@ namespace FightLand_Sever.InGame
             Console.WriteLine(this.p2.Name + "剩余分数:" + this.p2.Mark);
             Console.WriteLine(this.p3.Name + "剩余分数:" + this.p3.Mark);
             this.gameStage = GameStage.结束阶段;
+            this.clock.Del();
             if (this.GameEnd != null) this.GameEnd(this, new EventArgs());
             Log.Print("游戏结束", ConsoleColor.Red);
         }

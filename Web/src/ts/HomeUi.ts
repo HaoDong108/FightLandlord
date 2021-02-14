@@ -16,6 +16,7 @@ namespace HomeUi {
   export var event_创建房间 = "createRoom";
   export var event_信息保存 = "changeinfo";
   export var event_请求房间 = "requstRoom";
+  export var event_进入房间 = "enterRoom";
   export function init() {
     //取消全局鼠标选中以及拖功能
     document.body.ondrag = () => false;
@@ -108,13 +109,11 @@ namespace HomeUi {
     //寻找房间按钮
     $(".create>.indiv").on("click", function (e) {
       if (onloking) {
-        Tools.shwoPrompt("请先取消匹配!", 1500, Tools.PromptIcon.info);
+        Tools.showPrompt("请先取消匹配!", 1500, Tools.PromptIcon.info);
         return;
       }
       e.stopPropagation();
       event.emit(event_请求房间);
-      if ($(".rooms .table .item").length > 0) $(".nullroom").hide();
-      else $(".nullroom").show();
       $(".roombox").fadeIn(500).css("display", "flex");
       let role = $(".roombox>.rolelogo")[0];
       let content = $(".roombox>.center")[0];
@@ -215,11 +214,11 @@ namespace HomeUi {
     $("#icsave").on("click", function () {
       temp_username = (<string>$("#icname").val()).trim();
       if (temp_username.length == 0) {
-        Tools.shwoPrompt("昵称不能为空", 1500);
+        Tools.showPrompt("昵称不能为空", 1500);
         return;
       }
       if ((<string>$("#icname").val()).length > 7) {
-        Tools.shwoPrompt("昵称不能超过7个字符", 1500);
+        Tools.showPrompt("昵称不能超过7个字符", 1500);
         return;
       }
       $(".infochange").fadeOut(500);
@@ -230,7 +229,7 @@ namespace HomeUi {
         .removeClass("icon-nv")
         .addClass(temp_gender == 0 ? "icon-nan" : "icon-nv");
       $("#phead").attr("src", "../static/img/HeadImgs/an" + temp_headid + ".png");
-      Tools.shwoPrompt("保存成功!", 1500, Tools.PromptIcon.ok);
+      Tools.showPrompt("保存成功!", 1500, Tools.PromptIcon.ok);
 
       let ags = {
         name: temp_username,
@@ -362,19 +361,25 @@ namespace HomeUi {
 
       if (!obj.lok) {
         if (!patt.test(obj.pwd)) {
-          Tools.shwoPrompt("房间密码只能是4~8位数字");
+          Tools.showPrompt("房间密码只能是4~8位数字");
           return;
         }
       }
       if (obj.bts < 10 || obj.bts > 1000) {
-        Tools.shwoPrompt("房间底分只能是10~1000");
+        Tools.showPrompt("房间底分只能是10~1000");
         return;
       }
-      event.emit(event_创建房间, { pwd: obj.pwd, bts: obj.lok ? "" : obj.bts });
+      event.emit(event_创建房间, { pwd: obj.lok ? "" : obj.pwd, bts: obj.bts });
     });
-  }
 
-  /**字数限制 */
+    //限制分数和密码输入
+    $("#setbtscore").on("keypress", checkNum);
+    $("#setroompwd").on("keypress", checkNum).keypress();
+  }
+  function checkNum(e: JQuery.KeyPressEvent) {
+    let numcheck = /^\d+$/;
+    return numcheck.test(e.key);
+  }
 
   /**绑定事件 */
   export function addEventLinstener(ev: string, fn: (...ags: any[]) => void) {
@@ -423,12 +428,26 @@ namespace HomeUi {
     div.className = "item";
     div.id = "rom" + roomid;
     div.innerHTML = item;
+    $(div).on("click", () => {
+      event.emit(event_进入房间, roomid);
+    });
     $(".rooms .table").append(div);
   }
 
   /**删除房间 */
   export function removeRoom(rid: string) {
     $("#rom" + rid).remove();
+  }
+
+  /**显示加载遮罩阻塞用户操作 */
+  export function showLoad(mes: string = "加载中...") {
+    $("#lodetext").text(mes);
+    $(".lodepanel").css("display", "flex");
+  }
+
+  /**隐藏加载遮罩 */
+  export function hideLoad() {
+    $(".lodepanel").css("display", "none");
   }
 }
 

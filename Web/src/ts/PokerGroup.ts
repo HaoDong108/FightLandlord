@@ -1,6 +1,6 @@
-import { OutType, PokerValue as PV, PokerFlower as PF, PokerValue, PokerFlower } from "./Model";
+import { PokerValue, PokerFlower, OutPokerType as OutType } from "./Model";
 import Poker from "./Poker";
-import Enumerable from "../lib/linq.js";
+import Enumerable from "linq";
 class PokerGroup {
   public _pkGroup: Poker[] = []; //当前牌组
   /**当前牌组牌型 */

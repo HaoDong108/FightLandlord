@@ -1,12 +1,13 @@
-import { PokerValue, PokerFlower, OutType, BtnSituation, OutDct } from "./Model";
+import { BtnSituation, OutDct, RoomMode } from "./Model";
 import { GameUi } from "./GameUi";
 import Player from "./Player";
 import Game from "./Game";
-import { NetInfoBase, NetPlayer, NetRoom, RoomOrderType } from "./NetInfos";
+import { NetInfoBase, NetPlayer, NetRoom } from "./NetInfos";
+import { RoomOrderType } from "./Model";
 import "../css/gamestyle.css";
 import Tools from "./Tools";
 import Enumerable from "linq";
-import $, { now } from "jquery";
+import $, { type } from "jquery";
 
 var host = window.document.location.host;
 var hostip = host.split(":")[0];
@@ -41,6 +42,10 @@ function init() {
   function f() {
     return false;
   }
+  window.onbeforeunload = () => {
+    Tools.delCookie("pid");
+    Tools.delCookie("roomid");
+  };
   GameUi.showWait("等待其他玩家");
   GameUi.eventBinding();
   $("#roomid").text("房间ID:" + roomid);
@@ -72,8 +77,13 @@ function wsOnMessage(e: MessageEvent) {
   switch (<RoomOrderType>bas.OrderType) {
     case RoomOrderType.回送房间信息: {
       let nr: NetRoom = JSON.parse(jsonData);
-      console.log("房间数据" + jsonData);
+      if (nr.RoomMode == RoomMode.Matched) {
+        GameUi.hideRoomID();
+      } else {
+        GameUi.showRoomID();
+      }
       btScore = nr.BtScore;
+      $(".minScore>span").last().text(btScore);
       //找到我方玩家
       let nown = Enumerable.from(nr.Players).first((w) => w.PlayerID == mypid);
       if (!nown) throw new Error("玩家ID轮空");
@@ -125,6 +135,17 @@ function wsOnMessage(e: MessageEvent) {
       startGame();
       break;
     }
+    case RoomOrderType.踢出玩家: {
+      let pid = bas.Tag;
+      if (pid == ownGamer.playerID) {
+        Tools.showMsbox("你已被房主移出房间!\n 即将返回大厅", () => {
+          //跳转到大厅
+          window.location.href = `http://${hostip}:8080/home.html`;
+        });
+      }
+      removePlayer(pid);
+      break;
+    }
   }
 }
 
@@ -146,6 +167,17 @@ function eventBinding() {
     onReady = true;
     $("#btn_ready").html("已准备");
     wsSend("", RoomOrderType.玩家准备);
+  });
+  $("#ti-lef").on("click", function () {
+    if (lastGamer && ownGamer.isRoomMaster) {
+      wsSend("", RoomOrderType.踢出玩家, lastGamer.playerID);
+    }
+  });
+  $("#ti-rig").on("click", function () {
+    if (nextGamer && ownGamer.isRoomMaster) {
+      wsSend("", RoomOrderType.踢出玩家, nextGamer.playerID);
+      GameUi.restoreInfo(nextGamer.dct);
+    }
   });
 }
 
@@ -180,7 +212,9 @@ function addPlayer(nply: NetPlayer) {
   if (ply.onReady && ply.dct != OutDct.bottom) {
     GameUi.showReady(ply.dct);
   }
+  //设置房主
   if (nply.IsRoomMaster) setMaster(ply);
+  //满员设置关系并触发事件
   if (ownGamer && lastGamer && nextGamer) {
     lastGamer.last = nextGamer;
     nextGamer.next = lastGamer;
@@ -200,13 +234,11 @@ function getPlayer(pid: string): Player {
 function removePlayer(pid: string): void {
   var ply = getPlayer(pid);
   if (!ply) return;
-  if (pid == lastGamer.playerID) {
-    Tools.shwoPrompt("玩家" + lastGamer.userName + "已退出房间");
+  if (lastGamer && pid == lastGamer.playerID) {
     GameUi.restoreInfo(lastGamer.dct);
     lastGamer = null;
   }
-  if (pid == nextGamer.playerID) {
-    Tools.shwoPrompt("玩家" + nextGamer.userName + "已退出房间");
+  if (nextGamer && pid == nextGamer.playerID) {
     GameUi.restoreInfo(nextGamer.dct);
     nextGamer = null;
   }
@@ -235,6 +267,7 @@ function setMaster(p: Player): void {
       nextGamer.isRoomMaster = false;
     }
     p.isRoomMaster = true;
+    Tools.showPrompt(p.userName + "成为房主");
   }
 }
 
@@ -244,9 +277,13 @@ function startGame(): void {
     GameUi.hiadeReady();
     console.log("隐藏");
   }, 500);
+  onStart = true;
+  GameUi.hideRoomID();
   GameUi.hideButton();
   onStart = true;
-  game = new Game(lastGamer, nextGamer, ownGamer, btScore, ws);
+  game = new Game(lastGamer, nextGamer, ownGamer, btScore, ws, () => {
+    game = null;
+  });
 }
 
 /**发送websock数据 */

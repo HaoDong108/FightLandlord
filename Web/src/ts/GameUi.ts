@@ -779,13 +779,19 @@ export namespace GameUi {
   export function setRole(dct: OutDct, id: number) {
     switch (dct) {
       case OutDct.left:
-        $(".role-left").css("background", `url(../static/img/Roles/role${id}.png) no-repeat`).css("background-size", "contain").removeClass("roleask");
+        $(".role-left").css("background", `url(../static/img/Roles/role${id}.png) no-repeat`).css("background-size", "contain");
+        if (id == 0) $(".role-left").addClass("roleask");
+        else $(".role-left").removeClass("roleask");
         break;
       case OutDct.right:
-        $(".role-right").css("background", `url(../static/img/Roles/role${id}.png) no-repeat`).css("background-size", "contain").removeClass("roleaskrig");
+        $(".role-right").css("background", `url(../static/img/Roles/role${id}.png) no-repeat`).css("background-size", "contain");
+        if (id == 0) $(".role-right").addClass("roleask");
+        else $(".role-right").removeClass("roleask");
         break;
       case OutDct.bottom:
-        $(".role-own").css("background", `url(../static/img/Roles/role${id}.png) no-repeat`).css("background-size", "contain").removeClass("roleask");
+        $(".role-own").css("background", `url(../static/img/Roles/role${id}.png) no-repeat`).css("background-size", "contain");
+        if (id == 0) $(".role-own").addClass("roleask");
+        else $(".role-own").removeClass("roleask");
         break;
     }
   }
@@ -999,22 +1005,47 @@ export namespace GameUi {
   /**设置玩家信息*/
   export function setGamerInfo(dct: OutDct, ply: NetPlayer) {
     $(dct == OutDct.left ? "#lef-name" : dct == OutDct.right ? "#rig-name" : "#btm-name").text(ply.Name);
-    $(dct == OutDct.left ? "#lef-id" : dct == OutDct.right ? "#rig-id" : "#btm-id").text(ply.PlayerID);
+    $(dct == OutDct.left ? "#lef-id" : dct == OutDct.right ? "#rig-id" : "#btm-id").text("ID:" + ply.PlayerID);
     $(dct == OutDct.left ? "#slip-lef-name" : dct == OutDct.right ? "#slip-rig-name" : "#slip-btm-name").text(ply.Name);
     $(dct == OutDct.left ? "#slip-lef-ip" : dct == OutDct.right ? "#slip-rig-ip" : "#slip-btm-ip").text(ply.IP);
-    $(dct == OutDct.left ? "#slip-lef-head" : dct == OutDct.right ? "#slip-rig-head" : "#slip-btm-head").attr("../static/img/HeadImgs/an" + ply.HeadID + ".png");
+    $(dct == OutDct.left ? "#slip-lef-head" : dct == OutDct.right ? "#slip-rig-head" : "#slip-btm-head").attr("src", "../static/img/HeadImgs/an" + ply.HeadID + ".png");
     $(dct == OutDct.left ? "#money-lef" : dct == OutDct.right ? "#money-rig" : "#money-btm").text(Tools.markUnitConver(parseInt(ply.Mark)));
+    $(dct == OutDct.left ? ".slippanel .pages .top .lef" : dct == OutDct.right ? ".slippanel .pages .top .rig" : ".slippanel .pages .btm").css("visibility", "visible");
     setRole(dct, ply.RoleID);
   }
 
   /**去除玩家信息 */
   export function restoreInfo(dct: OutDct) {
-    $(dct == OutDct.left ? "#lef-name" : dct == OutDct.right ? "#rig-name" : "#btm-name").text("虚位以待");
-    $(dct == OutDct.left ? "#lef-id" : dct == OutDct.right ? "#rig-id" : "#btm-id").text("ID:");
-    $(dct == OutDct.left ? "#slip-lef-name" : dct == OutDct.right ? "#slip-rig-name" : "#slip-btm-name").text("虚位以待");
+    $(dct == OutDct.left ? "#lef-name" : dct == OutDct.right ? "#rig-name" : "#btm-name").text("");
+    $(dct == OutDct.left ? "#lef-id" : dct == OutDct.right ? "#rig-id" : "#btm-id").text("");
+    $(dct == OutDct.left ? "#slip-lef-name" : dct == OutDct.right ? "#slip-rig-name" : "#slip-btm-name").text("");
     $(dct == OutDct.left ? "#slip-lef-ip" : dct == OutDct.right ? "#slip-rig-ip" : "#slip-btm-ip").text("");
-    $(dct == OutDct.left ? "#slip-lef-head" : dct == OutDct.right ? "#slip-rig-head" : "#slip-btm-head").attr("../static/img/HeadImgs/an0.png");
+    $(dct == OutDct.left ? "#slip-lef-head" : dct == OutDct.right ? "#slip-rig-head" : "#slip-btm-head").attr("src", "../static/img/HeadImgs/an0.png");
     $(dct == OutDct.left ? "#money-lef" : dct == OutDct.right ? "#money-rig" : "#money-btm").text("");
+    $(dct == OutDct.left ? ".slippanel .pages .top .lef" : dct == OutDct.right ? ".slippanel .pages .top .rig" : ".slippanel .pages .btm").css("visibility", "hidden");
+    if (dct != OutDct.bottom) $(dct == OutDct.left ? ".leftGamer .readflg" : ".rightGamer .readflg").hide();
     setRole(dct, 0);
+  }
+
+  /**显示房间ID块 */
+  export function showRoomID() {
+    let div = $(".roomidbox")[0];
+    anime({
+      targets: div,
+      duration: 1000,
+      easing: "linear",
+      top: 0,
+    });
+  }
+
+  /**隐藏房间ID块 */
+  export function hideRoomID() {
+    let div = $(".roomidbox")[0];
+    anime({
+      targets: div,
+      duration: 1000,
+      easing: "linear",
+      top: -($(div).height() + 10),
+    });
   }
 }

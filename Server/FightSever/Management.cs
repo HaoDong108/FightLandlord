@@ -61,82 +61,37 @@ namespace FightLand_Sever
             var p2 = plys[1];
             //为他们创建房间,并添加到房间列表
             var p3 = plys[2];
-            GameRoom r = new GameRoom(p1, 100,RoomModels.Matched, "");
-            r.AddPlayer(p2);
-            r.AddPlayer(p3);
-            rooms.Add(r.RoomID, r);
+            GameRoom room = new GameRoom(p1, 100, RoomModel.Matched, "");
+            room.AddPlayer(p2);
+            room.AddPlayer(p3);
+            room.RoomDestroy += Room_RoomDestroy;
+            AddRoom(room);
             //绑定房间
-            p1.RoomWhich = p2.RoomWhich = p3.RoomWhich = r;
-            r.AllReady += Room_AllReady;
-            Log.Print("房间已生成:ID" + r.RoomID);
-            //发送
-            p1.HallWebsok.SendData(JsonConvert.SerializeObject(new { roomid = r.RoomID, pid = p1.PlayerID }), HallOrderType.房间创建完毕);
-            p2.HallWebsok.SendData(JsonConvert.SerializeObject(new { roomid = r.RoomID, pid = p2.PlayerID }), HallOrderType.房间创建完毕);
-            p3.HallWebsok.SendData(JsonConvert.SerializeObject(new { roomid = r.RoomID, pid = p3.PlayerID }), HallOrderType.房间创建完毕);
+            p1.RoomWhich = p2.RoomWhich = p3.RoomWhich = room;
+            Log.Print("房间已生成:ID" + room.RoomID);
+            //即将进行页面跳转
+            p1.Jumping = p2.Jumping = p3.Jumping = true;
+            //指示匹配成功的玩家进行页面跳转
+            p1.HallWebsok.SendData(JsonConvert.SerializeObject(new { roomid = room.RoomID, pid = p1.PlayerID }), HallOrderType.房间创建完毕);
+            p2.HallWebsok.SendData(JsonConvert.SerializeObject(new { roomid = room.RoomID, pid = p2.PlayerID }), HallOrderType.房间创建完毕);
+            p3.HallWebsok.SendData(JsonConvert.SerializeObject(new { roomid = room.RoomID, pid = p3.PlayerID }), HallOrderType.房间创建完毕);
         }
 
-        private static void Room_AllReady(object sender, EventArgs e)
+        //房间销毁时触发
+        private static void Room_RoomDestroy(object sender, EventArgs e)
         {
-            var rom = sender as GameRoom;
-            var pls = rom.GetPlayers();
-            Game g = new Game(pls[0], pls[1], pls[2],rom.BtScore);
-            onRuningGames.Add(g.GameID, g);
-            g.GameEnd += (s, ev) =>
-            {
-                onRuningGames.Remove(g.GameID);
-                g = null;
-            };
-            rom.BroadCast("", RoomOrderType.开始游戏指令);
+            var room = sender as GameRoom;
+            Log.Print("房间" + room.RoomID + "已销毁");
+            RemoveRoom(room.RoomID.ToString());
         }
 
+        //到达保存周期时触发
         private static void SaveTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             SaveAllPlayerData(); //保存玩家数据
             UpdateRankInfo(); //更新排名信息
         }
 
-        //保存当前所有玩家的数据
-        private static void SaveAllPlayerData()
-        {
-            if (allPlayers.Count == 0) return;
-            foreach (var p in onLinePlayers.Values)
-            {
-                allPlayers[p.IP] = new NetPlayer(p);
-            }
-            foreach (var p in offLinePlayers.Values)
-            {
-                allPlayers[p.IP] = new NetPlayer(p);
-            }
-            var list = allPlayers.Values.ToList();
-            string json = JsonConvert.SerializeObject(list);
-            StreamWriter sw = new StreamWriter(plysDataPath, false, Encoding.UTF8);
-            sw.WriteAsync(json);
-            offLinePlayers.Clear(); //清除离线列表
-            sw.Close();
-            sw.Dispose();
-        }
-
-        //从本地json读取玩家数据
-        private static void ReadPlayers()
-        {
-            allPlayers = new Dictionary<string, NetPlayer>();
-            using (StreamReader sr = new StreamReader(plysDataPath))
-            {
-                string json = sr.ReadToEnd();
-                if (json.Length == 0)
-                {
-                    sr.Close();
-                    return;
-                }
-                var data = JsonConvert.DeserializeObject<List<NetPlayer>>(json);
-                if (data == null)
-                {
-                    sr.Close();
-                    return;
-                }
-                data.ForEach(e => { allPlayers.Add(e.IP, e); });
-            }
-        }
 
         #region 添加
         /// <summary>
@@ -146,6 +101,22 @@ namespace FightLand_Sever
         public static void AddToOnline(Player p)
         {
             onLinePlayers.Add(p.PlayerID, p);
+            p.HallSokDisconnect += (sender) =>
+            {
+                if (!sender.Jumping)
+                {
+                    Log.Print("已将玩家" + sender.Name + "下线");
+                    OffLine(sender.PlayerID);
+                }
+            };
+            p.RoomSokDisconnect += (sender) =>
+            {
+                if (!sender.Jumping)
+                {
+                    Log.Print("已将玩家" + sender.Name + "下线");
+                    OffLine(sender.PlayerID);
+                }
+            };
         }
 
         /// <summary>
@@ -163,7 +134,17 @@ namespace FightLand_Sever
         /// <param name="rom"></param>
         public static void AddRoom(GameRoom rom)
         {
-            rooms.Add(rom.RoomID, rom);
+            rooms.Add(rom.RoomID.ToString(), rom);
+            rom.RoomDestroy += Room_RoomDestroy;
+        }
+
+        /// <summary>
+        /// 添加游戏
+        /// </summary>
+        /// <param name="game"></param>
+        public static void AddGame(Game game)
+        {
+            onRuningGames.Add(game.GameID.ToString(), game);
         }
         #endregion
 
@@ -188,10 +169,16 @@ namespace FightLand_Sever
         /// <param name="rid"></param>
         public static void RemoveRoom(string rid)
         {
-            if (rooms.ContainsKey(rid))
-            {
-                rooms.Remove(rid);
-            }
+            rooms.Remove(rid);
+        }
+
+        /// <summary>
+        /// 删除游戏对局
+        /// </summary>
+        /// <param name="rid"></param>
+        public static void RemoveGame(string rid)
+        {
+
         }
         #endregion
 
@@ -248,6 +235,49 @@ namespace FightLand_Sever
         }
         #endregion
 
+        //保存当前所有玩家的数据
+        private static void SaveAllPlayerData()
+        {
+            if (allPlayers.Count == 0) return;
+            foreach (var p in onLinePlayers.Values)
+            {
+                allPlayers[p.IP] = new NetPlayer(p);
+            }
+            foreach (var p in offLinePlayers.Values)
+            {
+                allPlayers[p.IP] = new NetPlayer(p);
+            }
+            var list = allPlayers.Values.ToList();
+            string json = JsonConvert.SerializeObject(list);
+            StreamWriter sw = new StreamWriter(plysDataPath, false, Encoding.UTF8);
+            sw.WriteAsync(json);
+            offLinePlayers.Clear(); //清除离线列表
+            sw.Close();
+            sw.Dispose();
+        }
+
+        //从本地json读取玩家数据
+        private static void ReadPlayers()
+        {
+            allPlayers = new Dictionary<string, NetPlayer>();
+            using (StreamReader sr = new StreamReader(plysDataPath))
+            {
+                string json = sr.ReadToEnd();
+                if (json.Length == 0)
+                {
+                    sr.Close();
+                    return;
+                }
+                var data = JsonConvert.DeserializeObject<List<NetPlayer>>(json);
+                if (data == null)
+                {
+                    sr.Close();
+                    return;
+                }
+                data.ForEach(e => { allPlayers.Add(e.IP, e); });
+            }
+        }
+
         /// <summary>
         /// 更新所有玩家的排名信息
         /// </summary>
@@ -264,7 +294,6 @@ namespace FightLand_Sever
             });
         }
 
-
         /// <summary>
         /// 判断玩家当前是否在线
         /// </summary>
@@ -273,6 +302,16 @@ namespace FightLand_Sever
         public static bool HasPlayerInOnline(string pid)
         {
             return onLinePlayers.ContainsKey(pid);
+        }
+
+        /// <summary>
+        /// 判断是否存在该房间
+        /// </summary>
+        /// <param name="rid"></param>
+        /// <returns></returns>
+        public static bool HasRoom(string rid)
+        {
+            return rooms.ContainsKey(rid);
         }
 
         /// <summary>

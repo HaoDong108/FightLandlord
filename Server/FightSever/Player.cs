@@ -36,22 +36,27 @@ namespace FightLand_Sever
         /// 玩家昵称
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
         /// 玩家IP
         /// </summary>
         public string IP { get; private set; }
+
         /// <summary>
         /// 玩家唯一ID
         /// </summary>
         public string PlayerID { get; private set; }
+
         /// <summary>
         /// 剩余金钱
         /// </summary>
         public long Mark { get; set; }
+
         /// <summary>
         /// 客户终端信息
         /// </summary>
         public IPEndPoint Ipend { get; private set; }
+
         /// <summary>
         /// 当前关联的游戏对象
         /// </summary>
@@ -66,10 +71,12 @@ namespace FightLand_Sever
         /// 房间内连接对象
         /// </summary>
         public RoomChat RoomWebsok { get; private set; }
+
         /// <summary>
         /// 大厅连接对象
         /// </summary>
         public HallChat HallWebsok { get; private set; }
+
         /// <summary>
         /// 上一个玩家=>左
         /// </summary>
@@ -79,18 +86,22 @@ namespace FightLand_Sever
         /// 下一个玩家=>右
         /// </summary>
         public Player NextPlayer { get; set; }
+
         /// <summary>
         /// 性别 0男 1女
         /// </summary>
         public int Gender { get; set; }
+
         /// <summary>
         /// 人物展示编号
         /// </summary>
         public int RoleID { get; set; }
+
         /// <summary>
         /// 头像编号
         /// </summary>
         public int HeadID { get; set; }
+
         /// <summary>
         /// 指示该玩家是否是房主
         /// </summary>
@@ -105,18 +116,20 @@ namespace FightLand_Sever
         /// 指示玩家是否已经连接到房间
         /// </summary>
         public bool ConnectRoom { get { return (this.RoomWebsok != null&&!this.RoomWebsok.IsDisconnect); } }
+
+        /// <summary>
+        /// 指示玩家是否即将进行页面跳转
+        /// </summary>
+        public bool Jumping { get; set; }
         #endregion
 
-        public event EventHandler RoomSokDisconnect;  //房间连接断开时触发
+        public event Action<Player> RoomSokDisconnect;  //房间连接断开时触发
+        public event Action<Player> HallSokDisconnect;  //大厅连接断开时触发 
         public event Action<Player, NetInfoBase> OnGameData; //收到数据触发
         public List<NetPoker> handPk = new List<NetPoker>();
 
-
-        public Player(HallChat hsok)
+        public Player()
         {
-            this.IsRoomMaster = false;
-            this.IP = hsok.IP;
-            this.HallWebsok = hsok;
             //默认信息
             this.Mark = 3000;
             this.PlayerID = id++.ToString();
@@ -125,12 +138,11 @@ namespace FightLand_Sever
             this.HeadID = 1;
             this.RoleID = 1;
             this.IsRoomMaster = false;
+            this.Jumping = false;
         }
 
-        public Player(HallChat hsok, NetPlayer p)
+        public Player(NetPlayer p)
         {
-            this.HallWebsok = hsok;
-            this.IP = hsok.IP;
             this.Name = p.Name;
             this.PlayerID = p.PlayerID;
             this.RoleID = p.RoleID;
@@ -138,7 +150,7 @@ namespace FightLand_Sever
             this.Gender = p.Gender;
             this.IP = p.IP;
             this.HeadID = int.Parse(p.HeadID);
-            this.IsRoomMaster = false;
+            this.IsRoomMaster = p.IsRoomMaster;
         }
 
         /// <summary>
@@ -178,8 +190,19 @@ namespace FightLand_Sever
         public void SetRoomWebSok(RoomChat chat)
         {
             this.RoomWebsok = chat;
-            chat.OnClosed += RoomChat_OnClosed;
+            chat.OnDisconnetc += RoomChat_OnClosed;
             chat.OnGameData += (s, e) => { if(this.OnGameData!=null) this.OnGameData(this, e); };
+        }
+
+        /// <summary>
+        /// 设置大厅连接对象
+        /// </summary>
+        /// <param name="chat"></param>
+        public void SetHallWebSok(HallChat hsok)
+        {
+            this.IP = hsok.IP;
+            this.HallWebsok = hsok;
+            hsok.OnDisConnect += HallChat_OnClosed;
         }
 
         public void SendRoomData(string data, RoomOrderType order, string tag = "")
@@ -221,11 +244,23 @@ namespace FightLand_Sever
             }
         }
 
-        private void RoomChat_OnClosed(object sender, EventArgs e)
+        //CallBack->房间连接断开触发
+        private void RoomChat_OnClosed(RoomChat sender)
         {
+            this.RoomWebsok = null;
             if (RoomSokDisconnect != null)
             {
-                RoomSokDisconnect(this, new EventArgs());
+                RoomSokDisconnect(this);
+            }
+        }
+
+        //CallBack->大厅连接断开触发
+        private void HallChat_OnClosed(HallChat sender)
+        {
+            this.HallWebsok = null;
+            if (this.HallSokDisconnect!=null)
+            {
+                this.HallSokDisconnect(this);
             }
         }
     }

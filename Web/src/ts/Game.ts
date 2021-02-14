@@ -1,4 +1,4 @@
-import { PokerValue, PokerFlower, OutType, BtnSituation, OutDct, GameStage } from "./Model";
+import { OutPokerType as OutType, BtnSituation, OutDct, GameStage } from "./Model";
 import PokerGroup from "./PokerGroup";
 import Poker from "./Poker";
 import { GameUi } from "./GameUi";
@@ -6,7 +6,8 @@ import Player from "./Player";
 import anime from "animejs";
 import $ from "jquery";
 import Enumerable from "../lib/linq.js";
-import { NetPkGroup, NetPlayer, NetPoker, NetInfoBase, GameOrderType, NetStaData } from "./NetInfos";
+import { GameOrderType } from "./Model";
+import { NetPoker, NetInfoBase, NetStaData } from "./NetInfos";
 import { EventEmitter } from "events";
 import Tools from "./Tools";
 
@@ -59,26 +60,6 @@ class Game {
     return this.pmy_count;
   }
 
-  constructor(plast: Player, pnext: Player, pmy: Player, btScore: number, ws: WebSocket, overcallback?: () => void) {
-    this.btScore = btScore;
-    this.ws = ws;
-    var tis = this;
-    if (overcallback) {
-      this.event.once(this.event_GameOver, overcallback);
-    }
-    ws.addEventListener("message", function (e: MessageEvent<string>) {
-      tis.onGameOrder(e.data);
-    });
-    $(".minScore>span:last-child").text(btScore);
-    pmy.game = this;
-    plast.game = this;
-    pnext.game = this;
-    this.p_my = pmy;
-    this.p_lef = pnext;
-    this.p_rig = plast;
-    this.init();
-  }
-
   set multiple(value: number) {
     if (value == this._multiple) return;
     this._multiple = value;
@@ -104,6 +85,26 @@ class Game {
   }
   get landLord() {
     return this._landLord;
+  }
+
+  constructor(plast: Player, pnext: Player, pmy: Player, btScore: number, ws: WebSocket, overcallback?: () => void) {
+    this.btScore = btScore;
+    this.ws = ws;
+    var tis = this;
+    if (overcallback) {
+      this.event.once(this.event_GameOver, overcallback);
+    }
+    ws.addEventListener("message", function (e: MessageEvent<string>) {
+      tis.onGameOrder(e.data);
+    });
+    $(".minScore>span:last-child").text(btScore);
+    pmy.game = this;
+    plast.game = this;
+    pnext.game = this;
+    this.p_my = pmy;
+    this.p_lef = pnext;
+    this.p_rig = plast;
+    this.init();
   }
 
   private init() {
@@ -292,6 +293,7 @@ class Game {
       }
 
       case GameOrderType.发我方手牌: {
+        $(".pokerNum").text(17);
         var npks = <NetPoker[]>JSON.parse(bas.JsonData);
         var pks = Poker.npksToPks(npks);
         var pg = new PokerGroup(pks);
@@ -354,6 +356,7 @@ class Game {
 
       case GameOrderType.有玩家胜出: {
         let info = <NetStaData>JSON.parse(bas.JsonData);
+        GameUi.hideClock();
         this.statistics(info);
         this.event.emit(this.event_GameOver);
       }

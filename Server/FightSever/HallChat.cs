@@ -39,8 +39,10 @@ namespace FightLand_Sever.Hall
         /// </summary>
         public Player BindPlayer { get; private set; }
 
-
-        public HallChat() { }
+        public HallChat()
+        {
+           
+        }
 
         /// <summary>
         /// 发送数据到客户端
@@ -72,25 +74,49 @@ namespace FightLand_Sever.Hall
                 IsFirstLogin = isflogin //指示该玩家是否为第一次登陆
             };
             var json = JsonConvert.SerializeObject(obj);
-            this.SendData(json, HallOrderType.大厅基本数据);
+            this.SendData(json, HallOrderType.返回大厅数据);
         }
-
+        
         protected override async Task OnMessage(MessageEventArgs e)
         {
             using (var rs = new System.IO.StreamReader(e.Data))
             {
                 string json = rs.ReadToEnd();
-                NetInfoBase hallbase = JsonConvert.DeserializeObject<NetInfoBase>(json);
+                NetInfoBase bas = JsonConvert.DeserializeObject<NetInfoBase>(json);
                 Player ply = this.BindPlayer;
-                json = hallbase.JsonData;
-                if (hallbase != null && this.OnHallOrder != null)
+                json = bas.JsonData;
+                if (bas != null && this.OnHallOrder != null)
                 {
-                    this.OnHallOrder(this, hallbase);
+                    this.OnHallOrder(this, bas);
                 }
                 try
                 {
-                    switch ((HallOrderType)hallbase.OrderType)
+                    switch ((HallOrderType)bas.OrderType)
                     {
+                        case HallOrderType.请求大厅数据:
+                            {
+                                //绑定IP
+                                this.IP = base.Context.UserEndPoint.Address.ToString();
+                                Log.Print("玩家" + this.IP + "已连接到服务器");
+                                Log.Print("Hash:" + this.GetHashCode());
+                                string pid = bas.Tag;
+                                Player py = null;
+                                if (Management.HasPlayerInOnline(pid))
+                                {
+                                    py = Management.GetOnlinePlayer(pid);
+                                }
+                                if(py==null||(py!=null&&!py.Jumping))
+                                {
+                                    py = new Player();
+                                    py.SetHallWebSok(this);
+                                    Management.AddToOnline(py);
+                                }
+                                py.Jumping = false; //取消跳转标识
+                                this.BindPlayer = py;
+                                this.SendHallData(new NetPlayer(py), false);
+                                if (this.OnConnect != null) this.OnConnect(this);
+                                break;
+                            }
                         case HallOrderType.进入匹配队列:
                             {
                                 MatchingQueue.Enqueue(ply);
@@ -121,7 +147,7 @@ namespace FightLand_Sever.Hall
                                 {
                                     return new NetRoom()
                                     {
-                                        RoomID=r.RoomID,
+                                        RoomID=r.RoomID.ToString(),
                                         BtScore = r.BtScore,
                                         MasterName = r.RoomMaster.Name,
                                         MasterHead = r.RoomMaster.HeadID,
@@ -134,8 +160,11 @@ namespace FightLand_Sever.Hall
                         case HallOrderType.创建房间:
                             {
                                 var rom = JsonConvert.DeserializeAnonymousType(json, new {pwd = "", bts = 0 });
-                                GameRoom room = new GameRoom(ply, rom.bts,RoomModels.Room, rom.pwd);
+                                GameRoom room = new GameRoom(ply, rom.bts,RoomModel.Room, rom.pwd);
+                                ply.RoomWhich = room;
+                                ply.Jumping = true;
                                 Management.AddRoom(room);
+                                this.SendData(JsonConvert.SerializeObject(new { pid = BindPlayer.PlayerID, roomid = room.RoomID }), HallOrderType.房间创建完毕);
                                 break;
                             }
                     }
@@ -156,36 +185,6 @@ namespace FightLand_Sever.Hall
         protected override async Task OnError(ErrorEventArgs e)
         {
             Console.WriteLine("错误:" + e.Message);
-        }
-
-        protected override async Task OnOpen()
-        {
-            //绑定IP
-            this.IP = base.Context.UserEndPoint.Address.ToString();
-            Log.Print("玩家" + this.IP + "已连接到服务器");
-            Log.Print("Hash:" + this.GetHashCode());
-
-            //决定读取玩家或者添加新的玩家
-            Player p = null;
-            bool IsFirstLogin = false;
-            ////如果玩家存不在数据表中则生成新的数据
-            //if (!Management.hasPlayer(this.IP))
-            //{
-            //IsFirstLogin = true;
-            p = new Player(this);
-            //Management.AddToData(new NetPlayer(p));
-            //}
-            //else
-            //{
-            //p = new Player(this, Management.GetPlayerData(this.IP));
-            //}
-            //将玩家添加到当前在线列表
-            Management.AddToOnline(p);
-            //绑定该玩家
-            this.BindPlayer = p;
-            //发送大厅数据
-            SendHallData(new NetPlayer(p), IsFirstLogin);
-            if (this.OnConnect != null) this.OnConnect(this);
         }
     }
 }

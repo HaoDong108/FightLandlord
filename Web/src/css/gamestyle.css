@@ -913,6 +913,11 @@ img {
   display: flex;
   justify-content: space-between;
 }
+#pg-mmt .lef,
+#pg-mmt .rig,
+#pg-mmt .btm {
+  visibility: hidden;
+}
 #pg-mmt > .top > div {
   width: 50%;
   height: 100%;

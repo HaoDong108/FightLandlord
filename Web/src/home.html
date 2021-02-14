@@ -263,10 +263,12 @@
                 <input type="checkbox" id="roomlock" class="slider-input" />
                 <label for="roomlock" class="slider-label"></label>
               </div>
+
               <div>
                 <span>房间密码:</span>
                 <input readonly="readonly" type="text" id="setroompwd" placeholder="4~8位房间密码" />
               </div>
+
               <div>
                 <span>对局底分:</span>
                 <input type="number" id="setbtscore" placeholder="10~1000" />
@@ -275,6 +277,19 @@
             <div class="btm flex-center">
               <button id="rsetting-createroom" class="homebtn homebtn-color-cyan">创建</button>
               <button id="rsetting-quit" class="homebtn homebtn-color-red">取消</button>
+            </div>
+          </div>
+        </div>
+        <!-- 加载弹出层 -->
+        <div class="loadpanel mask">
+          <div>
+            <div class="top">
+              <div class="center iconfont icon-spades">
+                <div class="load"></div>
+              </div>
+            </div>
+            <div class="btm">
+              <div class="text">加载中...</div>
             </div>
           </div>
         </div>

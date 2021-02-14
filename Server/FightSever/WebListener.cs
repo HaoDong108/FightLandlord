@@ -7,6 +7,11 @@ using System.Net;
 using System.Web;
 using System.Threading;
 using System.IO;
+using System.Text.RegularExpressions;
+using System.Collections;
+using System.Collections.Specialized;
+using FightLand_Sever.Model.Net;
+using Newtonsoft.Json;
 
 namespace FightLand_Sever
 {
@@ -18,9 +23,15 @@ namespace FightLand_Sever
      */
     static class WebListener
     {
-    
+
+        public delegate void PostMessageEventHandler(PostEventArgs e);
+        /// <summary>
+        /// 收到Post请求时触发
+        /// </summary>
+        public static event PostMessageEventHandler OnPostMessage;
+
         static HttpListener fileListener = new HttpListener(); //监听文0件请求
-        
+
         static string ProjectsDir = @"D:\Desktop\Work\ServerOrWeb\FightLandlord\Web\dist";
         static string RootDir = @"D:\Desktop\Work\ServerOrWeb\FightLandlord\Web";
         static bool stopped = true;
@@ -42,7 +53,7 @@ namespace FightLand_Sever
         /// <summary>
         /// 启动http监听 以及websocket监听
         /// </summary>
-        public static void  StartListen ()
+        public static void StartListen()
         {
             Log.Print("WebListener监听器已启动...");
             stopped = false;
@@ -98,14 +109,18 @@ namespace FightLand_Sever
             var stream = rp.OutputStream;
             switch (rq.HttpMethod)
             {
+                case "HEAD":
+                    GET_HEAD_HttpMethonHandle(ctx,false);
+                    break;
                 case "GET":
-                    GET_HttpMethonHandle(ctx);
+                    GET_HEAD_HttpMethonHandle(ctx);
                     break;
                 case "POST":
                     POST_HttpMethonHandle(ctx);
                     break;
                 default:
                     rp.StatusCode = 501;
+                    rp.StatusDescription = "服务器对该请求方法不支持";
                     byte[] by = Encoding.UTF8.GetBytes("501 服务器对该请求方法不支持");
                     rp.ContentType = MimeMapping.GetMimeMapping(".txt") + ";charset=UTF-8";
                     rp.ContentLength64 = by.Length;
@@ -115,7 +130,7 @@ namespace FightLand_Sever
             }
         }
 
-        private static void GET_HttpMethonHandle(HttpListenerContext ctx)
+        private static void GET_HEAD_HttpMethonHandle(HttpListenerContext ctx,bool isget=true)
         {
             var rq = ctx.Request;
             var rp = ctx.Response;
@@ -142,11 +157,15 @@ namespace FightLand_Sever
                         string rmid = rq.QueryString.Get("roomid");
                         //（过滤恶意请求）
                         //判断该玩家是否在线
-                        if (Management.HasPlayerInOnline(pid))
+                        if (Management.HasPlayerInOnline(pid) && Management.HasRoom(rmid))
                         {
                             //判断玩家是否已经连接到了房间
                             var p = Management.GetOnlinePlayer(pid);
-                            if (!p.ConnectRoom) get = true;
+                            if (!p.ConnectRoom)
+                            {
+                                get = true;
+                                p.Jumping = true;
+                            }
                         }
                     }
                     //不满足条件则重定向
@@ -156,7 +175,7 @@ namespace FightLand_Sever
                         return;
                     }
                 }
-                rp.Return200(fullpath);
+                rp.Return200(fullpath,isget);
             }
             else
             {
@@ -167,7 +186,21 @@ namespace FightLand_Sever
 
         private static void POST_HttpMethonHandle(HttpListenerContext ctx)
         {
-
+            var rq = ctx.Request;
+            var rp = ctx.Response;
+            var pid = rq.Headers["PlayerID"];
+            if (string.IsNullOrEmpty(pid))
+            {
+                rp.ReturnStatusCode(401);
+                return;
+            }
+            if (!Management.HasPlayerInOnline(pid))
+            {
+                rp.ReturnStatusCode(403);
+                return;
+            }
+            var e = new PostEventArgs(ctx);
+            if (rq.HasEntityBody&&e.Data!=null&&OnPostMessage != null) OnPostMessage(e);
         }
 
         //网页重定向
@@ -178,9 +211,13 @@ namespace FightLand_Sever
             rp.Close();
         }
 
+        /// <summary>
+        /// 请求资源无法找到
+        /// </summary>
+        /// <param name="rp"></param>
         private static void Return404(this HttpListenerResponse rp)
         {
-           
+
             rp.StatusCode = 404;
             byte[] by = Encoding.UTF8.GetBytes("404 请求资源不存在");
             rp.ContentType = MimeMapping.GetMimeMapping(".txt") + ";charset=UTF-8";
@@ -189,13 +226,31 @@ namespace FightLand_Sever
             rp.Close();
         }
 
-        private static void Return200(this HttpListenerResponse rp,string fullpath)
+        /// <summary>
+        /// 成功，返回资源
+        /// </summary>
+        /// <param name="rp"></param>
+        /// <param name="fullpath"></param>
+        private static void Return200(this HttpListenerResponse rp, string fullpath,bool hasBody=true)
         {
             rp.StatusCode = 200;
             byte[] by = GetFileData(fullpath);
             rp.ContentType = MimeMapping.GetMimeMapping(fullpath) + ";charset=UTF-8";
             rp.ContentLength64 = by.Length;
-            rp.OutputStream.Write(by, 0, by.Length);
+            if(hasBody) rp.OutputStream.Write(by, 0, by.Length);
+            rp.Close();
+        }
+
+        /// <summary>
+        /// 不返回除状态码外其他任何信息
+        /// </summary>
+        /// <param name="rp"></param>
+        /// <param name="code"></param>
+        private static void ReturnStatusCode(this HttpListenerResponse rp,int code)
+        {
+            rp.StatusCode = code;
+            rp.ContentType = MimeMapping.GetMimeMapping(".txt") + ";charset=UTF-8";
+            rp.ContentLength64 = 0;
             rp.Close();
         }
 
@@ -208,6 +263,67 @@ namespace FightLand_Sever
                 fs.Read(bys, 0, bys.Length);
                 return bys;
             }
+        }
+    }
+
+    class PostEventArgs : EventArgs
+    {
+        public HttpListenerRequest Request { get; private set; }
+        public ResponseSend ResponseSend { get; private set; }
+        public NetInfoBase Data { get; private set; }
+        public Player Sender { get; private set; }
+        public PostEventArgs(HttpListenerContext ctx)
+        {
+            var rq = ctx.Request;
+            this.Request = rq;
+            this.ResponseSend = new ResponseSend(ctx.Response);
+            var pid = rq.Headers["PlayerID"];
+            this.Sender = Management.GetOnlinePlayer(pid);
+            if (rq.HasEntityBody)
+            {
+                using (var body = rq.InputStream)
+                {
+                    using (var stream = new StreamReader(body, rq.ContentEncoding))
+                    {
+                        try
+                        {
+                            this.Data = JsonConvert.DeserializeObject<NetInfoBase>(stream.ReadToEnd());
+                        }
+                        catch (Exception)
+                        {
+                            this.Data = null;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                this.Data = null;
+            }
+        }
+    }
+    class ResponseSend
+    {
+        private HttpListenerResponse response;
+
+        public ResponseSend(HttpListenerResponse response)
+        {
+            this.response = response;
+        }
+
+        /// <summary>
+        /// 发送json
+        /// </summary>
+        /// <param name="json"></param>
+        public void SendJson(string json)
+        {
+            response.ContentType = MimeMapping.GetMimeMapping(".json") + ";charset=UTF-8";
+            byte[] by = Encoding.UTF8.GetBytes(json);
+            response.ContentLength64 = by.Length;
+            response.StatusCode = 200;
+            this.response.OutputStream.Write(by, 0, by.Length);
+            this.response.OutputStream.Close();
+            response.Close();
         }
     }
 }

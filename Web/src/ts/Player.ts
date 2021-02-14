@@ -1,9 +1,8 @@
-import { OutType, PokerValue as PV, PokerFlower as PF, OutDct } from "./Model";
+import { OutDct } from "./Model";
 import PokerGroup from "./PokerGroup";
-import $ from "jquery";
 import Game from "./Game";
 import Poker from "./Poker";
-import { GameOrderType, NetPlayer } from "./NetInfos";
+import { NetPlayer } from "./NetInfos";
 class Player {
   /**昵称 */
   public userName: string;

@@ -207,4 +207,81 @@
   font-size: 20px;
 }
 
-
+/* 加载遮罩层 */
+.loadpanel {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}
+.loadpanel > div {
+  height: 100px;
+  border-radius: 10px;
+  background-color: rgba(29, 28, 28, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 5px 30px;
+  box-sizing: initial;
+}
+.loadpanel .top,
+.loadpanel .btm {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loadpanel .top .center {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  text-align: center;
+  line-height: 60px;
+  transform-style: preserve-3d;
+  transform: translateZ(50px);
+}
+.loadpanel .top .center::before {
+  color: white;
+  font-size: 1.7rem;
+  display: inline-block;
+  animation: roley 1.5s linear infinite;
+}
+@keyframes roley {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+.loadpanel .top .center .load {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 5px solid rgba(255, 255, 255, 0.4);
+  border-top: 5px solid white;
+  border-radius: 50%;
+  animation: load 1.5s linear infinite;
+}
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loadpanel .btm {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-top: 5px;
+}
+.loadpanel .btm > div {
+  font-size: 1.1rem;
+  color: white;
+  text-align: center;
+}

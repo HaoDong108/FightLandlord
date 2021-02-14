@@ -802,7 +802,7 @@ div::-webkit-scrollbar-thumb:hover {
   flex-grow: 1;
 }
 .roombox .section > .rooms > .nullroom {
-  display: block;
+  display: none;
   position: absolute;
   width: 100%;
   top: 48%;
@@ -877,7 +877,7 @@ div::-webkit-scrollbar-thumb:hover {
   transform: translateX(4px) translateY(4px);
   background-color: white;
   box-shadow: 2px 2px 0px rgb(218, 216, 216);
-  transition: all 0.2s;
+  /* transition: all 0.2s; */
 }
 .roombox .section > .rooms .item > .roomid {
   position: absolute;

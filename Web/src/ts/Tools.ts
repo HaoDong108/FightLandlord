@@ -39,10 +39,29 @@ namespace Tools {
     return "";
   }
 
+  /**删除cookie中所有定变量函数 */
+  export function clearCookie() {
+    var myDate = new Date();
+    myDate.setTime(-1000); //设置时间
+    var data = document.cookie;
+    var dataArray = data.split("; ");
+    for (var i = 0; i < dataArray.length; i++) {
+      var varName = dataArray[i].split("=");
+      document.cookie = varName[0] + "=''; expires=" + myDate.toUTCString();
+    }
+  }
+
+  /**删除指定cookie */
+  export function delCookie(name: string) {
+    var myDate = new Date();
+    myDate.setTime(-1000); //设置时间
+    document.cookie = `${name}='';expires=${myDate.toUTCString()}`;
+  }
+
   /**在界面显示提示信息 */
-  export function shwoPrompt(text: string, showtime: number = 1000, icon: PromptIcon = PromptIcon.info) {
+  export function showPrompt(text: string, showtime: number = 1000, icon: PromptIcon = PromptIcon.info) {
     let info = $(document.createElement("span")).text("i").addClass("inf ico");
-    let erro = $(document.createElement("span")).text("✘").addClass("erro ico");
+    let erro = $(document.createElement("span")).text("X").addClass("erro ico");
     let ok = $(document.createElement("span")).text("✔").addClass("succ ico");
     let div = document.createElement("div");
     div.innerHTML = `<span class="innertext">${text}</span>`;
