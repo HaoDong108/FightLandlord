@@ -16,7 +16,8 @@ namespace HomeUi {
   export var event_创建房间 = "createRoom";
   export var event_信息保存 = "changeinfo";
   export var event_请求房间 = "requstRoom";
-  export var event_进入房间 = "enterRoom";
+  export var event_进入房间界面 = "enterRoomView";
+  export var event_退出房间界面 = "outRoomView";
   export function init() {
     //取消全局鼠标选中以及拖功能
     document.body.ondrag = () => false;
@@ -159,6 +160,7 @@ namespace HomeUi {
     $("#quitroom").on("click", function (e) {
       e.stopPropagation();
       if (rombtlock) return;
+      event.emit(event_退出房间界面);
       rombtlock = true;
       let role = $(".roombox>.rolelogo")[0];
       let content = $(".roombox>.center")[0];
@@ -429,7 +431,7 @@ namespace HomeUi {
     div.id = "rom" + roomid;
     div.innerHTML = item;
     $(div).on("click", () => {
-      event.emit(event_进入房间, roomid);
+      event.emit(event_进入房间界面, roomid);
     });
     $(".rooms .table").append(div);
   }

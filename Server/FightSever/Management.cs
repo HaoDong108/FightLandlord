@@ -33,9 +33,17 @@ namespace FightLand_Sever
         // 所有玩家对象(IP:Player)
         static Dictionary<string, NetPlayer> allPlayers = new Dictionary<string, NetPlayer>();
 
+        //正在进行下线倒计时的玩家
+        static Dictionary<string, Clock> soonOffline = new Dictionary<string, Clock>();
+
+        //WebSocket服务器对象
         static WebSocketServer gameWs = null;
 
-        static Timer saveTimer = new Timer(60000);//数据定时存储器
+        //数据定时存储器
+        static Timer saveTimer = new Timer(60000);
+
+        //定时向所有玩家推送房间排名信息
+        //static Timer putInfoTimer = new Timer(3000);
 
         static string plysDataPath = Environment.CurrentDirectory + "\\PlayerDatas.json";//玩家数据文件
 
@@ -69,8 +77,6 @@ namespace FightLand_Sever
             //绑定房间
             p1.RoomWhich = p2.RoomWhich = p3.RoomWhich = room;
             Log.Print("房间已生成:ID" + room.RoomID);
-            //即将进行页面跳转
-            p1.Jumping = p2.Jumping = p3.Jumping = true;
             //指示匹配成功的玩家进行页面跳转
             p1.HallWebsok.SendData(JsonConvert.SerializeObject(new { roomid = room.RoomID, pid = p1.PlayerID }), HallOrderType.房间创建完毕);
             p2.HallWebsok.SendData(JsonConvert.SerializeObject(new { roomid = room.RoomID, pid = p2.PlayerID }), HallOrderType.房间创建完毕);
@@ -89,9 +95,78 @@ namespace FightLand_Sever
         private static void SaveTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             SaveAllPlayerData(); //保存玩家数据
-            UpdateRankInfo(); //更新排名信息
         }
 
+        //玩家连接断开时触发
+        private static void PlayerDisConnect(Player sender)
+        {
+            Clock c = new Clock(3);
+            c.Start();
+            c.TagPlayer = sender;
+            c.OverTime += (s) =>
+            {
+                Log.Print("已将玩家" + sender.Name + "下线");
+                OffLine(sender.PlayerID);
+                soonOffline.Remove(sender.PlayerID);
+            };
+            //将玩家添加进下线倒计时队列
+            soonOffline.Add(sender.PlayerID, c);
+        }
+
+        //玩家成功连接到服务器时触发
+        private static void PlayerConnect(Player sender)
+        {
+            //如果即将下线队列中有该玩家则停止计时并删除
+            if (soonOffline.ContainsKey(sender.PlayerID))
+            {
+                soonOffline[sender.PlayerID].Stop().Del();
+                soonOffline.Remove(sender.PlayerID);
+                Log.Print("玩家" + sender.Name + "重连成功");
+            }
+        }
+
+        //保存当前所有玩家的数据
+        private static void SaveAllPlayerData()
+        {
+            if (allPlayers.Count == 0) return;
+            foreach (var p in onLinePlayers.Values)
+            {
+                allPlayers[p.IP] = new NetPlayer(p);
+            }
+            foreach (var p in offLinePlayers.Values)
+            {
+                allPlayers[p.IP] = new NetPlayer(p);
+            }
+            var list = allPlayers.Values.ToList();
+            string json = JsonConvert.SerializeObject(list);
+            StreamWriter sw = new StreamWriter(plysDataPath, false, Encoding.UTF8);
+            sw.WriteAsync(json);
+            offLinePlayers.Clear(); //清除离线列表
+            sw.Close();
+            sw.Dispose();
+        }
+
+        //从本地json读取玩家数据
+        private static void ReadPlayers()
+        {
+            allPlayers = new Dictionary<string, NetPlayer>();
+            using (StreamReader sr = new StreamReader(plysDataPath))
+            {
+                string json = sr.ReadToEnd();
+                if (json.Length == 0)
+                {
+                    sr.Close();
+                    return;
+                }
+                var data = JsonConvert.DeserializeObject<List<NetPlayer>>(json);
+                if (data == null)
+                {
+                    sr.Close();
+                    return;
+                }
+                data.ForEach(e => { allPlayers.Add(e.IP, e); });
+            }
+        }
 
         #region 添加
         /// <summary>
@@ -100,23 +175,12 @@ namespace FightLand_Sever
         /// <param name="p"></param>
         public static void AddToOnline(Player p)
         {
+            if (onLinePlayers.ContainsKey(p.PlayerID)) return;
             onLinePlayers.Add(p.PlayerID, p);
-            p.HallSokDisconnect += (sender) =>
-            {
-                if (!sender.Jumping)
-                {
-                    Log.Print("已将玩家" + sender.Name + "下线");
-                    OffLine(sender.PlayerID);
-                }
-            };
-            p.RoomSokDisconnect += (sender) =>
-            {
-                if (!sender.Jumping)
-                {
-                    Log.Print("已将玩家" + sender.Name + "下线");
-                    OffLine(sender.PlayerID);
-                }
-            };
+            p.HallConnect += PlayerConnect;
+            p.RoomSokConnect += PlayerConnect;
+            p.HallSokDisconnect += PlayerDisConnect;
+            p.RoomSokDisconnect += PlayerDisConnect;
         }
 
         /// <summary>
@@ -235,70 +299,10 @@ namespace FightLand_Sever
         }
         #endregion
 
-        //保存当前所有玩家的数据
-        private static void SaveAllPlayerData()
-        {
-            if (allPlayers.Count == 0) return;
-            foreach (var p in onLinePlayers.Values)
-            {
-                allPlayers[p.IP] = new NetPlayer(p);
-            }
-            foreach (var p in offLinePlayers.Values)
-            {
-                allPlayers[p.IP] = new NetPlayer(p);
-            }
-            var list = allPlayers.Values.ToList();
-            string json = JsonConvert.SerializeObject(list);
-            StreamWriter sw = new StreamWriter(plysDataPath, false, Encoding.UTF8);
-            sw.WriteAsync(json);
-            offLinePlayers.Clear(); //清除离线列表
-            sw.Close();
-            sw.Dispose();
-        }
-
-        //从本地json读取玩家数据
-        private static void ReadPlayers()
-        {
-            allPlayers = new Dictionary<string, NetPlayer>();
-            using (StreamReader sr = new StreamReader(plysDataPath))
-            {
-                string json = sr.ReadToEnd();
-                if (json.Length == 0)
-                {
-                    sr.Close();
-                    return;
-                }
-                var data = JsonConvert.DeserializeObject<List<NetPlayer>>(json);
-                if (data == null)
-                {
-                    sr.Close();
-                    return;
-                }
-                data.ForEach(e => { allPlayers.Add(e.IP, e); });
-            }
-        }
-
-        /// <summary>
-        /// 更新所有玩家的排名信息
-        /// </summary>
-        private static void UpdateRankInfo()
-        {
-            var rks = GetAllPlayers().OrderBy(e => long.Parse(e.Mark)).ToArray();
-            var json = JsonConvert.SerializeObject(rks);
-            Task.Run(() =>
-            {
-                foreach (var p in onLinePlayers.Values)
-                {
-                    p.HallWebsok.SendData(json, HallOrderType.更新排名信息);
-                }
-            });
-        }
-
         /// <summary>
         /// 判断玩家当前是否在线
         /// </summary>
         /// <param name="pid"></param>
-        /// <returns></returns>
         public static bool HasPlayerInOnline(string pid)
         {
             return onLinePlayers.ContainsKey(pid);

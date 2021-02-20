@@ -10,6 +10,10 @@ const host = window.document.location.host;
 const hostIp = host.split(":")[0];
 var myPlayer: NetPlayer;
 var ws: WebSocket = null;
+var rktimer: NodeJS.Timeout;
+var rmtimer: NodeJS.Timeout;
+var rankCycle = 5000; //排名更新周期
+var roomsCycle = 3000; //房间信息更新周期
 const MAIN_URl = "http://" + hostIp + ":8080/";
 
 HomeUi.init();
@@ -20,12 +24,6 @@ function init() {
   ws.onopen = playerConnect;
   ws.onmessage = onData;
   ws.onclose = onClose;
-
-  window.onbeforeunload = () => {
-    Tools.delCookie("pid");
-    Tools.delCookie("roomid");
-  };
-
   eventbind();
 }
 
@@ -49,9 +47,14 @@ function eventbind() {
   HomeUi.addEventLinstener(HomeUi.event_请求房间, () => {
     $(".rooms .loaderbox").show(); //显示加载标签
     $(".rooms .nullroom").hide();
-    sendData("", HallOrderType.获取房间列表);
+    stopUpdateRank();
+    startUpdateRooms();
   });
-  HomeUi.addEventLinstener(HomeUi.event_进入房间, (rid: string) => {
+  HomeUi.addEventLinstener(HomeUi.event_退出房间界面, () => {
+    stopUpdateRooms();
+    startUpdateRank();
+  });
+  HomeUi.addEventLinstener(HomeUi.event_进入房间界面, (rid: string) => {
     $.ajax({
       url: MAIN_URl + "game.html",
       method: "HEAD",
@@ -78,8 +81,11 @@ function eventbind() {
 
 /**Callback->成功连接websocket时触发 */
 function playerConnect(e: Event) {
-  sendData("", HallOrderType.请求大厅数据, Tools.getCookie("pid"));
+  var pid = Tools.getCookie("pid");
+  console.log("发起的pid" + pid);
+  sendData("", HallOrderType.请求大厅数据, pid);
   console.log("玩家已经连接");
+  startUpdateRank();
 }
 
 /**Callback->收到数据触发*/
@@ -90,11 +96,10 @@ function onData(e: MessageEvent<string>) {
     case HallOrderType.返回大厅数据: {
       var obj = JSON.parse(data);
       let pinfo: NetPlayer = obj.Player;
-      let rank: NetPlayer[] = obj.Rank;
       let flogin: boolean = obj.IsFirstLogin;
       myPlayer = pinfo;
       setHallData(pinfo);
-      setRankPanel(rank);
+      Tools.setCookie("pid", pinfo.PlayerID);
       if (flogin) HomeUi.showChangeInfoPanel();
       break;
     }
@@ -104,7 +109,7 @@ function onData(e: MessageEvent<string>) {
       window.location.href = `http://${hostIp}:8080/game.html?pid=${obj.pid}&roomid=${obj.roomid}`;
       break;
     }
-    case HallOrderType.返回房间列表: {
+    case HallOrderType.推送房间列表: {
       var roms = <NetRoom[]>JSON.parse(bas.JsonData);
       $(".rooms .table").html("");
       $(".rooms .loaderbox").hide();
@@ -118,17 +123,58 @@ function onData(e: MessageEvent<string>) {
       }
       break;
     }
+    case HallOrderType.推送排名信息: {
+      var rks: NetPlayer[] = JSON.parse(data);
+      setRankPanel(rks);
+    }
   }
 }
 
 //Callback->ws断开时触发
 function onClose(e: CloseEvent) {
-  console.log("大厅连接已断开");
+  Tools.showMsbox("服务器连接已断开！\n 错误码:" + e.code);
   console.log("错误码:" + e.code + "   断开原因:" + e.reason);
+}
+
+//CallBack->到达排名更新周期时触发
+function onGetRank() {
+  sendData("", HallOrderType.请求排名信息);
+}
+
+//CallBack->到达房间更新周期时触发
+function onGetRooms() {
+  sendData("", HallOrderType.请求房间列表);
+}
+
+/**启动排名更新 */
+function startUpdateRank() {
+  sendData("", HallOrderType.请求排名信息);
+  rktimer = setInterval(onGetRank, rankCycle);
+}
+
+/**停止排名更新 */
+function stopUpdateRank() {
+  if (rktimer) {
+    clearTimeout(rktimer);
+  }
+}
+
+/**启动房间更新 */
+function startUpdateRooms() {
+  sendData("", HallOrderType.请求房间列表);
+  rmtimer = setInterval(onGetRooms, roomsCycle);
+}
+
+/**停止房间更新 */
+function stopUpdateRooms() {
+  if (rmtimer) {
+    clearInterval(rmtimer);
+  }
 }
 
 /**发送数据*/
 function sendData(json: string, type: HallOrderType, tag: string = "") {
+  if (ws.readyState !== WebSocket.OPEN) return;
   let base = new NetInfoBase(type, json, tag);
   let str = JSON.stringify(base);
   ws.send(str);

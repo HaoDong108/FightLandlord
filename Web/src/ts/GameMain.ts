@@ -42,10 +42,6 @@ function init() {
   function f() {
     return false;
   }
-  window.onbeforeunload = () => {
-    Tools.delCookie("pid");
-    Tools.delCookie("roomid");
-  };
   GameUi.showWait("等待其他玩家");
   GameUi.eventBinding();
   $("#roomid").text("房间ID:" + roomid);
@@ -79,8 +75,10 @@ function wsOnMessage(e: MessageEvent) {
       let nr: NetRoom = JSON.parse(jsonData);
       if (nr.RoomMode == RoomMode.Matched) {
         GameUi.hideRoomID();
+        GameUi.closemmt();
       } else {
         GameUi.showRoomID();
+        GameUi.openmmt();
       }
       btScore = nr.BtScore;
       $(".minScore>span").last().text(btScore);
@@ -280,9 +278,11 @@ function startGame(): void {
   onStart = true;
   GameUi.hideRoomID();
   GameUi.hideButton();
+  GameUi.closemmt();
   onStart = true;
   game = new Game(lastGamer, nextGamer, ownGamer, btScore, ws, () => {
     game = null;
+    GameUi.openmmt();
   });
 }
 

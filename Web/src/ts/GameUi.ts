@@ -14,12 +14,16 @@ export namespace GameUi {
 
     //管理面板--成员选项卡
     $("#pt-mmt").on("click", () => {
-      $(".slippanel .pages .long").css("margin-left", "-400px");
+      var w = $(".slippanel .pages > .long > div").width();
+      $(".slippanel .pages .long").css("margin-left", "-" + w + "px");
     });
 
     //管理面板--聊天选项卡
     $("#pt-talk").on("click", () => {
-      $(".slippanel .pages .long").css("margin-left", "-800px");
+      var dsp = $("#pg-mmt").css("display");
+      var w = $(".slippanel .pages > .long > div").width();
+      w = dsp === "none" ? w : w * 2;
+      $(".slippanel .pages .long").css("margin-left", "-" + w + "px");
     });
 
     //管理面板--滑出滑入按钮
@@ -785,8 +789,8 @@ export namespace GameUi {
         break;
       case OutDct.right:
         $(".role-right").css("background", `url(../static/img/Roles/role${id}.png) no-repeat`).css("background-size", "contain");
-        if (id == 0) $(".role-right").addClass("roleask");
-        else $(".role-right").removeClass("roleask");
+        if (id == 0) $(".role-right").addClass("roleaskrig");
+        else $(".role-right").removeClass("roleaskrig");
         break;
       case OutDct.bottom:
         $(".role-own").css("background", `url(../static/img/Roles/role${id}.png) no-repeat`).css("background-size", "contain");
@@ -1047,5 +1051,17 @@ export namespace GameUi {
       easing: "linear",
       top: -($(div).height() + 10),
     });
+  }
+
+  /**开启成员管理 */
+  export function openmmt() {
+    $("#pt-mmt").css("display", "table-cell");
+    $("#pg-mmt").show();
+  }
+
+  /**关闭成员管理 */
+  export function closemmt() {
+    $("#pt-mmt").css("display", "none");
+    $("#pg-mmt").hide();
   }
 }

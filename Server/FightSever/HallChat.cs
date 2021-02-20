@@ -39,6 +39,11 @@ namespace FightLand_Sever.Hall
         /// </summary>
         public Player BindPlayer { get; private set; }
 
+        /// <summary>
+        /// 标识连接是否正常打开
+        /// </summary>
+        public bool IsConnect { get { return base.Context.WebSocket.ReadyState == WebSocketState.Open; } }
+
         public HallChat()
         {
            
@@ -49,11 +54,11 @@ namespace FightLand_Sever.Hall
         /// </summary>
         /// <param name="data"></param>
         /// <param name="type"></param>
-        public void SendData(string data, HallOrderType type)
+        public void SendData(string data, HallOrderType type,string tag="")
         {
             if (this.Context.WebSocket.ReadyState == WebSocketState.Open)
             {
-                var bas = new NetInfoBase((int)type, data);
+                var bas = new NetInfoBase((int)type, data,tag);
                 string json = JsonConvert.SerializeObject(bas);
                 base.Send(json);
             }
@@ -66,11 +71,9 @@ namespace FightLand_Sever.Hall
         /// <param name="isflogin"></param>
         private void SendHallData(NetPlayer np, bool isflogin)
         {
-            var rks = Management.GetAllPlayers().OrderBy(k => k.Mark).ToArray();
             var obj = new
             {
                 Player = np, //玩家信息
-                Rank = rks,  //排名信息
                 IsFirstLogin = isflogin //指示该玩家是否为第一次登陆
             };
             var json = JsonConvert.SerializeObject(obj);
@@ -98,23 +101,20 @@ namespace FightLand_Sever.Hall
                                 //绑定IP
                                 this.IP = base.Context.UserEndPoint.Address.ToString();
                                 Log.Print("玩家" + this.IP + "已连接到服务器");
-                                Log.Print("Hash:" + this.GetHashCode());
                                 string pid = bas.Tag;
                                 Player py = null;
                                 if (Management.HasPlayerInOnline(pid))
                                 {
                                     py = Management.GetOnlinePlayer(pid);
                                 }
-                                if(py==null||(py!=null&&!py.Jumping))
+                                if(py==null)
                                 {
                                     py = new Player();
-                                    py.SetHallWebSok(this);
                                     Management.AddToOnline(py);
                                 }
-                                py.Jumping = false; //取消跳转标识
+                                py.SetHallWebSok(this);
                                 this.BindPlayer = py;
                                 this.SendHallData(new NetPlayer(py), false);
-                                if (this.OnConnect != null) this.OnConnect(this);
                                 break;
                             }
                         case HallOrderType.进入匹配队列:
@@ -141,30 +141,39 @@ namespace FightLand_Sever.Hall
                                 Management.UpdatePlayer(ply.PlayerID, info.headid, info.roleid, info.gender, info.name);
                                 break;
                             }
-                        case HallOrderType.获取房间列表:
+                        case HallOrderType.创建房间:
                             {
+                                var rom = JsonConvert.DeserializeAnonymousType(json, new {pwd = "", bts = 0 });
+                                GameRoom room = new GameRoom(ply, rom.bts,RoomModel.Room, rom.pwd);
+                                ply.RoomWhich = room;
+                                Management.AddRoom(room);
+                                this.SendData(JsonConvert.SerializeObject(new { pid = BindPlayer.PlayerID, roomid = room.RoomID }), HallOrderType.房间创建完毕);
+                                break;
+                            }
+                        case HallOrderType.请求房间列表:
+                            {
+                                //获取房间信息
                                 var roms = Management.GetRooms().Select(r =>
                                 {
                                     return new NetRoom()
                                     {
-                                        RoomID=r.RoomID.ToString(),
+                                        RoomID = r.RoomID.ToString(),
                                         BtScore = r.BtScore,
                                         MasterName = r.RoomMaster.Name,
                                         MasterHead = r.RoomMaster.HeadID,
                                         NowCount = r.MemberCount,
                                     };
                                 }).ToArray();
-                                this.SendData(JsonConvert.SerializeObject(roms), HallOrderType.返回房间列表);
+                                var romjson = JsonConvert.SerializeObject(roms);
+                                ply.SendHallData(romjson, HallOrderType.推送房间列表);
                                 break;
                             }
-                        case HallOrderType.创建房间:
+                        case HallOrderType.请求排名信息:
                             {
-                                var rom = JsonConvert.DeserializeAnonymousType(json, new {pwd = "", bts = 0 });
-                                GameRoom room = new GameRoom(ply, rom.bts,RoomModel.Room, rom.pwd);
-                                ply.RoomWhich = room;
-                                ply.Jumping = true;
-                                Management.AddRoom(room);
-                                this.SendData(JsonConvert.SerializeObject(new { pid = BindPlayer.PlayerID, roomid = room.RoomID }), HallOrderType.房间创建完毕);
+                                //获取排名信息
+                                var rks = Management.GetAllPlayers().OrderBy(r => long.Parse(r.Mark)).ToArray();
+                                var rkjson = JsonConvert.SerializeObject(rks);
+                                ply.SendHallData(rkjson, HallOrderType.推送排名信息);
                                 break;
                             }
                     }
@@ -185,6 +194,11 @@ namespace FightLand_Sever.Hall
         protected override async Task OnError(ErrorEventArgs e)
         {
             Console.WriteLine("错误:" + e.Message);
+        }
+
+        protected override async Task OnOpen()
+        {
+            if (this.OnConnect != null) this.OnConnect(this);
         }
     }
 }

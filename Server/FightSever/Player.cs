@@ -53,6 +53,21 @@ namespace FightLand_Sever
         public long Mark { get; set; }
 
         /// <summary>
+        /// 性别 0男 1女
+        /// </summary>
+        public int Gender { get; set; }
+
+        /// <summary>
+        /// 人物展示编号
+        /// </summary>
+        public int RoleID { get; set; }
+
+        /// <summary>
+        /// 头像编号
+        /// </summary>
+        public int HeadID { get; set; }
+
+        /// <summary>
         /// 客户终端信息
         /// </summary>
         public IPEndPoint Ipend { get; private set; }
@@ -88,21 +103,6 @@ namespace FightLand_Sever
         public Player NextPlayer { get; set; }
 
         /// <summary>
-        /// 性别 0男 1女
-        /// </summary>
-        public int Gender { get; set; }
-
-        /// <summary>
-        /// 人物展示编号
-        /// </summary>
-        public int RoleID { get; set; }
-
-        /// <summary>
-        /// 头像编号
-        /// </summary>
-        public int HeadID { get; set; }
-
-        /// <summary>
         /// 指示该玩家是否是房主
         /// </summary>
         public bool IsRoomMaster { get; set; }
@@ -115,16 +115,13 @@ namespace FightLand_Sever
         /// <summary>
         /// 指示玩家是否已经连接到房间
         /// </summary>
-        public bool ConnectRoom { get { return (this.RoomWebsok != null&&!this.RoomWebsok.IsDisconnect); } }
-
-        /// <summary>
-        /// 指示玩家是否即将进行页面跳转
-        /// </summary>
-        public bool Jumping { get; set; }
+        public bool ConnectRoom { get { return (this.RoomWebsok != null&&this.RoomWebsok.IsConnect); } }
         #endregion
 
         public event Action<Player> RoomSokDisconnect;  //房间连接断开时触发
+        public event Action<Player> RoomSokConnect;//房间连接时触发
         public event Action<Player> HallSokDisconnect;  //大厅连接断开时触发 
+        public event Action<Player> HallConnect;//大厅连接成功时触发
         public event Action<Player, NetInfoBase> OnGameData; //收到数据触发
         public List<NetPoker> handPk = new List<NetPoker>();
 
@@ -138,7 +135,6 @@ namespace FightLand_Sever
             this.HeadID = 1;
             this.RoleID = 1;
             this.IsRoomMaster = false;
-            this.Jumping = false;
         }
 
         public Player(NetPlayer p)
@@ -192,6 +188,10 @@ namespace FightLand_Sever
             this.RoomWebsok = chat;
             chat.OnDisconnetc += RoomChat_OnClosed;
             chat.OnGameData += (s, e) => { if(this.OnGameData!=null) this.OnGameData(this, e); };
+            if (chat.IsConnect)
+            {
+                if(this.RoomSokConnect!=null) this.RoomSokConnect(this);
+            }
         }
 
         /// <summary>
@@ -203,6 +203,21 @@ namespace FightLand_Sever
             this.IP = hsok.IP;
             this.HallWebsok = hsok;
             hsok.OnDisConnect += HallChat_OnClosed;
+            if (hsok.IsConnect)
+            {
+                if (this.HallConnect != null) this.HallConnect(this);
+            }
+        }
+
+        /// <summary>
+        /// 发送大厅数据
+        /// </summary>
+        public void SendHallData(string data,HallOrderType order,string tag = "")
+        {
+            if (this.HallWebsok!=null&&this.HallWebsok.IsConnect)
+            {
+                this.HallWebsok.SendData(data, order, tag);
+            }
         }
 
         public void SendRoomData(string data, RoomOrderType order, string tag = "")

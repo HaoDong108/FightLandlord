@@ -907,6 +907,9 @@ img {
 #pg-mmt {
   display: block;
 }
+#pt-mmt {
+  display: table-cell;
+}
 #pg-mmt > .top {
   width: 100%;
   height: 50%;

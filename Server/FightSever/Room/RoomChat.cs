@@ -18,6 +18,7 @@ namespace FightLand_Sever.Room
 
         public event OnMessageHandler OnGameData;
         public event Action<RoomChat> OnDisconnetc;
+        public event Action<RoomChat> OnConnect;
         public event OnErrorHandler OnErrord;
 
         /// <summary>
@@ -31,9 +32,9 @@ namespace FightLand_Sever.Room
         public GameRoom BindRoom { get; set; }
 
         /// <summary>
-        /// 标识连接是否已经断开
+        /// 标识连接是否正常打开
         /// </summary>
-        public bool IsDisconnect { get { return base.Context.WebSocket.ReadyState != WebSocketState.Open; } }
+        public bool IsConnect { get { return base.Context.WebSocket.ReadyState == WebSocketState.Open; } }
 
         public RoomChat()
         {
@@ -88,7 +89,6 @@ namespace FightLand_Sever.Room
                             NetRoom nr = new NetRoom(room);
                             //广播房间信息
                             room.BroadCast(JsonConvert.SerializeObject(nr), RoomOrderType.回送房间信息);
-                            p.Jumping = false;
                             Log.Print("玩家" + this.BindPlayer.Name + "成功连接到房间");
                             break;
                         }
@@ -102,11 +102,6 @@ namespace FightLand_Sever.Room
                     case RoomOrderType.踢出玩家:
                         {
                             var pid = bas.Tag;
-                            if (Management.HasPlayerInOnline(pid))
-                            {
-                                Player p = Management.GetOnlinePlayer(pid);
-                                p.Jumping = true;
-                            }
                             this.BindRoom.BroadCast("", RoomOrderType.踢出玩家,pid);
                             //将玩家从房间删除
                             this.BindRoom.RemovePlayer(pid);
@@ -116,11 +111,15 @@ namespace FightLand_Sever.Room
             }
         }
 
+        protected override async Task OnOpen()
+        {
+            if (this.OnConnect != null) this.OnConnect(this);
+        }
+
         //CallBack->玩家退出房间触发
         private void Room_PlayerDisconnect(GameRoom sender, Player ply)
         {
             sender.BroadCast("", RoomOrderType.玩家退出, ply.PlayerID);
-            Management.OffLine(ply.PlayerID);
         }
 
         //CallBack->房主切换时触发
@@ -143,7 +142,7 @@ namespace FightLand_Sever.Room
         /// <param name="data"></param>
         public void SendData(string data, int order, string tag = "")
         {
-            if (!this.IsDisconnect)
+            if (this.IsConnect)
             {
                 NetInfoBase info = new NetInfoBase(order, data, tag);
                 var json = JsonConvert.SerializeObject(info);

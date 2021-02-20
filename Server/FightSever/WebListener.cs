@@ -164,7 +164,6 @@ namespace FightLand_Sever
                             if (!p.ConnectRoom)
                             {
                                 get = true;
-                                p.Jumping = true;
                             }
                         }
                     }

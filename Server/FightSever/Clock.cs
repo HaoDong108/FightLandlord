@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Timers;
 
-namespace FightLand_Sever.InGame
+namespace FightLand_Sever
 {
     class Clock
     {
@@ -27,7 +27,7 @@ namespace FightLand_Sever.InGame
         private static Timer timer = new Timer() { Interval = 1000 };
 
         private bool isStoped = true;
-        private int initTok;
+        private int initSec;
         private bool delFlg = false;
         private int delay = 0;
         private int tik;
@@ -39,17 +39,17 @@ namespace FightLand_Sever.InGame
             }
             set
             {
-                if (this.isStoped) return;
+                if (this.isStoped) return; //如果已停止则返回
                 if (this.delay > 0)
                 {
                     delay--;
                     return;
-                }
+                } //延迟时间未达到则返回
                 if (this.tik != value && this.TikChange != null && value >= 0) this.TikChange(this, value);
                 this.tik = value;
                 if (this.tik <= -1)
                 {
-                    this.tik = this.initTok;
+                    this.tik = this.initSec;
                     this.isStoped = true;
                     if (this.OverTime != null) this.OverTime(this);
                 }
@@ -58,10 +58,10 @@ namespace FightLand_Sever.InGame
 
         public Player TagPlayer { get; set; }
 
-        public Clock(int tik)
+        public Clock(int second)
         {
-            this.initTok = tik;
-            this.tik = tik;
+            this.initSec = second;
+            this.tik = second;
             clocks.Add(this);
         }
 
@@ -88,32 +88,35 @@ namespace FightLand_Sever.InGame
         /// <summary>
         /// 停止该计时器,并初始化tik
         /// </summary>
-        public void Stop()
+        public Clock Stop()
         {
             this.isStoped = true;
-            this.tik = this.initTok;
+            this.tik = this.initSec;
             if (this.Stopped != null) this.Stopped(this);
+            return this;
         }
 
         /// <summary>
-        /// 开始计时
+        /// 如果计时尚未开始则开始计时
         /// </summary>
         /// <param name="delayBySecond">延迟启动(秒)</param>
-        public void Start(int delayBySecond = 0)
+        public Clock Start(int delayBySecond = 0)
         {
-            if (!this.isStoped) return;
+            if (!this.isStoped) return this;
             this.delay = delayBySecond;
-            this.tik = this.initTok;
+            this.tik = this.initSec;
             this.isStoped = false;
+            return this;
         }
 
         /// <summary>
         /// 立即重新开始计时
         /// </summary>
-        public void ReStart()
+        public Clock ReStart()
         {
-            this.tik = this.initTok;
+            this.tik = this.initSec;
             this.isStoped = false;
+            return this;
         }
 
         /// <summary>
